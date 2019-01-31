@@ -5,7 +5,6 @@ Version: 0.1.0
 Author: c(person("Chiaowen Joyce", "Hsiao", email = "joyce.hsiao1@gmail.com", 
   role = c("aut","cre")),
   person("Matthew", "Stephens", email = "stephens999@gmail.com", role ="aut")) 
-Maintainer: Chiaowen Joyce Hsiao  <joyce.hsiao1@gmail.com>
 Description: A supervised approach for predicting cell cycle progression in induced 
     pluripotent stem cells (iPSCs) using scRNA-seq data. We provide gene-specific 
     estimates of cyclic trends of gene expression based on our training data. These
