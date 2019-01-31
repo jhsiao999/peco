@@ -1,0 +1,89 @@
+#' Unsupervised method for inferring cell times
+#'
+#' We implemented an unsupervised version for inferring angles or
+#' cell cycle phases. This performs poorly and was hence not included
+#'  inferring cell times
+#'
+#' @author Joyce Hsiao
+#'
+#' @export
+cycle.npreg.unsupervised <- function(Y, theta,
+                                 ncores=4,
+                                 method.trend=c("npcirc.nw", "npcirc.ll", "trendfilter"
+                                                ,"loess", "bspline"),
+                                 grids=100,
+                                 polyorder=2,
+                                 maxiter=30, verbose=TRUE, tol=1,
+                                 ...) {
+
+  # order data by initial cell times
+  G <- nrow(Y)
+  N <- ncol(Y)
+  theta_ordered_initial <- theta[order(theta)]
+  Y_ordered <- Y[,order(theta)]
+
+  # initialize mu and sigma
+  initial_mstep <- cycle.npreg.mstep(Y = Y_ordered,
+                                     theta = theta_ordered_initial,
+                                     method.trend=method.trend,
+                                     polyorder=polyorder,
+                                     ncores = ncores)
+
+  # compute log-likelihood under initial mu and sigma
+  initial_estep <- cycle.npreg.loglik(Y = initial_mstep$Y,
+                                      sigma_est = initial_mstep$sigma_est,
+                                      funs_est=initial_mstep$funs,
+                                      method.grid="pca",
+                                      method.type="unsupervised")
+
+  sigma_est_previous <- initial_mstep$sigma_est
+  funs_est_previous <- initial_mstep$funs
+  Y_previous <- initial_mstep$Y
+  cell_times_previous <- initial_estep$cell_times_est
+  loglik_previous <- initial_estep$loglik_est
+  loglik_vec <- c(loglik_previous)
+
+  iter <- 0
+  while(TRUE) {
+    current_mstep <- cycle.npreg.mstep(Y = Y_previous,
+                                       theta = cell_times_previous,
+                                       method.trend = method.trend,
+                                       polyorder=polyorder,
+                                       ncores = ncores)
+    current_loglik <- cycle.npreg.loglik(Y = current_mstep$Y,
+                                sigma_est = current_mstep$sigma_est,
+                                funs_est = current_mstep$funs,
+                                method.grid="pca",
+                                method.type="unsupervised")
+
+    sigma_est_current <- current_mstep$sigma_est
+    funs_est_current <- current_mstep$funs
+    Y_current <- current_mstep$Y
+    cell_times_current <- current_loglik$cell_times_est
+    loglik_current <- current_loglik$loglik_est
+    loglik_vec <- c(loglik_vec, loglik_current)
+
+    if (verbose) message("log-likelihood:", loglik_current)
+    eps <- loglik_current - loglik_previous
+
+    # loop out if converged
+    if (!(eps > tol & iter < maxiter)) break
+
+    iter <- iter + 1
+    loglik_previous <- loglik_current
+    Y_previous <- Y_current
+    sigma_est_previous <- sigma_est_current
+    cell_times_previous <- cell_times_current
+    funs_est_previous <- funs_est_current
+    }
+
+  out <- list(Y_ordered=Y_current,
+              loglik_est=loglik_current,
+              cell_times_est=cell_times_current,
+             # mu_est=mu_est_current,
+              sigma_est=sigma_est_current,
+              funs_est=funs_est_current,
+              loglik_vec=loglik_vec)
+  return(out)
+}
+
