@@ -1,0 +1,8 @@
+eset_final <- readRDS("/project2/gilad/joycehsiao/fucci-seq/data/eset-final.rds")
+
+genes_cyclic_list <- get(load("data/genes_cyclic_list.Rdata"))
+
+eset_final_sub <- eset_final[match(genes_cyclic_list$ensg, rownames(eset_final)),]
+
+save(eset_final_sub, file="data/eset_final_sub.Rdata")
+

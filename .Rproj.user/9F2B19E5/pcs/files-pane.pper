@@ -1,0 +1,13 @@
+{
+    "path" : "/project2/gilad/joycehsiao/peco/data-raw",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        },
+        {
+            "ascending" : false,
+            "columnIndex" : 4
+        }
+    ]
+}

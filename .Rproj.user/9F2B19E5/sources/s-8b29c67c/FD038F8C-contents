@@ -1,0 +1,3 @@
+eset_final <- readRDS("/project2/gilad/joycehsiao/fucci-seq/data/eset_final.rds")
+
+save(eset_final, "/project2/gilad/joycehsiao/fucci-seq/data/eset_final.Rdata")

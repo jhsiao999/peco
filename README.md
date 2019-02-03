@@ -19,16 +19,19 @@ To load the package
 library(peco)
 ```
 
+
+## Vignettes
+
+I've included an example of using `peco` to predict cell cycle phase using single-cell RNA-seq data. Run the following command to view the vignette. 
+
+```
+browseVignettes("peco")
+```
+
+## Contact
+
 Please contact me at [joyce.hsiao1@gmail.com](joyce.hsiao1@gmail.com) for questions on the package or the methods. 
 
-
-## Example
-
-```
-eset-final.rds
-
-
-```
 
 ## How to cite
 
@@ -36,5 +39,5 @@ eset-final.rds
 
 ## Licenses
 
-The CountClust package is distributed under [GPL - General Public License (>= 2)]
+This package is distributed under [GPL - General Public License (>= 2)]
 

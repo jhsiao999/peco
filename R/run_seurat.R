@@ -1,9 +1,11 @@
-#' @title Seurat code for cell cycle scoring
-#' @description Compute phase specific cell cycle scores as outlined in Seurat
-
+#' Seurat code for cell cycle scoring
+#' 
+#' Compute phase specific cell cycle scores using the code outlined in Seurat
+#'
 #' @param Y log2 normalized gene expression matrix
 #'
-#' @export
+#' @references Butler, A., Hoffman, P., Smibert, P., Papalexi, E., and Satija, R. (2018) Integrating single-cell transcriptomic data across different conditions, technologies, and species. Nature Biotechnology 36, 411-420. doi:10.1038/nbt.4096
+#'
 run_seurat <- function(Y, s.genes, g2m.genes, n.bin=25,
          seed.use=1, random.seed=1) {
   set.seed(random.seed)

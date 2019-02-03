@@ -1,0 +1,85 @@
+library(peco)
+
+# expression set of top 100 cyclic genes
+eset <- get(data(eset_final_sub))
+
+# All 11,040 genes included in our dataset
+# ordered by cyclic trend (strong to weak)
+genes_cyclic_list <- get(data(genes_cyclic_list))
+
+
+##------ Data preprocessing
+
+# phenotype information
+pdata <- pData(eset)
+
+# gene information
+fdata <- fData(eset)
+
+# select endogeneous genes
+counts <- exprs(eset)[grep("ENSG", rownames(eset)), ]
+
+# normalize molecule count for differencese in library sizes
+log2cpm <- t(log2(1+(10^6)*(t(counts)/pdata$molecules)))
+
+# reordering the data according to FUCCI phase
+log2cpm <- log2cpm[,order(pdata$theta)]
+pdata <- pdata[order(pdata$theta),]
+
+
+# quantile-transform each gene to normal distribution
+log2cpm.quant <- do.call(rbind, lapply(1:nrow(log2cpm), function(g) {
+  yy <- log2cpm[g,]
+  is.zero <- which(yy == 0)
+  qq.map <- qqnorm(yy)
+  yy.qq <- qq.map$x
+  yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+  return(yy.qq)
+}) )
+rownames(log2cpm.quant) <- rownames(log2cpm)
+colnames(log2cpm.quant) <- colnames(log2cpm)
+
+
+# Select single-cell samples for our prediction example
+which_samples_predict <- rownames(pdata)[which(pdata$chip_id == "NA19098")]
+which_samples_train <- rownames(pdata)[which(pdata$chip_id != "NA19098")]
+
+
+# use top 5 cyclic genes for prediciton
+ngenes <- 5
+which_genes <- genes_cyclic_list$ensg[1:ngenes]
+
+
+##------ Estimate cyclic trends in the training data
+
+Y_train <- log2cpm.quant[which(rownames(log2cpm.quant) %in% which_genes),
+                         which(colnames(log2cpm.quant) %in% which_samples_train)]
+theta_train <- pdata$theta[which(rownames(pdata) %in% which_samples_train)]
+names(theta_train) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_train)]
+
+fit_train <- cycle_npreg_insample(Y = Y_train,
+                                  theta = theta_train,
+                                  polyorder=2,
+                                  ncores=1,
+                                  method.trend="trendfilter")
+
+
+
+##------ Predict cell cycle phase
+
+Y_predict <- log2cpm.quant[which(rownames(log2cpm.quant) %in% which_genes),
+                           which(colnames(log2cpm.quant) %in% which_samples_predict)]
+
+theta_test <- pdata$theta[which(rownames(pdata) %in% which_samples_predict)]
+names(theta_test) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_predict)]
+
+fit_predict <- cycle_npreg_outsample(Y_test=Y_predict,
+                                     sigma_est=fit_train$sigma_est,
+                                     funs_est=fit_train$funs_est,
+                                     theta_prior=fit_train$theta,
+                                     method.grid = "uniform",
+                                     method.trend="trendfilter",
+                                     polyorder=2, ncores=1)
+save(fit_predict,
+     fit_train, file="data/fit.rda")
+
