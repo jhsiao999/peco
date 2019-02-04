@@ -1,5 +1,4 @@
 inst/doc
 .Rhistory
 data-raw/
-R/create_mast.R
 R/run_seurat.R

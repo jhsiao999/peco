@@ -21,7 +21,6 @@ Imports:
     conicfit,
     genlasso,
     ggplot2,
-    EBImage,
     MASS,
     parallel
 RoxygenNote: 6.1.1
