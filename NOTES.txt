@@ -5,6 +5,11 @@ notes
 
 + To do: Remove unneeded Imports in DESCRIPTION.
 
++ To do: Test loading data sets.
+
++ To do: Figure what are "theta" and "exprs(est_final)" are
+  data(eset_final_sub).
+  
 + Why do "fit_bspline" and "fit_loess" return a list with only one
   element? You don't need the list.
 
