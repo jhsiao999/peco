@@ -326,7 +326,7 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' 
 #' \item{theta}{Input angles.}
 #' 
-#' \tem{mu_est}{Estimated expression levels given the cyclic function
+#' \item{mu_est}{Estimated expression levels given the cyclic function
 #' for each gene.}
 #' 
 #' \item{sigma_est}{Estimated standard error of the cyclic trends for

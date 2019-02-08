@@ -19,7 +19,7 @@ A list with the following elements:
 
 \item{theta}{Input angles.}
 
-\tem{mu_est}{Estimated expression levels given the cyclic function
+\item{mu_est}{Estimated expression levels given the cyclic function
 for each gene.}
 
 \item{sigma_est}{Estimated standard error of the cyclic trends for
