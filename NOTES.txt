@@ -1,18 +1,35 @@
 notes
 =====
 
-+ To do: Remove all "imports" statements.
++ To do: Add @importFrom statements as needed.
+
++ To do: Remove all "imports" comments.
 
 + To do: Remove unneeded Imports in DESCRIPTION.
 
-+ To do: Test loading data sets.
++ Please fix: I don't understand the description of the eset_final_sub
+  data set. What are "theta" and "exprs(est_final)"?
 
-+ To do: Figure what are "theta" and "exprs(est_final)" are
-  data(eset_final_sub).
-  
-+ Why do "fit_bspline" and "fit_loess" return a list with only one
-  element? You don't need the list.
++ Please fix: The "fit" data set should be a single object; currently
+  it loads two objects, "fit_predict" and "fit_train". Maybe define a
+  list with two elements. Also, I suggest using a more descriptive
+  name.
 
++ Please fix: Why do "fit_bspline" and "fit_loess" return a list with
+  only one element? You don't need the list.
+
++ Please fix: some undocumented arguments that should be added to the
+  roxygen2 docs:
+  - Undocumented arguments in cycle_npreg_insample: ‘...’
+  - Undocumented arguments in cycle_npreg_loglik: grids, method.type,
+    method.grid ‘...’
+  - Undocumented arguments in cycle_npreg_mstep: method.trend, polyorder,
+    ncores, ‘...’
+  - Undocumented arguments in cycle_npreg_outsample: ‘...’
+  - Undocumented arguments in initialize_grids: ‘...’
+  - Undocumented arguments in run_seurat: s.genes, g2m.genes, n.bin,
+    seed.use, random.seed
+    
 + Suggestion: Explain in "Description" field of DESCRIPTION file why
   it is called "peco". (And in README.)
 
@@ -23,21 +40,8 @@ notes
 
 + Suggestion: Add titles to roxygen docs for data sets.
 
-+ Suggestion: For the "fit" data set, I suggest using a more
-  descriptive name.
-
 + Suggestion: Create a pkgdown site, and activate GitHub Pages (see
   stephenslab/mixsqp for an example of this). This is easy to do once
   you have create the vignettes and roxygen2 docs for your R
   functions.
 
-+ Some undocumented arguments that should be added to the roxygen2 docs:
-  - Undocumented arguments in cycle_npreg_insample: ‘...’
-  - Undocumented arguments in cycle_npreg_loglik: grids, method.type,
-    method.grid ‘...’
-  - Undocumented arguments in cycle_npreg_mstep: method.trend, polyorder,
-    ncores, ‘...’
-  - Undocumented arguments in cycle_npreg_outsample: ‘...’
-  - Undocumented arguments in initialize_grids: ‘...’
-  - Undocumented arguments in run_seurat: s.genes, g2m.genes, n.bin,
-    seed.use, random.seed
