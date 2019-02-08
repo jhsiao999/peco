@@ -26,8 +26,11 @@ Imports:
 RoxygenNote: 6.1.1
 License: GPL (>=2)
 Encoding: UTF-8
+Remotes:
+  glmgen/genlasso
 LazyData: true
-Suggests: 
+Suggests:
+    Biobase,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
