@@ -236,6 +236,8 @@ initialize_grids <- function(Y, grids=100,
 #'
 #' @author Joyce Hsiao
 #'
+#' @importFrom stats dnorm
+#' 
 #' @export
 #' 
 cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
@@ -336,6 +338,9 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #'
 #' @author Joyce Hsiao
 #'
+#' @importFrom assertthat assert_that
+#' @importFrom parallel mclapply
+#' 
 #' @export
 #' 
 cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
@@ -343,8 +348,6 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                               polyorder=2,
                               ncores=4,...) {
 # import genlasso
-# import assertthat
-# import parallel
 
       G <- nrow(Y)
       N <- ncol(Y)

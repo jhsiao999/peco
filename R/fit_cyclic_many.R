@@ -37,12 +37,13 @@
 #'
 #' @author Joyce Hsiao
 #'
+#' @importFrom assertthat assert_that
+#' @importFrom parallel mclapply
+#' 
 #' @export
 #' 
 fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=4) {
 # import genlasso
-# import assertthat
-# import parallel
   G <- nrow(Y)
   N <- ncol(Y)
 
