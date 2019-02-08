@@ -6,4 +6,19 @@ notes
 + Why do "fit_bspline" and "fit_loess" return a list with only one
   element? You don't need the list.
 
-+ Add note here.
++ Suggestion: Explain in Description why it is called "peco".
+
++ Suggestion: If reasonable to do so, reduce size of data sets in
+  "data" folder in order to reduce installation time from GitHub.
+
++ Suggestion: Create a "release" on GitHub. (I can show you how.)
+
++ Suggestion: Add titles to roxygen docs for data sets.
+
++ Suggestion: For the "fit" data set, I suggest using a more
+  descriptive name.
+
++ Suggestion: Create a pkgdown site, and activate GitHub Pages (see
+  stephenslab/mixsqp for an example of this). This is easy to do once
+  you have create the vignettes and roxygen2 docs for your R
+  functions.

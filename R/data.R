@@ -1,6 +1,3 @@
-# Data can be downloaded from the Gilad lab website.
-
-
 #' @name eset_final_sub
 #' 
 #' Filtered gene expression data, along with summarized FUCCI intensities
