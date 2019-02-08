@@ -1,4 +1,9 @@
 notes
 =====
 
++ To do: Remove all "imports" statements.
+
++ Why do "fit_bspline" and "fit_loess" return a list with only one
+  element? You don't need the list.
+
 + Add note here.

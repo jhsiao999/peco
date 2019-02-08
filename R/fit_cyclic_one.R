@@ -1,42 +1,45 @@
-#' Using trendfiltering to estimate cyclic trend of gene expression
+#' @title Using trendfiltering to estimate cyclic trend of gene
+#' expression
 #'
-#' We applied quadratic (second order) trend filtering using the
-#' trendfilter function in the genlasso package (Tibshirani, 2014).
-#' The trendfilter function implements a nonparametric smoothing method
-#' which chooses the smoothing parameter by cross-validation and fits
-#' a piecewise polynomial regression. In more specifics: The trendfilter
-#' method determines the folds in cross-validation in a nonrandom manner.
-#' Every k-th data point in the ordered sample is placed in the k-th fold,
-#' so the folds contain ordered subsamples. We applied five-fold
-#' cross-validation and chose the smoothing penalty using
-#' the option lambda.1se: among all possible values of the penalty term,
-#' the largest value such that the cross-validation standard error is within
-#' one standard error of the minimum. Furthermore, we desired that the estimated
-#' expression trend be cyclical. To encourage this, we concatenated the ordered
-#' gene expression data three times, with one added after another. The quadratic
-#' trend filtering was applied to the concatenated data series of each gene.
+#' @description We applied quadratic (second order) trend filtering
+#' using the trendfilter function in the genlasso package (Tibshirani,
+#' 2014).  The trendfilter function implements a nonparametric
+#' smoothing method which chooses the smoothing parameter by
+#' cross-validation and fits a piecewise polynomial regression. In
+#' more specifics: The trendfilter method determines the folds in
+#' cross-validation in a nonrandom manner.  Every k-th data point in
+#' the ordered sample is placed in the k-th fold, so the folds contain
+#' ordered subsamples. We applied five-fold cross-validation and chose
+#' the smoothing penalty using the option lambda.1se: among all
+#' possible values of the penalty term, the largest value such that
+#' the cross-validation standard error is within one standard error of
+#' the minimum. Furthermore, we desired that the estimated expression
+#' trend be cyclical. To encourage this, we concatenated the ordered
+#' gene expression data three times, with one added after another. The
+#' quadratic trend filtering was applied to the concatenated data
+#' series of each gene.
 #'
-#' @param yy A vector of gene expression values for one gene. The expression
-#'     values are assumed to have been normalized and transformed to
-#'     standard normal distribution.
-#' @param polyorder We estimate cyclic trends of gene expression levels using
-#'    nonparamtric trend filtering. The default fits second degree polynomials
-#'    (polyorder=2).
+#' @param yy A vector of gene expression values for one gene. The
+#' expression values are assumed to have been normalized and
+#' transformed to standard normal distribution.
+#' 
+#' @param polyorder We estimate cyclic trends of gene expression
+#' levels using nonparamtric trend filtering. The default fits second
+#' degree polynomials.
 #'
-#' @return
-#'     \describe{
-#'      \item{\code{trend.yy}}{The estimated cyclic trend.}
-#'      \item{\code{pve}}{Proportion of variance explained by the cyclic trend
-#'          in the gene expression levels}
-#'          }
-#'
-#' @import genlasso
+#' @return A list with two elements:
+#' 
+#' \item{trend.yy}{The estimated cyclic trend.}
+#' 
+#' \item{pve}{Proportion of variance explained by the cyclic
+#' trend in the gene expression levels.}
 #'
 #' @author Joyce Hsiao
 #'
 #' @export
+#' 
 fit_trendfilter_generic <- function(yy, polyorder=2) {
-#  library(genlasso)
+# import genlasso
 
   yy.rep <- rep(yy,3)
   include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
@@ -54,31 +57,24 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
               pve=pve))
 }
 
-
-
-
-
-
-
-#' Use bsplies to cyclic trend of gene expression levels
+#' @title Use bsplies to cyclic trend of gene expression levels
 #'
-#' @param yy A vector of gene expression values for one gene. The expression
-#'     values are assumed to have been normalized and transformed to
-#'     standard normal distribution.
+#' @param yy A vector of gene expression values for one gene. The
+#' expression values are assumed to have been normalized and
+#' transformed to standard normal distribution.
+#' 
 #' @param time A vector of angels (cell cycle phase).
 #'
-#' @return
-#'     \describe{
-#'      \item{\code{pred.yy}}{The estimated cyclic trend.}
-#'          }
+#' @return A list with one element, \code{pred.yy}, giving the
+#' estimated cyclic trend.
 #'
 #' @author Joyce Hsiao
 #'
 #' @export
+#' 
 fit_bspline <- function(yy, time) {
 
   yy.rep <- rep(yy,3)
-  #  theta.nonzero.rep <- rep(theta.nonzero,3)
   time.rep <- c(time, time+(2*pi), time+(4*pi))
   include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
 
@@ -89,28 +85,24 @@ fit_bspline <- function(yy, time) {
   return(list(pred.yy=pred.yy))
 }
 
-
-
-
 #' Use loess to estimate cyclic trends of expression values
 #'
-#' @param yy A vector of gene expression values for one gene. The expression
-#'     values are assumed to have been normalized and transformed to
-#'     standard normal distribution.
-#' @param time A vector of angels (cell cycle phase).
+#' @param yy A vector of gene expression values for one gene. The
+#' expression values are assumed to have been normalized and
+#' transformed to standard normal distribution.
+#' 
+#' @param time A vector of angles (cell cycle phase).
 #'
-#' @return
-#'     \describe{
-#'      \item{\code{pred.yy}}{The estimated cyclic trend.}
-#'          }
+#' @return A list with one element, \code{pred.yy}, giving the
+#' estimated cyclic trend.
 #'
 #' @author Joyce Hsiao
 #'
 #' @export
+#' 
 fit_loess <- function(yy, time) {
 
   yy.rep <- rep(yy,3)
-  #  theta.nonzero.rep <- rep(theta.nonzero,3)
   time.rep <- c(time, time+(2*pi), time+(4*pi))
   include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
 

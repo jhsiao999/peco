@@ -16,8 +16,7 @@ intensity. Rows correspond to samples.}
 \item{method}{The method used to fit the circle. \code{trig} uses
 trignometry to transform intensity measurements from cartesian
 coordinates to polar coordinates. \code{algebraic} uses an
-algebraic approach for circle fitting, using the \code{conicfit}
-package.}
+algebraic approach for circle fitting, using the conicfit package.}
 }
 \value{
 The inferred angles on unit circle based on the input

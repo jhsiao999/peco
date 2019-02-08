@@ -12,26 +12,25 @@
 #' @param method The method used to fit the circle. \code{trig} uses
 #' trignometry to transform intensity measurements from cartesian
 #' coordinates to polar coordinates. \code{algebraic} uses an
-#' algebraic approach for circle fitting, using the \code{conicfit}
-#' package.
+#' algebraic approach for circle fitting, using the conicfit package.
 #' 
 #' @param plot.it TRUE or FALSE. Plot the fitted results.
 #'
 #' @return The inferred angles on unit circle based on the input
 #' intensity measurements.
 #'
-#' @import stats
-#' @import circular
-#' @import conicfit
-#'
 #' @author Joyce Hsiao
 #'
 #' @export
 #' 
-intensity2circle <- function(mat, plot.it=F, method=c("trig",
-                                                      "algebraic")) {
-
-  if (is.matrix(mat)==F) { mat <- as.matrix(mat) }
+intensity2circle <- function(mat, plot.it=F,
+                             method=c("trig","algebraic")) {
+# import stats
+# import circular
+# import conicfit
+    
+  if (is.matrix(mat)==F)
+    mat <- as.matrix(mat)
 
   if (method=="trig") {
     pca <- prcomp(mat, scale. = T)
@@ -49,27 +48,29 @@ intensity2circle <- function(mat, plot.it=F, method=c("trig",
     theta <- theta%%(2*pi)
     return(theta)
   }
-
-  if (method=="algebraic") {
+  else if (method=="algebraic") {
     pca <- prcomp(mat, scale. = F)
     pca_scores <- pca$x
     ellipDirect <- EllipseDirectFit(pca_scores[,1:2])
     ellipDirectG <- AtoG(ellipDirect)$ParG
-    xyDirect<- calculateEllipse(ellipDirectG[1], ellipDirectG[2], ellipDirectG[3],
-                                          ellipDirectG[4], 180/pi*ellipDirectG[5])
+    xyDirect <- calculateEllipse(ellipDirectG[1], ellipDirectG[2],
+                                 ellipDirectG[3],
+                                 ellipDirectG[4], 180/pi*ellipDirectG[5])
     ellipProj <- Residuals.ellipse(pca_scores[,1:2], ellipDirectG)
 
     if (plot.it==TRUE) {
       rng <- c(-1,1)*max(abs(range(xyDirect)))
       plot(pca_scores[,1:2], pch=16,col="gray80", cex=.7,
-           xlim=rng, ylim=rng)  #;par(new=TRUE)
+           xlim=rng, ylim=rng)
       points(ellipProj$XYproj, pch=16,col="black", cex=.7)
-    }
+  }
+    
     # convert to angle
-    ang <- atan2(ellipDirectG[3]/ellipDirectG[4]*ellipProj$XYproj[,2], ellipProj$XYproj[,1])
+    ang <- atan2(ellipDirectG[3]/ellipDirectG[4]*ellipProj$XYproj[,2],
+                 ellipProj$XYproj[,1])
     ang <- ang%%(2*pi)
 
     return(ang)
-  }
-
+  } else 
+    stop("Invalid value for argument \"method\"")
 }

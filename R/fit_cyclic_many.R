@@ -72,5 +72,3 @@ fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=4) {
 
   return(out)
 }
-
-
