@@ -1,7 +1,7 @@
 # peco
 
-[![Travis-CI Build Status](https://travis-ci.org/jdblischak/peco.svg?branch=master)](https://travis-ci.org/jdblischak/peco)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/jdblischak/peco?branch=master&svg=true)](https://ci.appveyor.com/project/jdblischak/peco)
+[![Travis-CI Build Status](https://travis-ci.org/jhsiao999/peco.svg?branch=master)](https://travis-ci.org/jhsiao999/peco)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/jhsiao999/peco?branch=master&svg=true)](https://ci.appveyor.com/project/jhsiao999/peco)
 
 **peco** is a R package for predicting cell cycle progression in a continnum using scRNA-seq data.
 

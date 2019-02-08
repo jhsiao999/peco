@@ -8,6 +8,8 @@ latex: false
 bioc_packages:
   - Biobase
 
+warnings_are_errors: false
+
 matrix:
   include:
     - os: linux
@@ -16,7 +18,6 @@ matrix:
       r: release
     - os: linux
       r: devel
-      warnings_are_errors: false
     - os: osx
       r: release
 
