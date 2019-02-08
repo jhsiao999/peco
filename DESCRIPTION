@@ -29,7 +29,8 @@ Encoding: UTF-8
 Remotes:
   glmgen/genlasso
 LazyData: true
-Suggests: 
+Suggests:
+    Biobase,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
