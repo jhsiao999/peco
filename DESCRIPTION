@@ -1,20 +1,23 @@
-Package: peco
+Encoding: UTF-8
 Type: Package
-Title: Predicting cell cycle progression in a contiuum using single-cell RNA-seq data 
-Version: 0.1.0
+Package: peco
+Title: Predicting cell cycle progression in a contiuum using
+    single-cell RNA-seq data
+Version: 0.1.1
 Author: c(person("Chiaowen Joyce", "Hsiao", email = "joyce.hsiao1@gmail.com", 
   role = c("aut","cre")),
   person("Matthew", "Stephens", email = "stephens999@gmail.com", role ="aut")) 
-Maintainer: Chiaowen Joyce Hsiao <joyce.hsiao1@gmail.com>  
-Description: A supervised approach for predicting cell cycle progression in induced 
-    pluripotent stem cells (iPSCs) using scRNA-seq data. We provide gene-specific 
-    estimates of cyclic trends of gene expression based on our training data. These
-    gene-specific estimates can be applied to other scRNA-seq data to predict cell 
-    cycle phases (measured as angles on a unit cirlce). The training data consists of
-    fluorescence imaging data and scRNA-seq data from iPSCs derived from 6 Yoruba
-    cell lines. 
-Depends:
-    R (>= 3.2)
+Maintainer: Chiaowen Joyce Hsiao <joyce.hsiao1@gmail.com>
+Description: A supervised approach for predicting cell cycle
+    progression in induced pluripotent stem cells (iPSCs) using
+    scRNA-seq data. We provide gene-specific estimates of cyclic
+    trends of gene expression based on our training data. These
+    gene-specific estimates can be applied to other scRNA-seq data to
+    predict cell cycle phases (measured as angles on a unit
+    cirlce). The training data consists of fluorescence imaging data
+    and scRNA-seq data from iPSCs derived from 6 Yoruba cell lines.
+License: GPL (>=2)
+Depends: R (>= 3.2)
 Imports:
     assertthat,
     circular,
@@ -24,10 +27,9 @@ Imports:
     MASS,
     parallel
 RoxygenNote: 6.1.1
-License: GPL (>=2)
-Encoding: UTF-8
-LazyData: true
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    Biobase
 VignetteBuilder: knitr
+LazyData: true

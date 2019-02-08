@@ -45,6 +45,7 @@ Default is 4 cores.}
          }
 }
 \description{
-Apply the estimates of cycle_npreg_insample to another gene
-expression dataset to infer an angle or cell cycle phase for each cell
+Apply the estimates of cycle_npreg_insample to another
+gene expression dataset to infer an angle or cell cycle phase for
+each cell
 }

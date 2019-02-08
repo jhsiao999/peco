@@ -9,11 +9,13 @@ cycle_npreg_loglik(Y, sigma_est, funs_est, grids = 100,
   "uniform"), ...)
 }
 \arguments{
-\item{Y}{gene by sample expression matrix}
+\item{Y}{Gene by sample expression matrix.}
 
-\item{sigma_est}{A vector of standard errors for each gene from the training data}
+\item{sigma_est}{A vector of standard errors for each gene from the
+training data.}
 
-\item{funs_est}{A vector of cyclic functions estimated for each gene from the training data}
+\item{funs_est}{A vector of cyclic functions estimated for each
+gene from the training data.}
 }
 \value{
 \describe{

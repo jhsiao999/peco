@@ -1,5 +1,8 @@
 # Data can be downloaded from the Gilad lab website.
 
+
+#' @name eset_final_sub
+#' 
 #' Filtered gene expression data, along with summarized FUCCI intensities
 #' and sample information. Contain the top 100 cyclic genes from our data.
 #'
@@ -9,9 +12,10 @@
 #'        \item{\code{theta}}{Inferred angles}
 #'        \item{\code{exprs(est_final)}}{Molecule counts}
 #'      }
-"eset_final_sub"
+NULL
 
-
+#' @name genes_cyclic_list
+#'
 #' Genes ordered by their cyclic trend (stronog to weak)
 #' and sample information
 #'
@@ -24,11 +28,10 @@
 #'        \item{\code{pve}}{Proportion of variance explained in the expression values by the
 #'             estimated cyclic trend}
 #'      }
-"genes_cyclic_list"
+NULL
 
-
-
-
+#' @name fit
+#'
 #' Pre-computed results, including training and prediction
 #' and sample information
 #'
@@ -38,4 +41,4 @@
 #'        \item{\code{fit_train}}{training results}
 #'        \item{\code{fit_predict}}{prediction results}
 #'      }
-"fit"
+NULL

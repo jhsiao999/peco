@@ -7,16 +7,16 @@
 circ_dist(y1, y2)
 }
 \arguments{
-\item{y1}{A vector of angles}
+\item{y1}{A vector of angles.}
 
-\item{y2}{A vector of angles}
+\item{y2}{A vector of angles.}
 }
 \value{
-A vector of distances between angles
+A vector of distances between angles.
 }
 \description{
-We define distance between two angles: the minimum of the differences
-in both clockwise and counterclockwise directions.
+We define distance between two angles: the minimum of
+the differences in both clockwise and counterclockwise directions.
 }
 \author{
 Joyce Hsiao, Matthew Stephens

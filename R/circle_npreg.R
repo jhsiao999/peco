@@ -1,26 +1,28 @@
-# cycle_npreg_insample and cycle_npreg_outsample are the
-# two main functions in peco. cycle_npreg_insample generates cyclic trend
+# cycle_npreg_insample and cycle_npreg_outsample are the two main
+# functions in peco. cycle_npreg_insample generates cyclic trend
 # estimates of gene expression levels using training data, and
 # cycle_npreg_outsample applies the estimates of cycle_npreg_insample
 # to another gene expression dataset to infer an angle or cell cycle
 # phase for each cell.
-#
-#------ main functions
-#
-#' Obtain cyclic trend estimates from the training data
+
+#' @title Obtain cyclic trend estimates from the training data
 #'
-#' Estimates cyclic trends of gene expression levels using training data
+#' @description Estimates cyclic trends of gene expression levels
+#' using training data.
 #'
 #' @param Y A matrix of normalized and transformed gene expression values.
 #'     Gene by sample.
-#' @param theta A vector of angele
+#' 
+#' @param theta A vector of angles.
+#' 
 #' @param ncores We use mclapply function for parallel computing.
-#'     Default is 4 cores.
-#' @param polyorder We estimate cyclic trends of gene expression levels using
-#'    nonparamtric trend filtering. The default fits second degree polynomials
-#'    (polyorder=2).
-#' @param method.trend Varous methods that can be applied to estimate cyclic trend
-#'     of gene expression levels.
+#' 
+#' @param polyorder We estimate cyclic trends of gene expression
+#' levels using nonparamtric trend filtering. The default fits second
+#' degree polynomials (polyorder=2).
+#' 
+#' @param method.trend Varous methods that can be applied to estimate
+#' cyclic trend of gene expression levels.
 #'
 #' @return
 #'     \describe{
@@ -31,11 +33,13 @@
 #'          }
 #'
 #' @import parallel
+#' 
 #' @import genlasso
 #'
 #' @author Joyce Hsiao
 #'
 #' @export
+#' 
 cycle_npreg_insample <- function(Y, theta,
                                  ncores=4,
                                  polyorder=2,
@@ -62,14 +66,11 @@ cycle_npreg_insample <- function(Y, theta,
   return(out)
 }
 
-
-
-
-
-#' Predict test-sample ordering using training labels (no update)
+#' @title Predict test-sample ordering using training labels (no update)
 #'
-#' Apply the estimates of cycle_npreg_insample to another gene
-#' expression dataset to infer an angle or cell cycle phase for each cell
+#' @description Apply the estimates of cycle_npreg_insample to another
+#' gene expression dataset to infer an angle or cell cycle phase for
+#' each cell
 #'
 #' @param Y_test Gene expression data to be used for prediction.
 #'     Gene by sample.
@@ -166,7 +167,6 @@ initialize_grids <- function(Y, grids=100,
   len <- (2*pi)/(2*grids)
   theta_grids <- seq(len, (2*pi)-(len), length.out=grids)
 
-#  library(circular)
   if (method.grid=="pca") {
     pc_res <- prcomp(t(Y), scale = TRUE)
     grid_approx <- coord2rad(cbind(pc_res$x[,1], pc_res$x[,2]))
@@ -192,13 +192,15 @@ initialize_grids <- function(Y, grids=100,
   return(theta_initial)
 }
 
-
-
 #' Infer angles or cell cycle phase based on gene expression data
 #'
-#' @param Y gene by sample expression matrix
-#' @param sigma_est A vector of standard errors for each gene from the training data
-#' @param funs_est A vector of cyclic functions estimated for each gene from the training data
+#' @param Y Gene by sample expression matrix.
+#' 
+#' @param sigma_est A vector of standard errors for each gene from the
+#' training data.
+#' 
+#' @param funs_est A vector of cyclic functions estimated for each
+#' gene from the training data.
 #'
 #' @return
 #'     \describe{
@@ -212,6 +214,7 @@ initialize_grids <- function(Y, grids=100,
 #' @author Joyce Hsiao
 #'
 #' @export
+#' 
 cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
                                grids=100,
                                method.type=c("supervised", "unsupervised"),
@@ -236,6 +239,7 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
   }
 
   for (n in 1:N) {
+      
     # for each cell, sum up the loglikelihood for each gene
     # at the observed cell times
     loglik_per_cell <- do.call(rbind, lapply(1:G, function(g) {

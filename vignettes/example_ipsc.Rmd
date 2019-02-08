@@ -17,12 +17,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-`peco` is a supervised approach for predicting cell cycle phase in a continuum using single-cell RNA sequencing data in human induced pluripotent stem cells (iPSCs). This vignette provides a simple example of predicting cell cycle phase using 5 genes. These 5 genes were identified as exhibiting strong cyclic trend in our analysis, and also as cell-cycle marker genes in previous cell-cycle studies using yeast ([Spellman et al., 1998](spellman)) and HeLa cells ([Whitfield et al., 2002](whitfield)).  
-
+`peco` is a supervised approach for predicting cell cycle phase in a
+continuum using single-cell RNA sequencing data in human induced
+pluripotent stem cells (iPSCs). This vignette provides a simple
+example of predicting cell cycle phase using 5 genes. These 5 genes
+were identified as exhibiting strong cyclic trend in our analysis, and
+also as cell-cycle marker genes in previous cell-cycle studies using
+yeast ([Spellman et al., 1998](spellman)) and HeLa cells
+([Whitfield et al., 2002](whitfield)).
 
 [spellman]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC25624/
 [whitfield]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC117619/
-
 
 ## Load data and packages
 
@@ -81,8 +86,10 @@ ngenes <- 5
 which_genes <- genes_cyclic_list$ensg[1:ngenes]
 ```
 
-
-We quantile-normalize log2CPM values for each gene to a normal distribution. The samples with zero molecule count are each assigned a different quantile value. By doing this, the transformed gene expression values centered at 0 with standard deviation of 1. 
+We quantile-normalize log2CPM values for each gene to a normal
+distribution. The samples with zero molecule count are each assigned a
+different quantile value. By doing this, the transformed gene
+expression values centered at 0 with standard deviation of 1.
 
 ```{r, fig.width=9, fig.height=7}
 par(mfrow=c(2,2), mar=c(4,4,3,1))
@@ -107,7 +114,9 @@ load pre-computed results
 data(fit)
 ```
 
-Estimating cyclic functions of the desired genes using the traing data. In this example, we include single-cell samples from 5 individuals.
+Estimating cyclic functions of the desired genes using the traing
+data. In this example, we include single-cell samples from 5
+individuals.
 
 ```{r}
 # learning cyclic functions of the genes using our training data
@@ -192,8 +201,6 @@ title(rownames(fit_predict$Y_reordered)[g])
 }
 title("Predicting cell cycle phase for NA19160", outer=T)
 ```
-
-
 
 ## Session information
 

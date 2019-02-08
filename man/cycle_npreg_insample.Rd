@@ -11,17 +11,16 @@ cycle_npreg_insample(Y, theta, ncores = 4, polyorder = 2,
 \item{Y}{A matrix of normalized and transformed gene expression values.
 Gene by sample.}
 
-\item{theta}{A vector of angele}
+\item{theta}{A vector of angles.}
 
-\item{ncores}{We use mclapply function for parallel computing.
-Default is 4 cores.}
+\item{ncores}{We use mclapply function for parallel computing.}
 
-\item{polyorder}{We estimate cyclic trends of gene expression levels using
-nonparamtric trend filtering. The default fits second degree polynomials
-(polyorder=2).}
+\item{polyorder}{We estimate cyclic trends of gene expression
+levels using nonparamtric trend filtering. The default fits second
+degree polynomials (polyorder=2).}
 
-\item{method.trend}{Varous methods that can be applied to estimate cyclic trend
-of gene expression levels.}
+\item{method.trend}{Varous methods that can be applied to estimate
+cyclic trend of gene expression levels.}
 }
 \value{
 \describe{
@@ -32,7 +31,8 @@ of gene expression levels.}
          }
 }
 \description{
-Estimates cyclic trends of gene expression levels using training data
+Estimates cyclic trends of gene expression levels
+using training data.
 }
 \author{
 Joyce Hsiao

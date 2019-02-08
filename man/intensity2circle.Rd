@@ -2,29 +2,32 @@
 % Please edit documentation in R/intensity2circle.R
 \name{intensity2circle}
 \alias{intensity2circle}
-\title{Infer angles for each single-cell samples using fluorescence intensities}
+\title{Infer angles for each single-cell samples using fluorescence
+intensities}
 \usage{
 intensity2circle(mat, plot.it = F, method = c("trig", "algebraic"))
 }
 \arguments{
-\item{mat}{A matrix of two columns of summarized fluorescence intensity.
-Rows correspond to samples.}
+\item{mat}{A matrix of two columns of summarized fluorescence
+intensity. Rows correspond to samples.}
 
-\item{plot.it}{T/F. Plot the fitted results.}
+\item{plot.it}{TRUE or FALSE. Plot the fitted results.}
 
-\item{method}{The method used to fit the circle. \code{trig} uses trignometry to
-transform intensity measurements from cartesian coordinates to
-polar coordinates. \code{algebraic} uses an algebraic approach for
-circle fitting, using the \code{conicfit} package.}
+\item{method}{The method used to fit the circle. \code{trig} uses
+trignometry to transform intensity measurements from cartesian
+coordinates to polar coordinates. \code{algebraic} uses an
+algebraic approach for circle fitting, using the \code{conicfit}
+package.}
 }
 \value{
-The inferred angles on unit circle based on the input intensity
-    measurements.
+The inferred angles on unit circle based on the input
+intensity measurements.
 }
 \description{
-We use FUCCI intensities to infer the position of the cells in cell
-cycle progression. The result is a vector of angles on a unit circle
-corresponding to the positions of the cells in cell cycle progression.
+We use FUCCI intensities to infer the position of the
+cells in cell cycle progression. The result is a vector of angles
+on a unit circle corresponding to the positions of the cells in
+cell cycle progression.
 }
 \author{
 Joyce Hsiao

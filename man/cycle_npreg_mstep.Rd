@@ -13,12 +13,12 @@ cycle_npreg_mstep(Y, theta, method.trend = c("trendfilter", "loess",
 \item{theta}{observed cellt times}
 }
 \value{
-\describe{
-    \item{\code{Y}{Input gene expression data}}
-    \item{\code{theta}{Input angles}}
-    \item{\code{mu_est}{Estimated expression levels given the cyclic function for each gene}}
-    \item{\code{sigma_est}{Estimated standard error of the cyclic trends for each gene}}
-    \item{\code{funs_est}{Estimated cyclic functions}}
+\describe{f
+    \item{\code{Y}}{Input gene expression data}
+    \item{\code{theta}}{Input angles}
+    \item{\code{mu_est}}{Estimated expression levels given the cyclic function for each gene}
+    \item{\code{sigma_est}}{Estimated standard error of the cyclic trends for each gene}
+    \item{\code{funs_est}}{Estimated cyclic functions}
     }
 }
 \description{
