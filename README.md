@@ -5,7 +5,7 @@
 
 ## Installation 
 
-To install the package, follow the commands below 
+To install the package, follow the commands below:
 
 ```
 install.packages("devtools")
