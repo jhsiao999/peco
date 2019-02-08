@@ -3,3 +3,5 @@ inst/doc
 data-raw/
 R/run_seurat.R
 .Rproj.user
+peco.Rcheck/
+peco*tar.gz
