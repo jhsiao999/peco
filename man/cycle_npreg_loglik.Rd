@@ -18,11 +18,15 @@ training data.}
 gene from the training data.}
 }
 \value{
-\describe{
-     \item{\code{cell_times_est}}{Inferred angles or cell cycle phases, NOT ordered}
-     \item{\code{loglik_est}}{log-likelihood estimates for each gene}
-     \item{\code{prob_per_cell_by_celltimes}}{probabilities of each cell belong to each bin}
-         }
+A list with the following three elements:
+
+\item{cell_times_est}{Inferred angles or cell cycle phases, NOT
+ordered.}
+
+\item{loglik_est}{Log-likelihood estimates for each gene.}
+
+\item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
+to each bin.}
 }
 \description{
 Infer angles or cell cycle phase based on gene expression data

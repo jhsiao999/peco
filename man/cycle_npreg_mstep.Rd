@@ -8,25 +8,32 @@ cycle_npreg_mstep(Y, theta, method.trend = c("trendfilter", "loess",
   "bspline"), polyorder = 2, ncores = 4, ...)
 }
 \arguments{
-\item{Y}{gene by sample expression matrix (log2CPM)}
+\item{Y}{Gene by sample expression matrix (log2CPM).}
 
-\item{theta}{observed cellt times}
+\item{theta}{Observed cell times.}
 }
 \value{
-\describe{f
-    \item{\code{Y}}{Input gene expression data}
-    \item{\code{theta}}{Input angles}
-    \item{\code{mu_est}}{Estimated expression levels given the cyclic function for each gene}
-    \item{\code{sigma_est}}{Estimated standard error of the cyclic trends for each gene}
-    \item{\code{funs_est}}{Estimated cyclic functions}
-    }
+A list with the following elements: 
+    
+\item{Y}{Input gene expression data.}
+
+\item{theta}{Input angles.}
+
+\tem{mu_est}{Estimated expression levels given the cyclic function
+for each gene.}
+
+\item{sigma_est}{Estimated standard error of the cyclic trends for
+each gene.}
+
+\item{funs_est}{Estimated cyclic functions.}
 }
 \description{
-This is used in both cycle_npreg_insample (training data fitting)
-and cycle_npreg_outsample (testing data prediction) to estimate cyclic
-trends of gene expression values. The function outputs for each gene
-standard error of the cyclic trend, cyclic function, and the estimated
-expression levels given the cyclic function.
+This is used in both cycle_npreg_insample (training
+data fitting) and cycle_npreg_outsample (testing data prediction)
+to estimate cyclic trends of gene expression values. The function
+outputs for each gene standard error of the cyclic trend, cyclic
+function, and the estimated expression levels given the cyclic
+function.
 }
 \author{
 Joyce Hsiao

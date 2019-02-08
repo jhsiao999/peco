@@ -10,8 +10,8 @@
 #' @description Estimates cyclic trends of gene expression levels
 #' using training data.
 #'
-#' @param Y A matrix of normalized and transformed gene expression values.
-#'     Gene by sample.
+#' @param Y A matrix of normalized and transformed gene expression
+#' values.  Gene by sample.
 #' 
 #' @param theta A vector of angles.
 #' 
@@ -19,22 +19,22 @@
 #' 
 #' @param polyorder We estimate cyclic trends of gene expression
 #' levels using nonparamtric trend filtering. The default fits second
-#' degree polynomials (polyorder=2).
+#' degree polynomials.
 #' 
 #' @param method.trend Varous methods that can be applied to estimate
 #' cyclic trend of gene expression levels.
 #'
-#' @return
-#'     \describe{
-#'      \item{\code{Y}}{Gene expression marix.}
-#'      \item{\code{theta}}{Vector of angles or cell cycle phases}
-#'      \item{\code{sigma_est}}{Estimated standard error of the cyclic trend for each gene.}
-#'      \item{\code{funs_est}}{A list of functions for approximating the cyclic trends of gene express levels for each gene.}
-#'          }
-#'
-#' @import parallel
+#' @return A list with four elements:
 #' 
-#' @import genlasso
+#' \item{Y}{Gene expression marix.}
+#' 
+#' \item{theta}{Vector of angles or cell cycle phases.}
+#' 
+#' \item{sigma_est}{Estimated standard error of the cyclic trend for
+#' each gene.}
+#' 
+#' \item{funs_est}{A list of functions for approximating the cyclic
+#' trends of gene express levels for each gene.}
 #'
 #' @author Joyce Hsiao
 #'
@@ -45,6 +45,8 @@ cycle_npreg_insample <- function(Y, theta,
                                  polyorder=2,
                                  method.trend=c("trendfilter",
                                                 "loess", "bspline"),...) {
+# import parallel
+# import genlasso
 
   # order data by initial cell times
   G <- nrow(Y)
@@ -59,52 +61,66 @@ cycle_npreg_insample <- function(Y, theta,
                                      method.trend=method.trend,
                                      ncores = ncores)
 
-  out <- list(Y=Y,
+  return(list(Y=Y,
               theta=theta,
               sigma_est=initial_mstep$sigma_est,
-              funs_est=initial_mstep$funs)
-  return(out)
+              funs_est=initial_mstep$funs))
 }
 
 #' @title Predict test-sample ordering using training labels (no update)
 #'
 #' @description Apply the estimates of cycle_npreg_insample to another
 #' gene expression dataset to infer an angle or cell cycle phase for
-#' each cell
+#' each cell.
 #'
 #' @param Y_test Gene expression data to be used for prediction.
 #'     Gene by sample.
-#' @param sigma_est A vector of gene-specific standard error of the cyclic trends.
+#' 
+#' @param sigma_est A vector of gene-specific standard error of the
+#' cyclic trends.
+#' 
 #' @param funs_est A vector of cyclic functions estimating cyclic trends.
+#' 
 #' @param polyorder We estimate cyclic trends of gene expression levels using
-#'    nonparamtric trend filtering. The default fits second degree polynomials
-#'    (polyorder=2).
+#'    nonparamtric trend filtering. The default fits second degree polynomials.
+#' 
 #' @param method.grid Method for defining bins along the circle.
-#' @param method.trend Varous methods that can be applied to estimate cyclic trend
-#'     of gene expression levels.
+#' 
+#' @param method.trend Varous methods that can be applied to estimate
+#' cyclic trend of gene expression levels.
+#' 
 #' @param ncores We use mclapply function for parallel computing.
-#'     Default is 4 cores.
 #'
-#' @return
-#'     \describe{
-#'      \item{\code{Y}}{The input gene expression marix.}
-#'      \item{\code{cell_times_est}}{Inferred angles or cell cycle phases, NOT ordered}
-#'      \item{\code{loglik_est}}{log-likelihood estimates for each gene}
-#'      \item{\code{cell_times_reordered}}{The inferred angles reordered (in ascending order)}
-#'      \item{\code{Y_reorded}}{The input gene expression matrix reordered by cell_times_reordered}
-#'      \item{\code{sigma_reordered}}{Estimated standard error of the cyclic trend
-#'      for each gene, reordered by cell_times_reordered.}
-#'      \item{\code{funs_reordered}}{A list of functions for approximating the cyclic
-#'      trends of gene express levels for each gene, reordered by cell_times_reordered.}
-#'      \item{\code{mu_reordered}}{Estimated cyclic trend of gene expression values for each gene,
-#'      reordered by cell_times_reordered.}
-#'      \item{\code{prob_per_cell_by_celltimes}}{probabilities of each cell belong to each bin}
-#'          }
-#'
-#' @import parallel
-#' @import genlasso
+#' @return A list with the following elements:
+#' 
+#' \item{Y}{The input gene expression marix.}
+#' 
+#' \item{cell_times_est}{Inferred angles or cell cycle phases, NOT
+#' ordered.}
+#' 
+#' \item{loglik_est}{Log-likelihood estimates for each gene.}
+#' 
+#' \item{cell_times_reordered}{The inferred angles reordered (in
+#' ascending order).}
+#' 
+#' \item{Y_reorded}{The input gene expression matrix reordered by
+#' cell_times_reordered.}
+#' 
+#' \item{sigma_reordered}{Estimated standard error of the cyclic trend
+#' for each gene, reordered by cell_times_reordered.}
+#' 
+#' \item{funs_reordered}{A list of functions for approximating the
+#' cyclic trends of gene express levels for each gene, reordered by
+#' cell_times_reordered.}
+#' 
+#' \item{mu_reordered}{Estimated cyclic trend of gene expression
+#' values for each gene, reordered by cell_times_reordered.}
+#' 
+#' \item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
+#' to each bin.}
 #'
 #' @export
+#' 
 cycle_npreg_outsample <- function(Y_test,
                                   sigma_est,
                                   funs_est,
@@ -113,6 +129,8 @@ cycle_npreg_outsample <- function(Y_test,
                                   polyorder=2,
                                   method.grid=c("pca", "uniform"),
                                   ncores=4,...) {
+# import parallel
+# import genlasso
 
   # compute expected cell time for the test samples
   # under mu and sigma estimated from the training samples
@@ -139,31 +157,34 @@ cycle_npreg_outsample <- function(Y_test,
   return(out)
 }
 
-
-
 #------ Supporting functions
 
-
-#' For prediction, initialize grid points for cell cycle phase on a circle.
+#' @title For prediction, initialize grid points for cell cycle phase
+#' on a circle.
 #'
 #' @param Y Gene expression matrix. Gene by sample.
+#' 
 #' @param grids number of bins to be selected along 0 to 2pi.
-#' @param method.grid The approach to initialize angles in the computation.
-#' \code{uniform} creates k equally-spaced bins (grids). \code{pca} uses
-#' gene expression values to infer angles, and then use these pca-based
-#' angles to move the cells to the closest bin (as defined by \code{uniform}).
+#' 
+#' @param method.grid The approach to initialize angles in the
+#' computation. \code{uniform} creates k equally-spaced bins
+#' (grids). \code{pca} uses gene expression values to infer angles,
+#' and then use these pca-based angles to move the cells to the
+#' closest bin (as defined by \code{uniform}).
 #'
-#' @return A vector of initialized angles to be used in \code{cycle_npreg_loglik}
-#' to infer angles.
-#'
-#' @import circular
+#' @return A vector of initialized angles to be used in
+#' \code{cycle_npreg_loglik} to infer angles.
 #'
 #' @author Joyce Hsiao
 #'
+#' @importFrom stats prcomp
+#' 
 #' @export
+#' 
 initialize_grids <- function(Y, grids=100,
                              method.grid=c("pca", "uniform"),...) {
-
+# import circular
+    
   len <- (2*pi)/(2*grids)
   theta_grids <- seq(len, (2*pi)-(len), length.out=grids)
 
@@ -179,8 +200,9 @@ initialize_grids <- function(Y, grids=100,
     names(theta_initial_ind) <- names(grid_approx)
 
     for (i in 1:length(grid_approx)) {
-      theta_initial_ind[i] <- which.min(pmin(abs(theta_grids-grid_approx[i]),
-                                             abs(theta_grids-(2*pi-grid_approx[i]))))
+      theta_initial_ind[i] <-
+        which.min(pmin(abs(theta_grids-grid_approx[i]),
+                       abs(theta_grids-(2*pi-grid_approx[i]))))
       theta_initial <- theta_grids[theta_initial_ind]
     }
   }
@@ -192,7 +214,7 @@ initialize_grids <- function(Y, grids=100,
   return(theta_initial)
 }
 
-#' Infer angles or cell cycle phase based on gene expression data
+#' @title Infer angles or cell cycle phase based on gene expression data
 #'
 #' @param Y Gene by sample expression matrix.
 #' 
@@ -202,14 +224,15 @@ initialize_grids <- function(Y, grids=100,
 #' @param funs_est A vector of cyclic functions estimated for each
 #' gene from the training data.
 #'
-#' @return
-#'     \describe{
-#'      \item{\code{cell_times_est}}{Inferred angles or cell cycle phases, NOT ordered}
-#'      \item{\code{loglik_est}}{log-likelihood estimates for each gene}
-#'      \item{\code{prob_per_cell_by_celltimes}}{probabilities of each cell belong to each bin}
-#'          }
-#'
-#' @import circular
+#' @return A list with the following three elements:
+#' 
+#' \item{cell_times_est}{Inferred angles or cell cycle phases, NOT
+#' ordered.}
+#' 
+#' \item{loglik_est}{Log-likelihood estimates for each gene.}
+#' 
+#' \item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
+#' to each bin.}
 #'
 #' @author Joyce Hsiao
 #'
@@ -219,7 +242,8 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
                                grids=100,
                                method.type=c("supervised", "unsupervised"),
                                method.grid=c("pca", "uniform"),...) {
-
+# import circular
+    
   N <- ncol(Y)
   G <- nrow(Y)
 
@@ -252,7 +276,6 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 
   # use max likelihood to assign samples
   for (n in 1:N) {
-    # print(n)
     sumll <- sum(exp(loglik_per_cell_by_celltimes)[n,], na.rm=T)
     if (sumll == 0) {
       prob_per_cell_by_celltimes[n,] <- rep(0, grids)
@@ -284,40 +307,44 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
               prob_per_cell_by_celltimes=prob_per_cell_by_celltimes))
 }
 
-
-
-
-#' Estimate parameters of the cyclic trends
+#' @title Estimate parameters of the cyclic trends
 #'
-#' This is used in both cycle_npreg_insample (training data fitting)
-#' and cycle_npreg_outsample (testing data prediction) to estimate cyclic
-#' trends of gene expression values. The function outputs for each gene
-#' standard error of the cyclic trend, cyclic function, and the estimated
-#' expression levels given the cyclic function.
+#' @description This is used in both cycle_npreg_insample (training
+#' data fitting) and cycle_npreg_outsample (testing data prediction)
+#' to estimate cyclic trends of gene expression values. The function
+#' outputs for each gene standard error of the cyclic trend, cyclic
+#' function, and the estimated expression levels given the cyclic
+#' function.
 #'
-#' @param Y gene by sample expression matrix (log2CPM)
-#' @param theta observed cellt times
+#' @param Y Gene by sample expression matrix (log2CPM).
+#' 
+#' @param theta Observed cell times.
 #'
-#' @import genlasso
-#' @import assertthat
-#' @import parallel
-#'
-#' @return
-#'     \describe{f
-#'     \item{\code{Y}}{Input gene expression data}
-#'     \item{\code{theta}}{Input angles}
-#'     \item{\code{mu_est}}{Estimated expression levels given the cyclic function for each gene}
-#'     \item{\code{sigma_est}}{Estimated standard error of the cyclic trends for each gene}
-#'     \item{\code{funs_est}}{Estimated cyclic functions}
-#'     }
+#' @return A list with the following elements: 
+#'     
+#' \item{Y}{Input gene expression data.}
+#' 
+#' \item{theta}{Input angles.}
+#' 
+#' \tem{mu_est}{Estimated expression levels given the cyclic function
+#' for each gene.}
+#' 
+#' \item{sigma_est}{Estimated standard error of the cyclic trends for
+#' each gene.}
+#' 
+#' \item{funs_est}{Estimated cyclic functions.}
 #'
 #' @author Joyce Hsiao
 #'
 #' @export
+#' 
 cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                                                        "loess", "bspline"),
                               polyorder=2,
                               ncores=4,...) {
+# import genlasso
+# import assertthat
+# import parallel
 
       G <- nrow(Y)
       N <- ncol(Y)
@@ -336,7 +363,6 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
       # for each gene, estimate the cyclical pattern of gene expression
       # conditioned on the given cell times
       fit <- mclapply(1:G, function(g) {
-        # print(g)
         y_g <- Y_ordered[g,]
 
         if (method.trend=="trendfilter") {
@@ -383,20 +409,3 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                   sigma_est = sigma_est,
                   funs = funs))
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

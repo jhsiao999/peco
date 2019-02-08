@@ -8,8 +8,8 @@ cycle_npreg_insample(Y, theta, ncores = 4, polyorder = 2,
   method.trend = c("trendfilter", "loess", "bspline"), ...)
 }
 \arguments{
-\item{Y}{A matrix of normalized and transformed gene expression values.
-Gene by sample.}
+\item{Y}{A matrix of normalized and transformed gene expression
+values.  Gene by sample.}
 
 \item{theta}{A vector of angles.}
 
@@ -17,18 +17,23 @@ Gene by sample.}
 
 \item{polyorder}{We estimate cyclic trends of gene expression
 levels using nonparamtric trend filtering. The default fits second
-degree polynomials (polyorder=2).}
+degree polynomials.}
 
 \item{method.trend}{Varous methods that can be applied to estimate
 cyclic trend of gene expression levels.}
 }
 \value{
-\describe{
-     \item{\code{Y}}{Gene expression marix.}
-     \item{\code{theta}}{Vector of angles or cell cycle phases}
-     \item{\code{sigma_est}}{Estimated standard error of the cyclic trend for each gene.}
-     \item{\code{funs_est}}{A list of functions for approximating the cyclic trends of gene express levels for each gene.}
-         }
+A list with four elements:
+
+\item{Y}{Gene expression marix.}
+
+\item{theta}{Vector of angles or cell cycle phases.}
+
+\item{sigma_est}{Estimated standard error of the cyclic trend for
+each gene.}
+
+\item{funs_est}{A list of functions for approximating the cyclic
+trends of gene express levels for each gene.}
 }
 \description{
 Estimates cyclic trends of gene expression levels
