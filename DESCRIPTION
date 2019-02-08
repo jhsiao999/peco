@@ -1,14 +1,15 @@
 Encoding: UTF-8
 Type: Package
 Package: peco
-Version: 0.1.2
+Version: 0.1.4
 Date: 2019-02-08
 Title: Predicting Cell Cycle Progression in a Contiuum using
-    Single-cell RNA-seq Data
+    Single-Cell RNA-Seq Data
 Authors@R: c(person("Chiaowen Joyce","Hsiao",email="joyce.hsiao1@gmail.com", 
                     role=c("aut","cre")),
              person("Matthew","Stephens",
 	           email="stephens999@gmail.com",role="aut"),
+             person("John","Blischak",role="ctb"),
              person("Peter","Carbonetto",role="ctb"))
 Description: A supervised approach for predicting cell cycle
     progression in induced pluripotent stem cells (iPSCs) using
@@ -23,6 +24,7 @@ BugReports: https://github.com/jhsiao999/peco/issues
 License: GPL (>= 2)
 Depends: R (>= 3.2)
 Imports:
+    Matrix,
     assertthat,
     circular,
     conicfit,

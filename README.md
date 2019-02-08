@@ -41,6 +41,17 @@ for questions on the package or the methods.
 > inferring quantitative cell-cycle phase in single-cell RNA-seq data
 > analysis. bioRxiv
 
+## Developer notes
+
+Alternatively, to install and test the peco package, run the following
+commands in the command-line shell:
+
+```bash
+R CMD build --resave-data peco
+R CMD check --as-cran peco_0.1.3.tar.gz
+R CMD INSTALL peco_0.1.3.tar.gz
+```
+
 ## Licenses
 
 This package is distributed under [GPL - General Public License (>= 2)]

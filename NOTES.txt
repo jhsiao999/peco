@@ -30,3 +30,14 @@ notes
   stephenslab/mixsqp for an example of this). This is easy to do once
   you have create the vignettes and roxygen2 docs for your R
   functions.
+
++ Some undocumented arguments that should be added to the roxygen2 docs:
+  - Undocumented arguments in cycle_npreg_insample: ‘...’
+  - Undocumented arguments in cycle_npreg_loglik: grids, method.type,
+    method.grid ‘...’
+  - Undocumented arguments in cycle_npreg_mstep: method.trend, polyorder,
+    ncores, ‘...’
+  - Undocumented arguments in cycle_npreg_outsample: ‘...’
+  - Undocumented arguments in initialize_grids: ‘...’
+  - Undocumented arguments in run_seurat: s.genes, g2m.genes, n.bin,
+    seed.use, random.seed
