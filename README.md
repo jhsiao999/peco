@@ -1,7 +1,7 @@
 # peco
 
-**peco** is a R package for predicting cell cycle progression in a continnum using scRNA-seq data.
-
+**peco** is a R package for predicting cell cycle progression in a
+continnum using scRNA-seq data.
 
 ## Installation 
 
