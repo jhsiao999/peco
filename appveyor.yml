@@ -19,6 +19,7 @@ environment:
     USE_RTOOLS: true
 
 build_script:
+  - travis-tool.sh install_bioc_deps
   - travis-tool.sh install_deps
 
 test_script:

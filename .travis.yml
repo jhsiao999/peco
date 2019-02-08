@@ -5,6 +5,9 @@ sudo: false
 cache: packages
 latex: false
 
+bioc_packages:
+  - Biobase
+
 matrix:
   include:
     - os: linux
