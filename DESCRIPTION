@@ -1,13 +1,15 @@
 Encoding: UTF-8
 Type: Package
 Package: peco
-Title: Predicting cell cycle progression in a contiuum using
-    single-cell RNA-seq data
 Version: 0.1.1
-Author: c(person("Chiaowen Joyce", "Hsiao", email = "joyce.hsiao1@gmail.com", 
-  role = c("aut","cre")),
-  person("Matthew", "Stephens", email = "stephens999@gmail.com", role ="aut")) 
-Maintainer: Chiaowen Joyce Hsiao <joyce.hsiao1@gmail.com>
+Date: 2019-02-08
+Title: Predicting Cell Cycle Progression in a Contiuum using
+    Single-cell RNA-seq Data
+Authors@R: c(person("Chiaowen Joyce","Hsiao",email="joyce.hsiao1@gmail.com", 
+                    role=c("aut","cre")),
+             person("Matthew","Stephens",
+	           email="stephens999@gmail.com",role="aut"),
+             person("Peter,"Carbonetto",role="ctb"))
 Description: A supervised approach for predicting cell cycle
     progression in induced pluripotent stem cells (iPSCs) using
     scRNA-seq data. We provide gene-specific estimates of cyclic
@@ -16,7 +18,9 @@ Description: A supervised approach for predicting cell cycle
     predict cell cycle phases (measured as angles on a unit
     cirlce). The training data consists of fluorescence imaging data
     and scRNA-seq data from iPSCs derived from 6 Yoruba cell lines.
-License: GPL (>=2)
+URL: https://github.com/jhsiao999/peco
+BugReports: https://github.com/jhsiao999/peco/issues
+License: GPL (>= 2)
 Depends: R (>= 3.2)
 Imports:
     assertthat,
@@ -26,10 +30,10 @@ Imports:
     ggplot2,
     MASS,
     parallel
-RoxygenNote: 6.1.1
 Suggests: 
     knitr,
     rmarkdown,
     Biobase
 VignetteBuilder: knitr
 LazyData: true
+RoxygenNote: 6.1.1

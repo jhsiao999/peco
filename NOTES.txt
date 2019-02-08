@@ -3,10 +3,13 @@ notes
 
 + To do: Remove all "imports" statements.
 
++ To do: Remove unneeded Imports in DESCRIPTION.
+
 + Why do "fit_bspline" and "fit_loess" return a list with only one
   element? You don't need the list.
 
-+ Suggestion: Explain in Description why it is called "peco".
++ Suggestion: Explain in "Description" field of DESCRIPTION file why
+  it is called "peco". (And in README.)
 
 + Suggestion: If reasonable to do so, reduce size of data sets in
   "data" folder in order to reduce installation time from GitHub.
