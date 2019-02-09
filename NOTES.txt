@@ -41,7 +41,7 @@ notes
 + Suggestion: Add titles to roxygen docs for data sets.
 
 + Suggestion: Create a pkgdown site, and activate GitHub Pages (see
-  stephenslab/mixsqp for an example of this). This is easy to do once
-  you have create the vignettes and roxygen2 docs for your R
-  functions.
+  https://github.com/stephenslab/mixsqp for an example of this). This
+  is easy to do once you have create the vignettes and roxygen2 docs
+  for your R functions.
 
