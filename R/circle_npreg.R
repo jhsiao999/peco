@@ -45,8 +45,6 @@ cycle_npreg_insample <- function(Y, theta,
                                  polyorder=2,
                                  method.trend=c("trendfilter",
                                                 "loess", "bspline"),...) {
-# import parallel
-# import genlasso
 
   # order data by initial cell times
   G <- nrow(Y)
@@ -129,8 +127,6 @@ cycle_npreg_outsample <- function(Y_test,
                                   polyorder=2,
                                   method.grid=c("pca", "uniform"),
                                   ncores=4,...) {
-# import parallel
-# import genlasso
 
   # compute expected cell time for the test samples
   # under mu and sigma estimated from the training samples
@@ -178,12 +174,12 @@ cycle_npreg_outsample <- function(Y_test,
 #' @author Joyce Hsiao
 #'
 #' @importFrom stats prcomp
+#' @importFrom circular coord2rad
 #' 
 #' @export
 #' 
 initialize_grids <- function(Y, grids=100,
                              method.grid=c("pca", "uniform"),...) {
-# import circular
     
   len <- (2*pi)/(2*grids)
   theta_grids <- seq(len, (2*pi)-(len), length.out=grids)
@@ -340,6 +336,7 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #'
 #' @importFrom assertthat assert_that
 #' @importFrom parallel mclapply
+#' @importFrom stats approxfun
 #' 
 #' @export
 #' 
@@ -347,7 +344,6 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                                                        "loess", "bspline"),
                               polyorder=2,
                               ncores=4,...) {
-# import genlasso
 
       G <- nrow(Y)
       N <- ncol(Y)

@@ -29,7 +29,10 @@ notes
   - Undocumented arguments in initialize_grids: ‘...’
   - Undocumented arguments in run_seurat: s.genes, g2m.genes, n.bin,
     seed.use, random.seed
-    
+
++ Suggestion: In the file circle_npreg.R, the functions are
+  "cycle_npreg_*". Maybe hange the name of the file to be consistent.
+
 + Suggestion: Explain in "Description" field of DESCRIPTION file why
   it is called "peco". (And in README.)
 

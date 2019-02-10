@@ -36,10 +36,14 @@
 #'
 #' @author Joyce Hsiao
 #'
+#' @importFrom stats var
+#' @importFrom genlasso trendfilter
+#' @importFrom genlasso cv.trendfilter
+#' @importFrom genlasso predict.genlasso
+#' 
 #' @export
 #' 
 fit_trendfilter_generic <- function(yy, polyorder=2) {
-# import genlasso
 
   yy.rep <- rep(yy,3)
   include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
@@ -70,6 +74,9 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #'
 #' @author Joyce Hsiao
 #'
+#' @importFrom stats smooth.spline
+#' @importFrom stats predict
+#' 
 #' @export
 #' 
 fit_bspline <- function(yy, time) {
@@ -98,6 +105,8 @@ fit_bspline <- function(yy, time) {
 #'
 #' @author Joyce Hsiao
 #'
+#' @importFrom stats loess
+#' 
 #' @export
 #' 
 fit_loess <- function(yy, time) {

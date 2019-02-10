@@ -43,7 +43,6 @@
 #' @export
 #' 
 fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=4) {
-# import genlasso
   G <- nrow(Y)
   N <- ncol(Y)
 
@@ -62,7 +61,7 @@ fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=4) {
   # conditioned on the given cell times.
   fit <- mclapply(1:G, function(g) {
     y_g <- Y_ordered[g,]
-    fit_g <- fit_trendfilter.generic(yy=y_g, polyorder = polyorder)
+    fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
     return(fit_g$pve)
   }, mc.cores = ncores)
 

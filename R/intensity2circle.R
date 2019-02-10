@@ -21,13 +21,19 @@
 #'
 #' @author Joyce Hsiao
 #'
+#' @importFrom stats prcomp
+#' @importFrom graphics plot
+#' @importFrom graphics points
+#' @importFrom circular coord2rad
+#' @importFrom conicfit AtoG
+#' @importFrom conicfit EllipseDirectFit
+#' @importFrom conicfit calculateEllipse
+#' @importFrom conicfit Residuals.ellipse
+#' 
 #' @export
 #' 
 intensity2circle <- function(mat, plot.it=F,
                              method=c("trig","algebraic")) {
-# import stats
-# import circular
-# import conicfit
     
   if (is.matrix(mat)==F)
     mat <- as.matrix(mat)
