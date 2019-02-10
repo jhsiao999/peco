@@ -32,9 +32,9 @@ for questions on the package or the methods.
 ## How to cite
 
 > Hsiao, C. J., Tung, P., Blischak, J. D., Burnett, J., Dey, K. K. ,
-> Barr, K., Stephens, M., and Gilad, Y. (2018). Characterizing and
+> Barr, K., Stephens, M., and Gilad, Y. (2018). [Characterizing and
 > inferring quantitative cell-cycle phase in single-cell RNA-seq data
-> analysis. bioRxiv
+> analysis.](https://doi.org/10.1101/526848) bioRxiv doi:10.1101/526848
 
 ## License
 
