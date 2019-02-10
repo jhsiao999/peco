@@ -5,17 +5,12 @@ continuum using scRNA-seq data.
 
 ## Installation 
 
-To install the package, follow the commands below:
+To install and load the package, run:
 
 ```R
 install.packages("devtools")
 library(devtools)
 install_github("jhsiao999/peco")
-```
-
-To load the package, run
-
-```R
 library(peco)
 ```
 
