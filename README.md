@@ -1,31 +1,31 @@
 # peco
 
-**peco** is a R package for predicting cell cycle progression in a
+**peco** is an R package for predicting cell cycle progression in a
 continuum using scRNA-seq data.
 
 ## Installation 
 
 To install the package, follow the commands below:
 
-```
+```R
 install.packages("devtools")
 library(devtools)
-install_github('jhsiao999/peco')
+install_github("jhsiao999/peco")
 ```
 
-To load the package
+To load the package, run
 
-```
+```R
 library(peco)
 ```
 
-## Vignettes
+## Vignette
 
 I've included an example of using `peco` to predict cell cycle phase
 using single-cell RNA-seq data. Run the following command to view the
 vignette.
 
-```
+```R
 browseVignettes("peco")
 ```
 
@@ -41,6 +41,15 @@ for questions on the package or the methods.
 > inferring quantitative cell-cycle phase in single-cell RNA-seq data
 > analysis. bioRxiv
 
+## License
+
+Copyright (c) 2018-2019, Joyce Hsiao.
+
+All source code and software in this repository are made available
+under the terms of the [GNU General Public
+License](https://www.gnu.org/licenses/gpl-3.0.en.html). See
+file [LICENSE](LICENSE) for the full text of the license.
+
 ## Developer notes
 
 Alternatively, to install and test the peco package, run the following
@@ -52,6 +61,3 @@ R CMD check --as-cran peco_0.1.6.tar.gz
 R CMD INSTALL peco_0.1.6.tar.gz
 ```
 
-## Licenses
-
-This package is distributed under [GPL - General Public License (>= 2)]

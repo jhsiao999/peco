@@ -21,7 +21,7 @@ Description: A supervised approach for predicting cell cycle
     and scRNA-seq data from iPSCs derived from 6 Yoruba cell lines.
 URL: https://github.com/jhsiao999/peco
 BugReports: https://github.com/jhsiao999/peco/issues
-License: GPL (>= 2)
+License: GPL (>= 3)
 Depends: R (>= 3.2)
 Imports:
     stats,

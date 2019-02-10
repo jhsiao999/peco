@@ -30,11 +30,14 @@ notes
   - Undocumented arguments in run_seurat: s.genes, g2m.genes, n.bin,
     seed.use, random.seed
 
++ Please fix: Add an inst/CITATION file; see
+  github.com/stephenslab/mixsqp for an example.
+
 + Suggestion: In the file circle_npreg.R, the functions are
   "cycle_npreg_*". Maybe hange the name of the file to be consistent.
 
 + Suggestion: Explain in "Description" field of DESCRIPTION file why
-  it is called "peco". (And in README.)
+  it is called "peco". (And in README!)
 
 + Suggestion: If reasonable to do so, reduce size of data sets in
   "data" folder in order to reduce installation time from GitHub.
