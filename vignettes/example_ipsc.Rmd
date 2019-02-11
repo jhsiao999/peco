@@ -23,15 +23,12 @@ pluripotent stem cells (iPSCs). This vignette provides a simple
 example of predicting cell cycle phase using 5 genes. These 5 genes
 were identified as exhibiting strong cyclic trend in our analysis, and
 also as cell-cycle marker genes in previous cell-cycle studies using
-yeast ([Spellman et al., 1998](spellman)) and HeLa cells
-([Whitfield et al., 2002](whitfield)).
-
-[spellman]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC25624/
-[whitfield]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC117619/
+yeast ([Spellman et al., 1998][spellman]) and HeLa cells
+([Whitfield et al., 2002][whitfield]).
 
 ## Load data and packages
 
-```{r}
+```{r, message=FALSE}
 library(Biobase)
 library(peco)
 
@@ -80,7 +77,6 @@ colnames(log2cpm.quant) <- colnames(log2cpm)
 which_samples_predict <- rownames(pdata)[which(pdata$chip_id == "NA19098")]
 which_samples_train <- rownames(pdata)[which(pdata$chip_id != "NA19098")]
 
-
 # use top 5 cyclic genes for prediciton
 ngenes <- 5
 which_genes <- genes_cyclic_list$ensg[1:ngenes]
@@ -126,7 +122,7 @@ theta_train <- pdata$theta[which(rownames(pdata) %in% which_samples_train)]
 names(theta_train) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_train)]
 ```
 
-```{r, eval=F}
+```{r, eval=FALSE}
 fit_train <- cycle_npreg_insample(Y = Y_train,
                                   theta = theta_train,
                                   polyorder=2,
@@ -208,3 +204,5 @@ title("Predicting cell cycle phase for NA19160", outer=T)
 sessionInfo()
 ```
 
+[spellman]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC25624
+[whitfield]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC117619
