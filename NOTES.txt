@@ -1,8 +1,6 @@
 notes
 =====
 
-+ To do: Remove unneeded Imports in DESCRIPTION.
-
 + Please fix: I don't understand the description of the eset_final_sub
   data set. What are "theta" and "exprs(est_final)"?
 
