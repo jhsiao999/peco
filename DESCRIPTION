@@ -38,6 +38,8 @@ Suggests:
     knitr,
     rmarkdown,
     Biobase
+Remotes:
+  glmgen/genlasso
 VignetteBuilder: knitr
 LazyData: true
 RoxygenNote: 6.1.1

@@ -1,3 +1,9 @@
 ^peco\.Rproj$
 ^NOTES\.txt$
 ^LICENSE$
+^\.travis\.yml$
+^appveyor\.yml$
+^.*\.Rproj$
+^\.Rproj\.user$
+^packrat/
+^\.Rprofile$

@@ -1,5 +1,8 @@
 # peco
 
+[![Travis-CI Build Status](https://travis-ci.com/jhsiao999/peco.svg?branch=master)](https://travis-ci.com/jhsiao999/peco)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/jhsiao999/peco?branch=master&svg=true)](https://ci.appveyor.com/project/jhsiao999/peco)
+
 **peco** is an R package for predicting cell cycle progression in a
 continuum using scRNA-seq data.
 
@@ -31,7 +34,7 @@ for questions on the package or the methods.
 
 ## How to cite
 
-> Hsiao, C. J., Tung, P., Blischak, J. D., Burnett, J., Dey, K. K. ,
+> Hsiao, C. J., Tung, P., Blischak, J. D., Burnett, J., Dey, K. K.,
 > Barr, K., Stephens, M., and Gilad, Y. (2018). [Characterizing and
 > inferring quantitative cell-cycle phase in single-cell RNA-seq data
 > analysis.](https://doi.org/10.1101/526848) bioRxiv doi:10.1101/526848
