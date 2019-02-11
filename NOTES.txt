@@ -1,10 +1,6 @@
 notes
 =====
 
-+ To do: Add @importFrom statements as needed.
-
-+ To do: Remove all "imports" comments.
-
 + To do: Remove unneeded Imports in DESCRIPTION.
 
 + Please fix: I don't understand the description of the eset_final_sub
