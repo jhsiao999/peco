@@ -162,7 +162,7 @@ theta_test <- pdata$theta[which(rownames(pdata) %in% which_samples_predict)]
 names(theta_test) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_predict)]
 ```
 
-```{r, eval=F}
+```{r, eval=FALSE}
 fit_predict <- cycle_npreg_outsample(Y_test=Y_predict,
                                   sigma_est=fit_train$sigma_est,
                                   funs_est=fit_train$funs_est,
