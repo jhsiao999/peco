@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Type: Package
 Package: peco
-Version: 0.1.6
+Version: 0.1.7
 Date: 2019-02-10
 Title: Predicting Cell Cycle Progression in a Contiuum using
     Single-Cell RNA-Seq Data
