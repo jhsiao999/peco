@@ -3,21 +3,20 @@
 \docType{data}
 \name{genes_cyclic_list}
 \alias{genes_cyclic_list}
-\title{Genes ordered by their cyclic trend (stronog to weak)
-and sample information}
-\format{A data frame
-    \describe{
-       \item{\code{order}}{The ordering of the genes according to proportion of
-            variacne explained (large to small)}
-       \item{\code{ensg}}{ENSG gene ID}
-       \item{\code{pve}}{Proportion of variance explained in the expression values by the
-            estimated cyclic trend}
-     }}
-\usage{
-genes_cyclic_list
-}
+\title{Genes ordered by their cyclic trend}
+\format{A data frame with the following columns, in which the rows
+are ordered according to the proportion of variance explained
+(large to small):
+
+\describe{
+
+  \item{ensg}{ENSG gene ID.}
+
+  \item{pve}{Proportion of variance explained in the expression
+  values by the estimated cyclic trend.}
+}}
 \description{
-Genes ordered by their cyclic trend (stronog to weak)
-and sample information
+Genes ordered by their cyclic trend (strong to weak),
+and sample information.
 }
-\keyword{datasets}
+\keyword{data}

@@ -1,13 +1,18 @@
-#' Seurat code for cell cycle scoring
+#' @title Seurat code for cell cycle scoring
 #' 
-#' Compute phase specific cell cycle scores using the code outlined in Seurat
+#' @description Compute phase specific cell cycle scores using the
+#' code outlined in Seurat.
 #'
-#' @param Y log2 normalized gene expression matrix
+#' @param Y log2-normalized gene expression matrix.
 #'
-#' @references Butler, A., Hoffman, P., Smibert, P., Papalexi, E., and Satija, R. (2018) Integrating single-cell transcriptomic data across different conditions, technologies, and species. Nature Biotechnology 36, 411-420. doi:10.1038/nbt.4096
+#' @references Butler, A., Hoffman, P., Smibert, P., Papalexi, E, and
+#' Satija, R. (2018). Integrating single-cell transcriptomic data
+#' across different conditions, technologies, and species. \emph{Nature
+#' Biotechnology} \bold{36}, 411-420. doi:10.1038/nbt.4096
 #'
 run_seurat <- function(Y, s.genes, g2m.genes, n.bin=25,
-         seed.use=1, random.seed=1) {
+                       seed.use=1, random.seed=1) {
+    
   set.seed(random.seed)
   genes.list <- list(S.Score = s.genes, G2M.Score = g2m.genes)
   genes.list <- lapply(X = genes.list, FUN = function(x) {
@@ -19,11 +24,9 @@ run_seurat <- function(Y, s.genes, g2m.genes, n.bin=25,
                          FUN = length, FUN.VALUE = numeric(1)))
 
   # order genes by gene-specific averages
-  # genes.pool = rownames(Y)
-  # data.avg <- Matrix::rowMeans(Y[genes.pool, ])
   data.avg <- Matrix::rowMeans(Y)
   data.avg <- data.avg[order(data.avg)]
-  data.cut <- as.numeric(cut(x = data.avg, #breaks = round(x = length(x = data.avg)/n.bin),
+  data.cut <- as.numeric(cut(x = data.avg,
                              breaks=n.bin,
                              include.lowest = TRUE))
   names(x = data.cut) <- names(x = data.avg)
@@ -60,8 +63,8 @@ run_seurat <- function(Y, s.genes, g2m.genes, n.bin=25,
 
   assignments <- apply(X = genes.scores.use,
                        MARGIN = 1,
-                       FUN = function(scores,
-                                      first = "S", second = "G2M", null = "G1") {
+                       FUN = function(scores, first = "S", second = "G2M",
+                           null = "G1") {
     if (all(scores < 0)) {
       return(null)
     }
@@ -77,5 +80,3 @@ run_seurat <- function(Y, s.genes, g2m.genes, n.bin=25,
 
   return(out)
 }
-
-

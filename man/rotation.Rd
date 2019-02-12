@@ -2,23 +2,26 @@
 % Please edit documentation in R/circ_dist.R
 \name{rotation}
 \alias{rotation}
-\title{Rotate circular variable shift_var to minimize distance between ref_var and shift_var}
+\title{Rotate circular variable shift_var to minimize distance
+between ref_var and shift_var}
 \usage{
 rotation(ref_var, shift_var)
 }
 \arguments{
-\item{ref_var}{A vector of reference angles}
+\item{ref_var}{A vector of reference angles.}
 
-\item{shift_var}{A vector of angles to be compared to ref_var}
+\item{shift_var}{A vector of angles to be compared to ref_var.}
 }
 \value{
-The transformed values of shift_var after rotation and shifting
+The transformed values of shift_var after rotation and
+shifting.
 }
 \description{
-Because the origin of the cell cycle phases is arbitrary, we transform
-the angles prior to computing the distance (rotation and shifting)
-to minimize the distance between two vectors. After this, one can apply
-circ_dist to compute the distance between the output value and ref_var.
+Because the origin of the cell cycle phases is
+arbitrary, we transform the angles prior to computing the distance
+(rotation and shifting) to minimize the distance between two
+vectors. After this, one can apply circ_dist to compute the
+distance between the output value and ref_var.
 }
 \author{
 Matthew Stephens
