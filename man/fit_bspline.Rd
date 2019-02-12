@@ -7,16 +7,15 @@
 fit_bspline(yy, time)
 }
 \arguments{
-\item{yy}{A vector of gene expression values for one gene. The expression
-values are assumed to have been normalized and transformed to
-standard normal distribution.}
+\item{yy}{A vector of gene expression values for one gene. The
+expression values are assumed to have been normalized and
+transformed to standard normal distribution.}
 
 \item{time}{A vector of angels (cell cycle phase).}
 }
 \value{
-\describe{
-     \item{\code{pred.yy}}{The estimated cyclic trend.}
-         }
+A list with one element, \code{pred.yy}, giving the
+estimated cyclic trend.
 }
 \description{
 Use bsplies to cyclic trend of gene expression levels

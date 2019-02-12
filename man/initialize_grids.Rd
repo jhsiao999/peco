@@ -2,7 +2,8 @@
 % Please edit documentation in R/circle_npreg.R
 \name{initialize_grids}
 \alias{initialize_grids}
-\title{For prediction, initialize grid points for cell cycle phase on a circle.}
+\title{For prediction, initialize grid points for cell cycle phase
+on a circle.}
 \usage{
 initialize_grids(Y, grids = 100, method.grid = c("pca", "uniform"),
   ...)
@@ -12,17 +13,19 @@ initialize_grids(Y, grids = 100, method.grid = c("pca", "uniform"),
 
 \item{grids}{number of bins to be selected along 0 to 2pi.}
 
-\item{method.grid}{The approach to initialize angles in the computation.
-\code{uniform} creates k equally-spaced bins (grids). \code{pca} uses
-gene expression values to infer angles, and then use these pca-based
-angles to move the cells to the closest bin (as defined by \code{uniform}).}
+\item{method.grid}{The approach to initialize angles in the
+computation. \code{uniform} creates k equally-spaced bins
+(grids). \code{pca} uses gene expression values to infer angles,
+and then use these pca-based angles to move the cells to the
+closest bin (as defined by \code{uniform}).}
 }
 \value{
-A vector of initialized angles to be used in \code{cycle_npreg_loglik}
-to infer angles.
+A vector of initialized angles to be used in
+\code{cycle_npreg_loglik} to infer angles.
 }
 \description{
-For prediction, initialize grid points for cell cycle phase on a circle.
+For prediction, initialize grid points for cell cycle phase
+on a circle.
 }
 \author{
 Joyce Hsiao

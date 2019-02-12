@@ -9,18 +9,24 @@ cycle_npreg_loglik(Y, sigma_est, funs_est, grids = 100,
   "uniform"), ...)
 }
 \arguments{
-\item{Y}{gene by sample expression matrix}
+\item{Y}{Gene by sample expression matrix.}
 
-\item{sigma_est}{A vector of standard errors for each gene from the training data}
+\item{sigma_est}{A vector of standard errors for each gene from the
+training data.}
 
-\item{funs_est}{A vector of cyclic functions estimated for each gene from the training data}
+\item{funs_est}{A vector of cyclic functions estimated for each
+gene from the training data.}
 }
 \value{
-\describe{
-     \item{\code{cell_times_est}}{Inferred angles or cell cycle phases, NOT ordered}
-     \item{\code{loglik_est}}{log-likelihood estimates for each gene}
-     \item{\code{prob_per_cell_by_celltimes}}{probabilities of each cell belong to each bin}
-         }
+A list with the following three elements:
+
+\item{cell_times_est}{Inferred angles or cell cycle phases, NOT
+ordered.}
+
+\item{loglik_est}{Log-likelihood estimates for each gene.}
+
+\item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
+to each bin.}
 }
 \description{
 Infer angles or cell cycle phase based on gene expression data

@@ -1,0 +1,47 @@
+notes
+=====
+
++ Please fix: I don't understand the description of the eset_final_sub
+  data set. What are "theta" and "exprs(est_final)"?
+
++ Please fix: The "fit" data set should be a single object; currently
+  it loads two objects, "fit_predict" and "fit_train". Maybe define a
+  list with two elements. Also, I suggest using a more descriptive
+  name.
+
++ Please fix: Why do "fit_bspline" and "fit_loess" return a list with
+  only one element? You don't need the list.
+
++ Please fix: some undocumented arguments that should be added to the
+  roxygen2 docs:
+  - Undocumented arguments in cycle_npreg_insample: ‘...’
+  - Undocumented arguments in cycle_npreg_loglik: grids, method.type,
+    method.grid ‘...’
+  - Undocumented arguments in cycle_npreg_mstep: method.trend, polyorder,
+    ncores, ‘...’
+  - Undocumented arguments in cycle_npreg_outsample: ‘...’
+  - Undocumented arguments in initialize_grids: ‘...’
+  - Undocumented arguments in run_seurat: s.genes, g2m.genes, n.bin,
+    seed.use, random.seed
+
++ Please fix: Add an inst/CITATION file; see
+  github.com/stephenslab/mixsqp for an example.
+
++ Suggestion: In the file circle_npreg.R, the functions are
+  "cycle_npreg_*". Maybe hange the name of the file to be consistent.
+
++ Suggestion: Explain in "Description" field of DESCRIPTION file why
+  it is called "peco". (And in README!)
+
++ Suggestion: If reasonable to do so, reduce size of data sets in
+  "data" folder in order to reduce installation time from GitHub.
+
++ Suggestion: Create a "release" on GitHub. (I can show you how.)
+
++ Suggestion: Add titles to roxygen docs for data sets.
+
++ Suggestion: Create a pkgdown site, and activate GitHub Pages (see
+  https://github.com/stephenslab/mixsqp for an example of this). This
+  is easy to do once you have create the vignettes and roxygen2 docs
+  for your R functions.
+

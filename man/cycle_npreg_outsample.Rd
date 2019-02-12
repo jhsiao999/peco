@@ -12,39 +12,52 @@ cycle_npreg_outsample(Y_test, sigma_est, funs_est,
 \item{Y_test}{Gene expression data to be used for prediction.
 Gene by sample.}
 
-\item{sigma_est}{A vector of gene-specific standard error of the cyclic trends.}
+\item{sigma_est}{A vector of gene-specific standard error of the
+cyclic trends.}
 
 \item{funs_est}{A vector of cyclic functions estimating cyclic trends.}
 
-\item{method.trend}{Varous methods that can be applied to estimate cyclic trend
-of gene expression levels.}
+\item{method.trend}{Varous methods that can be applied to estimate
+cyclic trend of gene expression levels.}
 
 \item{polyorder}{We estimate cyclic trends of gene expression levels using
-nonparamtric trend filtering. The default fits second degree polynomials
-(polyorder=2).}
+nonparamtric trend filtering. The default fits second degree polynomials.}
 
 \item{method.grid}{Method for defining bins along the circle.}
 
-\item{ncores}{We use mclapply function for parallel computing.
-Default is 4 cores.}
+\item{ncores}{We use mclapply function for parallel computing.}
 }
 \value{
-\describe{
-     \item{\code{Y}}{The input gene expression marix.}
-     \item{\code{cell_times_est}}{Inferred angles or cell cycle phases, NOT ordered}
-     \item{\code{loglik_est}}{log-likelihood estimates for each gene}
-     \item{\code{cell_times_reordered}}{The inferred angles reordered (in ascending order)}
-     \item{\code{Y_reorded}}{The input gene expression matrix reordered by cell_times_reordered}
-     \item{\code{sigma_reordered}}{Estimated standard error of the cyclic trend
-     for each gene, reordered by cell_times_reordered.}
-     \item{\code{funs_reordered}}{A list of functions for approximating the cyclic
-     trends of gene express levels for each gene, reordered by cell_times_reordered.}
-     \item{\code{mu_reordered}}{Estimated cyclic trend of gene expression values for each gene,
-     reordered by cell_times_reordered.}
-     \item{\code{prob_per_cell_by_celltimes}}{probabilities of each cell belong to each bin}
-         }
+A list with the following elements:
+
+\item{Y}{The input gene expression marix.}
+
+\item{cell_times_est}{Inferred angles or cell cycle phases, NOT
+ordered.}
+
+\item{loglik_est}{Log-likelihood estimates for each gene.}
+
+\item{cell_times_reordered}{The inferred angles reordered (in
+ascending order).}
+
+\item{Y_reorded}{The input gene expression matrix reordered by
+cell_times_reordered.}
+
+\item{sigma_reordered}{Estimated standard error of the cyclic trend
+for each gene, reordered by cell_times_reordered.}
+
+\item{funs_reordered}{A list of functions for approximating the
+cyclic trends of gene express levels for each gene, reordered by
+cell_times_reordered.}
+
+\item{mu_reordered}{Estimated cyclic trend of gene expression
+values for each gene, reordered by cell_times_reordered.}
+
+\item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
+to each bin.}
 }
 \description{
-Apply the estimates of cycle_npreg_insample to another gene
-expression dataset to infer an angle or cell cycle phase for each cell
+Apply the estimates of cycle_npreg_insample to another
+gene expression dataset to infer an angle or cell cycle phase for
+each cell.
 }

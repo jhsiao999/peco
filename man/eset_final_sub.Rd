@@ -3,18 +3,18 @@
 \docType{data}
 \name{eset_final_sub}
 \alias{eset_final_sub}
-\title{Filtered gene expression data, along with summarized FUCCI intensities
-and sample information. Contain the top 100 cyclic genes from our data.}
-\format{An ExpressionSet object with 888 samples and top 100 cyclicl genes.
-    \describe{
-       \item{\code{theta}}{Inferred angles}
-       \item{\code{exprs(est_final)}}{Molecule counts}
-     }}
-\usage{
-eset_final_sub
-}
+\title{Filtered gene expression data}
+\format{An ExpressionSet object with 888 samples and top 100 cyclic
+genes.
+
+\describe{
+  \item{theta}{Inferred angles.}
+
+  \item{\code{exprs(est_final)}}{Molecule counts.}
+}}
 \description{
-Filtered gene expression data, along with summarized FUCCI intensities
-and sample information. Contain the top 100 cyclic genes from our data.
+Filtered gene expression data, along with summarized FUCCI
+intensities and sample information. Contains the top 100 cyclic
+genes from our data.
 }
-\keyword{datasets}
+\keyword{data}

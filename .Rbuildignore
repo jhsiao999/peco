@@ -1,3 +1,6 @@
+^peco\.Rproj$
+^NOTES\.txt$
+^LICENSE$
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^.*\.Rproj$

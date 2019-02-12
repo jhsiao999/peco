@@ -8,11 +8,15 @@ run_seurat(Y, s.genes, g2m.genes, n.bin = 25, seed.use = 1,
   random.seed = 1)
 }
 \arguments{
-\item{Y}{log2 normalized gene expression matrix}
+\item{Y}{log2-normalized gene expression matrix.}
 }
 \description{
-Compute phase specific cell cycle scores using the code outlined in Seurat
+Compute phase specific cell cycle scores using the
+code outlined in Seurat.
 }
 \references{
-Butler, A., Hoffman, P., Smibert, P., Papalexi, E., and Satija, R. (2018) Integrating single-cell transcriptomic data across different conditions, technologies, and species. Nature Biotechnology 36, 411-420. doi:10.1038/nbt.4096
+Butler, A., Hoffman, P., Smibert, P., Papalexi, E, and
+Satija, R. (2018). Integrating single-cell transcriptomic data
+across different conditions, technologies, and species. \emph{Nature
+Biotechnology} \bold{36}, 411-420. doi:10.1038/nbt.4096
 }

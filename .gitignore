@@ -1,7 +1,8 @@
-inst/doc
 .Rhistory
 data-raw/
-R/run_seurat.R
 .Rproj.user
 peco.Rcheck/
 peco*tar.gz
+vignettes/*.html
+vignettes/*.R
+

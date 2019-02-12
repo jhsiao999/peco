@@ -7,16 +7,15 @@
 fit_loess(yy, time)
 }
 \arguments{
-\item{yy}{A vector of gene expression values for one gene. The expression
-values are assumed to have been normalized and transformed to
-standard normal distribution.}
+\item{yy}{A vector of gene expression values for one gene. The
+expression values are assumed to have been normalized and
+transformed to standard normal distribution.}
 
-\item{time}{A vector of angels (cell cycle phase).}
+\item{time}{A vector of angles (cell cycle phase).}
 }
 \value{
-\describe{
-     \item{\code{pred.yy}}{The estimated cyclic trend.}
-         }
+A list with one element, \code{pred.yy}, giving the
+estimated cyclic trend.
 }
 \description{
 Use loess to estimate cyclic trends of expression values
