@@ -19,30 +19,66 @@
 #' quadratic trend filtering was applied to the concatenated data
 #' series of each gene.
 #'
-#' @param yy A vector of gene expression values for one gene. The
-#' expression values are assumed to have been normalized and
+#' @param yy A vector of gene expression values for one gene
+#' that are ordered by cell cycle phase. Also, the
+#' expression values are normalized and
 #' transformed to standard normal distribution.
-#' 
+#'
 #' @param polyorder We estimate cyclic trends of gene expression
 #' levels using nonparamtric trend filtering. The default fits second
 #' degree polynomials.
 #'
 #' @return A list with two elements:
-#' 
+#'
 #' \item{trend.yy}{The estimated cyclic trend.}
-#' 
+#'
 #' \item{pve}{Proportion of variance explained by the cyclic
 #' trend in the gene expression levels.}
 #'
 #' @author Joyce Hsiao
 #'
+#' @examples
+#' data(eset_final_sub)
+#' pdata <- pData(eset_final_sub)
+#'
+#' # cell-cycle phase based on FUCCI
+#' theta <- pdata$theta
+#' names(theta) <- rownames(pdata)
+#'
+#' # library size normalization
+#' log2cpm <- t(log2(1+(10^6)*(t(exprs(eset_final_sub))/pdata$molecules)))
+#'
+#' # quantile normalize to normal distribution
+#' yy <- log2cpm[1,]
+#' is.zero <- which(yy == 0)
+#' qq.map <- qqnorm(yy)
+#' yy.qq <- qq.map$x
+#' yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+#' names(yy.qq) <- colnames(log2cpm)
+#'
+#' theta_ordered <- theta[order(theta)]
+#' yy_ordered <- yy.qq[match(names(theta_ordered), names(yy.qq))]
+#'
+#' fit <- fit_trendfilter_generic(yy_ordered)
+#'
+#' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=F,
+#'   ylab="normalized expression values", xlab="FUCCI phase",
+#'   main = "trendfilter fit")
+#' points(x=theta_ordered, y=fit$trend.yy, col="blue", pch=16, cex=.7)
+#' axis(2)
+#' axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
+#'   labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
+#'   expression(2*pi)))
+#' abline(h=0, lty=1, col="black", lwd=.7)
+#'
+#'
 #' @importFrom stats var
 #' @importFrom genlasso trendfilter
 #' @importFrom genlasso cv.trendfilter
 #' @importFrom genlasso predict.genlasso
-#' 
+#'
 #' @export
-#' 
+#'
 fit_trendfilter_generic <- function(yy, polyorder=2) {
 
   yy.rep <- rep(yy,3)
@@ -66,7 +102,7 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #' @param yy A vector of gene expression values for one gene. The
 #' expression values are assumed to have been normalized and
 #' transformed to standard normal distribution.
-#' 
+#'
 #' @param time A vector of angels (cell cycle phase).
 #'
 #' @return A list with one element, \code{pred.yy}, giving the
@@ -74,11 +110,45 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #'
 #' @author Joyce Hsiao
 #'
+#' @examples
+#' data(eset_final_sub)
+#' pdata <- pData(eset_final_sub)
+#'
+#' # cell-cycle phase based on FUCCI
+#' theta <- pdata$theta
+#' names(theta) <- rownames(pdata)
+#'
+#' # library size normalization
+#' log2cpm <- t(log2(1+(10^6)*(t(exprs(eset_final_sub))/pdata$molecules)))
+#'
+#' # quantile normalize to normal distribution
+#' yy <- log2cpm[1,]
+#' is.zero <- which(yy == 0)
+#' qq.map <- qqnorm(yy)
+#' yy.qq <- qq.map$x
+#' yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+#' names(yy.qq) <- colnames(log2cpm)
+#'
+#' theta_ordered <- theta[order(theta)]
+#' yy_ordered <- yy.qq[match(names(theta_ordered), names(yy.qq))]
+#'
+#' fit <- fit_bspline(yy_ordered, time=theta_ordered)
+#'
+#' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=F,
+#'   ylab="normalized expression values", xlab="FUCCI phase",
+#'   main = "bspline fit")
+#' points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)
+#' axis(2)
+#' axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
+#'   labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
+#'   expression(2*pi)))
+#' abline(h=0, lty=1, col="black", lwd=.7)
+#'
 #' @importFrom stats smooth.spline
 #' @importFrom stats predict
-#' 
+#'
 #' @export
-#' 
+#'
 fit_bspline <- function(yy, time) {
 
   yy.rep <- rep(yy,3)
@@ -89,7 +159,10 @@ fit_bspline <- function(yy, time) {
   fit <- smooth.spline(x=time.rep, y=yy.rep)
   pred.yy <- predict(fit, time.rep)$y[which(include==TRUE)]
 
-  return(list(pred.yy=pred.yy))
+  pve <- 1-var(yy-pred.yy)/var(yy)
+
+  return(list(pred.yy=pred.yy,
+              pve=pve))
 }
 
 #' Use loess to estimate cyclic trends of expression values
@@ -97,7 +170,7 @@ fit_bspline <- function(yy, time) {
 #' @param yy A vector of gene expression values for one gene. The
 #' expression values are assumed to have been normalized and
 #' transformed to standard normal distribution.
-#' 
+#'
 #' @param time A vector of angles (cell cycle phase).
 #'
 #' @return A list with one element, \code{pred.yy}, giving the
@@ -105,10 +178,44 @@ fit_bspline <- function(yy, time) {
 #'
 #' @author Joyce Hsiao
 #'
+#' @examples
+#' data(eset_final_sub)
+#' pdata <- pData(eset_final_sub)
+#'
+#' # cell-cycle phase based on FUCCI
+#' theta <- pdata$theta
+#' names(theta) <- rownames(pdata)
+#'
+#' # library size normalization
+#' log2cpm <- t(log2(1+(10^6)*(t(exprs(eset_final_sub))/pdata$molecules)))
+#'
+#' # quantile normalize to normal distribution
+#' yy <- log2cpm[1,]
+#' is.zero <- which(yy == 0)
+#' qq.map <- qqnorm(yy)
+#' yy.qq <- qq.map$x
+#' yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+#' names(yy.qq) <- colnames(log2cpm)
+#'
+#' theta_ordered <- theta[order(theta)]
+#' yy_ordered <- yy.qq[match(names(theta_ordered), names(yy.qq))]
+#'
+#' fit <- fit_loess(yy_ordered, time=theta_ordered)
+#'
+#' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=F,
+#'   ylab="normalized expression values", xlab="FUCCI phase",
+#'   main = "loess fit")
+#' points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)
+#' axis(2)
+#' axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
+#'   labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
+#'   expression(2*pi)))
+#' abline(h=0, lty=1, col="black", lwd=.7)
+#'
 #' @importFrom stats loess
-#' 
+#'
 #' @export
-#' 
+#'
 fit_loess <- function(yy, time) {
 
   yy.rep <- rep(yy,3)
@@ -119,5 +226,8 @@ fit_loess <- function(yy, time) {
   fit <- loess(yy.rep~time.rep)
   pred.yy <- fit$fitted[which(include==TRUE)]
 
-  return(list(pred.yy=pred.yy))
+  pve <- 1-var(yy-pred.yy)/var(yy)
+
+  return(list(pred.yy=pred.yy,
+              pve=pve))
 }
