@@ -45,6 +45,7 @@ quadratic trend filtering was applied to the concatenated data
 series of each gene.
 }
 \examples{
+library(Biobase)
 data(eset_final_sub)
 pdata <- pData(eset_final_sub)
 

@@ -4,9 +4,7 @@
 \name{fit_train}
 \alias{fit_train}
 \title{Traing model results among samples from 5 individuals.}
-\format{\describe{
-  \item{\code{fit_train}}{training results}
-  }}
+\format{}
 \usage{
 fit_train
 }

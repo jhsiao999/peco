@@ -11,6 +11,10 @@ cycle_npreg_mstep(Y, theta, method.trend = c("trendfilter", "loess",
 \item{Y}{Gene by sample expression matrix (log2CPM).}
 
 \item{theta}{Observed cell times.}
+
+\item{polyorder}{We estimate cyclic trends of gene expression
+levels using nonparamtric trend filtering. The default fits second
+degree polynomials.}
 }
 \value{
 A list with the following elements:

@@ -24,6 +24,8 @@
 #' @param method.trend Varous methods that can be applied to estimate
 #' cyclic trend of gene expression levels.
 #'
+#' @inheritParams cycle_npreg_mstep
+#'
 #' @return A list with four elements:
 #'
 #' \item{Y}{Gene expression marix.}
@@ -83,11 +85,12 @@ cycle_npreg_insample <- function(Y, theta,
 #'    nonparamtric trend filtering. The default fits second degree polynomials.
 #'
 #' @param method.grid Method for defining bins along the circle.
-#'
 #' @param method.trend Varous methods that can be applied to estimate
 #' cyclic trend of gene expression levels.
-#'
 #' @param ncores We use mclapply function for parallel computing.
+#'
+#' @inheritParams cycle_npreg_mstep
+#' @inheritParams cycle_npreg_loglik
 #'
 #' @return A list with the following elements:
 #'
@@ -220,6 +223,8 @@ initialize_grids <- function(Y, grids=100,
 #' @param funs_est A vector of cyclic functions estimated for each
 #' gene from the training data.
 #'
+#' @inheritParams initialize_grids
+#'
 #' @return A list with the following three elements:
 #'
 #' \item{cell_times_est}{Inferred angles or cell cycle phases, NOT
@@ -315,8 +320,11 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' function.
 #'
 #' @param Y Gene by sample expression matrix (log2CPM).
-#'
 #' @param theta Observed cell times.
+#'
+#' @inheritParams fit_trendfilter_generic
+#' @inheritParams fit_bspline
+#' @inheritParams fit_loess
 #'
 #' @return A list with the following elements:
 #'

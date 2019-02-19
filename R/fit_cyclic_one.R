@@ -38,6 +38,7 @@
 #' @author Joyce Hsiao
 #'
 #' @examples
+#' library(Biobase)
 #' data(eset_final_sub)
 #' pdata <- pData(eset_final_sub)
 #'

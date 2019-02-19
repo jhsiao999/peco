@@ -49,10 +49,6 @@
 #'
 #' @format
 #'
-#' \describe{
-#'   \item{\code{fit_train}}{training results}
-#'   }
-#'
 #' @docType data
 #'
 #' @keywords data

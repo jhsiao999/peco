@@ -16,6 +16,14 @@ training data.}
 
 \item{funs_est}{A vector of cyclic functions estimated for each
 gene from the training data.}
+
+\item{grids}{number of bins to be selected along 0 to 2pi.}
+
+\item{method.grid}{The approach to initialize angles in the
+computation. \code{uniform} creates k equally-spaced bins
+(grids). \code{pca} uses gene expression values to infer angles,
+and then use these pca-based angles to move the cells to the
+closest bin (as defined by \code{uniform}).}
 }
 \value{
 A list with the following three elements:
