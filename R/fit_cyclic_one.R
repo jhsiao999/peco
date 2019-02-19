@@ -111,6 +111,7 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #' @author Joyce Hsiao
 #'
 #' @examples
+#' library(Biobase)
 #' data(eset_final_sub)
 #' pdata <- pData(eset_final_sub)
 #'
@@ -179,6 +180,7 @@ fit_bspline <- function(yy, time) {
 #' @author Joyce Hsiao
 #'
 #' @examples
+#' library(Biobase)
 #' data(eset_final_sub)
 #' pdata <- pData(eset_final_sub)
 #'

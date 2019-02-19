@@ -4,6 +4,9 @@
 \name{fit_train}
 \alias{fit_train}
 \title{Traing model results among samples from 5 individuals.}
+\format{\describe{
+  \item{\code{fit_train}}{training results}
+  }}
 \description{
 Pre-computed results. Applied \code{cycle_npreg_insample} to
   obtain gene-specific cyclic trend parameters using samples from 5

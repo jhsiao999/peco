@@ -10,8 +10,9 @@
 #'
 #' @author Joyce Hsiao
 #'
-#' @examples
-
+#' @importFrom parallel mclapply
+#'
+#' @export
 data_transform_quantile <- function(Y, ncores=2) {
   G <- nrow(Y)
 

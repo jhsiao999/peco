@@ -21,6 +21,7 @@ estimated cyclic trend.
 Use loess to estimate cyclic trends of expression values
 }
 \examples{
+library(Biobase)
 data(eset_final_sub)
 pdata <- pData(eset_final_sub)
 

@@ -6,18 +6,16 @@
 #'   in the study.
 #'
 #' @description An ExpressionSet object (require Biobase package) including
-#'   molecule count data after gene and smaple filtering. The phenotypeData() slot
-#'   contains sample phenotype information and the featureData() slot contains
+#'   molecule count data after gene and smaple filtering. The `phenotypeData()` slot
+#'   contains sample phenotype information and the `featureData()` slot contains
 #'   gene feature information.
 #'
 #' @format An ExpressionSet object with 888 samples and top 100 cyclic genes.
 #'
 #' \describe{
-#'   \item{\code(pData(eset_final_sub)$theta}{Inferred angles of each cell along
-#'     a circle, also known as FUCCI phase - cell cycle phase inferred from
-#'     FUCCI intensities.}
-#'
-#'   \item{\code{exprs(est_final_sub)}}{Molecule counts of top 100 cyclical genes.}
+#'   \item{`pData(eset_final_sub)$theta`}{Inferred angles of each cell along
+#'     a circle, also known as FUCCI phase.}
+#'   \item{`exprs(est_final_sub)`}{Molecule counts of top 100 cyclical genes.}
 #' }
 #'
 #' @keywords data
@@ -63,6 +61,7 @@ NULL
 #'
 #' \describe{
 #'   \item{\code{fit_train}}{training results}
+#'   }
 #'
 #' @keywords data
 #'
