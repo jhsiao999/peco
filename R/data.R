@@ -76,4 +76,4 @@
 #'
 #' @keywords data
 #'
-"fit_pred"
+"fit_predict"

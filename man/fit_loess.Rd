@@ -45,7 +45,7 @@ yy_ordered <- yy.qq[match(names(theta_ordered), names(yy.qq))]
 
 fit <- fit_loess(yy_ordered, time=theta_ordered)
 
-plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=F,
+plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
   ylab="normalized expression values", xlab="FUCCI phase",
   main = "loess fit")
 points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)

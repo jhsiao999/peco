@@ -5,7 +5,7 @@
 \title{Obtain cyclic trend estimates from the training data}
 \usage{
 cycle_npreg_insample(Y, theta, ncores = 4, polyorder = 2,
-  method.trend = c("trendfilter", "loess", "bspline"), ...)
+  method.trend = c("trendfilter", "loess", "bspline"))
 }
 \arguments{
 \item{Y}{A matrix of normalized and transformed gene expression

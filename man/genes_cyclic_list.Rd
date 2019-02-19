@@ -15,6 +15,9 @@ are ordered according to the proportion of variance explained
   \item{pve}{Proportion of variance explained in the expression
   values by the estimated cyclic trend.}
 }}
+\usage{
+genes_cyclic_list
+}
 \description{
 Top 100 cyclic genes ordered by their cyclic trend (strong to weak)
   across 888 samples analyzed in the study.

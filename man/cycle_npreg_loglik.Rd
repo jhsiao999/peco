@@ -6,7 +6,7 @@
 \usage{
 cycle_npreg_loglik(Y, sigma_est, funs_est, grids = 100,
   method.type = c("supervised", "unsupervised"), method.grid = c("pca",
-  "uniform"), ...)
+  "uniform"))
 }
 \arguments{
 \item{Y}{Gene by sample expression matrix.}

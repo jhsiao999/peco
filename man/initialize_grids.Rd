@@ -5,8 +5,7 @@
 \title{For prediction, initialize grid points for cell cycle phase
 on a circle.}
 \usage{
-initialize_grids(Y, grids = 100, method.grid = c("pca", "uniform"),
-  ...)
+initialize_grids(Y, grids = 100, method.grid = c("pca", "uniform"))
 }
 \arguments{
 \item{Y}{Gene expression matrix. Gene by sample.}

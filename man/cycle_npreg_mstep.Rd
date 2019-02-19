@@ -5,7 +5,7 @@
 \title{Estimate parameters of the cyclic trends}
 \usage{
 cycle_npreg_mstep(Y, theta, method.trend = c("trendfilter", "loess",
-  "bspline"), polyorder = 2, ncores = 4, ...)
+  "bspline"), polyorder = 2, ncores = 4)
 }
 \arguments{
 \item{Y}{Gene by sample expression matrix (log2CPM).}
@@ -13,8 +13,8 @@ cycle_npreg_mstep(Y, theta, method.trend = c("trendfilter", "loess",
 \item{theta}{Observed cell times.}
 }
 \value{
-A list with the following elements: 
-    
+A list with the following elements:
+
 \item{Y}{Input gene expression data.}
 
 \item{theta}{Input angles.}

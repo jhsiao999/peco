@@ -68,7 +68,7 @@ yy_ordered <- yy.qq[match(names(theta_ordered), names(yy.qq))]
 
 fit <- fit_trendfilter_generic(yy_ordered)
 
-plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=F,
+plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
   ylab="normalized expression values", xlab="FUCCI phase",
   main = "trendfilter fit")
 points(x=theta_ordered, y=fit$trend.yy, col="blue", pch=16, cex=.7)

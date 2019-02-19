@@ -6,7 +6,7 @@
 \usage{
 cycle_npreg_outsample(Y_test, sigma_est, funs_est,
   method.trend = c("trendfilter", "loess", "bspline"), polyorder = 2,
-  method.grid = c("pca", "uniform"), ncores = 4, ...)
+  method.grid = c("pca", "uniform"), ncores = 4)
 }
 \arguments{
 \item{Y_test}{Gene expression data to be used for prediction.

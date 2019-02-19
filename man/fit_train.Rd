@@ -7,6 +7,9 @@
 \format{\describe{
   \item{\code{fit_train}}{training results}
   }}
+\usage{
+fit_train
+}
 \description{
 Pre-computed results. Applied \code{cycle_npreg_insample} to
   obtain gene-specific cyclic trend parameters using samples from 5
