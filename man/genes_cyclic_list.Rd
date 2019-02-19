@@ -3,7 +3,7 @@
 \docType{data}
 \name{genes_cyclic_list}
 \alias{genes_cyclic_list}
-\title{Genes ordered by their cyclic trend}
+\title{List of top 100 cyclic genes}
 \format{A data frame with the following columns, in which the rows
 are ordered according to the proportion of variance explained
 (large to small):
@@ -16,7 +16,7 @@ are ordered according to the proportion of variance explained
   values by the estimated cyclic trend.}
 }}
 \description{
-Genes ordered by their cyclic trend (strong to weak),
-and sample information.
+Top 100 cyclic genes ordered by their cyclic trend (strong to weak)
+  across 888 samples analyzed in the study.
 }
 \keyword{data}

@@ -20,6 +20,41 @@ estimated cyclic trend.
 \description{
 Use bsplies to cyclic trend of gene expression levels
 }
+\examples{
+data(eset_final_sub)
+pdata <- pData(eset_final_sub)
+
+# cell-cycle phase based on FUCCI
+theta <- pdata$theta
+names(theta) <- rownames(pdata)
+
+# library size normalization
+log2cpm <- t(log2(1+(10^6)*(t(exprs(eset_final_sub))/pdata$molecules)))
+
+# quantile normalize to normal distribution
+yy <- log2cpm[1,]
+is.zero <- which(yy == 0)
+qq.map <- qqnorm(yy)
+yy.qq <- qq.map$x
+yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+names(yy.qq) <- colnames(log2cpm)
+
+theta_ordered <- theta[order(theta)]
+yy_ordered <- yy.qq[match(names(theta_ordered), names(yy.qq))]
+
+fit <- fit_bspline(yy_ordered, time=theta_ordered)
+
+plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=F,
+  ylab="normalized expression values", xlab="FUCCI phase",
+  main = "bspline fit")
+points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)
+axis(2)
+axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
+  labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
+  expression(2*pi)))
+abline(h=0, lty=1, col="black", lwd=.7)
+
+}
 \author{
 Joyce Hsiao
 }

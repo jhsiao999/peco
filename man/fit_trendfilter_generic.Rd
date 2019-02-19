@@ -8,8 +8,9 @@ expression}
 fit_trendfilter_generic(yy, polyorder = 2)
 }
 \arguments{
-\item{yy}{A vector of gene expression values for one gene. The
-expression values are assumed to have been normalized and
+\item{yy}{A vector of gene expression values for one gene
+that are ordered by cell cycle phase. Also, the
+expression values are normalized and
 transformed to standard normal distribution.}
 
 \item{polyorder}{We estimate cyclic trends of gene expression
@@ -42,6 +43,42 @@ trend be cyclical. To encourage this, we concatenated the ordered
 gene expression data three times, with one added after another. The
 quadratic trend filtering was applied to the concatenated data
 series of each gene.
+}
+\examples{
+data(eset_final_sub)
+pdata <- pData(eset_final_sub)
+
+# cell-cycle phase based on FUCCI
+theta <- pdata$theta
+names(theta) <- rownames(pdata)
+
+# library size normalization
+log2cpm <- t(log2(1+(10^6)*(t(exprs(eset_final_sub))/pdata$molecules)))
+
+# quantile normalize to normal distribution
+yy <- log2cpm[1,]
+is.zero <- which(yy == 0)
+qq.map <- qqnorm(yy)
+yy.qq <- qq.map$x
+yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+names(yy.qq) <- colnames(log2cpm)
+
+theta_ordered <- theta[order(theta)]
+yy_ordered <- yy.qq[match(names(theta_ordered), names(yy.qq))]
+
+fit <- fit_trendfilter_generic(yy_ordered)
+
+plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=F,
+  ylab="normalized expression values", xlab="FUCCI phase",
+  main = "trendfilter fit")
+points(x=theta_ordered, y=fit$trend.yy, col="blue", pch=16, cex=.7)
+axis(2)
+axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
+  labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
+  expression(2*pi)))
+abline(h=0, lty=1, col="black", lwd=.7)
+
+
 }
 \author{
 Joyce Hsiao

@@ -3,18 +3,21 @@
 \docType{data}
 \name{eset_final_sub}
 \alias{eset_final_sub}
-\title{Filtered gene expression data}
-\format{An ExpressionSet object with 888 samples and top 100 cyclic
-genes.
+\title{Molecule counts of top 100 cyclical genes in 888 samples analyzed
+  in the study.}
+\format{An ExpressionSet object with 888 samples and top 100 cyclic genes.
 
 \describe{
-  \item{theta}{Inferred angles.}
+  \item{\code(pData(eset_final_sub)$theta}{Inferred angles of each cell along
+    a circle, also known as FUCCI phase - cell cycle phase inferred from
+    FUCCI intensities.}
 
-  \item{\code{exprs(est_final)}}{Molecule counts.}
+  \item{\code{exprs(est_final_sub)}}{Molecule counts of top 100 cyclical genes.}
 }}
 \description{
-Filtered gene expression data, along with summarized FUCCI
-intensities and sample information. Contains the top 100 cyclic
-genes from our data.
+An ExpressionSet object (require Biobase package) including
+  molecule count data after gene and smaple filtering. The phenotypeData() slot
+  contains sample phenotype information and the featureData() slot contains
+  gene feature information.
 }
 \keyword{data}
