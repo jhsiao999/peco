@@ -135,7 +135,7 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #'
 #' fit <- fit_bspline(yy_ordered, time=theta_ordered)
 #'
-#' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=F,
+#' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
 #'   ylab="normalized expression values", xlab="FUCCI phase",
 #'   main = "bspline fit")
 #' points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)
@@ -204,7 +204,7 @@ fit_bspline <- function(yy, time) {
 #'
 #' fit <- fit_loess(yy_ordered, time=theta_ordered)
 #'
-#' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=F,
+#' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
 #'   ylab="normalized expression values", xlab="FUCCI phase",
 #'   main = "loess fit")
 #' points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)
