@@ -6,7 +6,8 @@
 \usage{
 cycle_npreg_outsample(Y_test, sigma_est, funs_est,
   method.trend = c("trendfilter", "loess", "bspline"), polyorder = 2,
-  method.grid = c("pca", "uniform"), ncores = 4)
+  method.grid = c("pca", "uniform"), ncores = 4,
+  get_trend_estimates = F)
 }
 \arguments{
 \item{Y_test}{Gene expression data to be used for prediction.
@@ -26,6 +27,10 @@ nonparamtric trend filtering. The default fits second degree polynomials.}
 \item{method.grid}{Method for defining bins along the circle.}
 
 \item{ncores}{We use mclapply function for parallel computing.}
+
+\item{get_trend_estimates}{To re-estimate the cylic trend based on the predicted
+cell cycle phase or not (T or F). Default FALSE. This step calls trendfilter
+and is computationally intensive.}
 }
 \value{
 A list with the following elements:

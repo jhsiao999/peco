@@ -87,6 +87,9 @@ cycle_npreg_insample <- function(Y, theta,
 #' @param method.grid Method for defining bins along the circle.
 #' @param method.trend Varous methods that can be applied to estimate
 #' cyclic trend of gene expression levels.
+#' @param get_trend_estimates To re-estimate the cylic trend based on the predicted
+#'   cell cycle phase or not (T or F). Default FALSE. This step calls trendfilter
+#'   and is computationally intensive.
 #' @param ncores We use mclapply function for parallel computing.
 #'
 #' @inheritParams cycle_npreg_mstep
@@ -129,7 +132,8 @@ cycle_npreg_outsample <- function(Y_test,
                                                  "loess", "bspline"),
                                   polyorder=2,
                                   method.grid=c("pca", "uniform"),
-                                  ncores=4) {
+                                  ncores=4,
+                                  get_trend_estimates=F) {
 
   # compute expected cell time for the test samples
   # under mu and sigma estimated from the training samples
@@ -138,21 +142,29 @@ cycle_npreg_outsample <- function(Y_test,
                                        method.type="supervised",
                                        method.grid=method.grid,
                                        funs_est=funs_est)
-  updated_estimates <- cycle_npreg_mstep(Y = Y_test,
-                                         theta = initial_loglik$cell_times_est,
-                                         method.trend = method.trend,
-                                         polyorder=polyorder,
-                                         ncores = ncores)
 
-  out <- list(Y=Y_test,
-              cell_times_est=initial_loglik$cell_times_est,
-              loglik_est=initial_loglik$loglik_est,
-              Y_reordered=updated_estimates$Y,
-              cell_times_reordered=updated_estimates$theta,
-              mu_reordered=updated_estimates$mu_est,
-              sigma_reordered=updated_estimates$sigma_est,
-              funs_reordered=updated_estimates$funs,
-              prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
+  if (get_trend_estimates==T) {
+    updated_estimates <- cycle_npreg_mstep(Y = Y_test,
+                                           theta = initial_loglik$cell_times_est,
+                                           method.trend = method.trend,
+                                           polyorder=polyorder,
+                                           ncores = ncores)
+    out <- list(Y=Y_test,
+                cell_times_est=initial_loglik$cell_times_est,
+                loglik_est=initial_loglik$loglik_est,
+                Y_reordered=updated_estimates$Y,
+                cell_times_reordered=updated_estimates$theta,
+                mu_reordered=updated_estimates$mu_est,
+                sigma_reordered=updated_estimates$sigma_est,
+                funs_reordered=updated_estimates$funs,
+                prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
+  } else {
+    out <- list(Y=Y_test,
+                cell_times_est=initial_loglik$cell_times_est,
+                loglik_est=initial_loglik$loglik_est,
+                prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
+  }
+
   return(out)
 }
 
