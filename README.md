@@ -3,7 +3,7 @@
 [![Travis-CI Build Status](https://travis-ci.com/jhsiao999/peco.svg?branch=master)](https://travis-ci.com/jhsiao999/peco)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/jhsiao999/peco?branch=master&svg=true)](https://ci.appveyor.com/project/jhsiao999/peco)
 
-**peco** is an R package for predicting cell cycle progression in a
+**peco** is an R package for **P**r**E**dicting **C**ell cycle pr**O**gression in a
 continuum using scRNA-seq data.
 
 ## Installation 
@@ -55,7 +55,8 @@ commands in the command-line shell:
 
 ```bash
 R CMD build --resave-data peco
-R CMD check --as-cran peco_0.1.8.tar.gz
-R CMD INSTALL peco_0.1.8.tar.gz
+R CMD INSTALL peco_0.6.0.tar.gz
 ```
+
+<!--- R CMD check --as-cran peco_0.6.0.tar.gz---!>
 

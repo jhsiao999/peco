@@ -139,7 +139,6 @@ cycle_npreg_outsample <- function(Y_test,
   # under mu and sigma estimated from the training samples
   initial_loglik <- cycle_npreg_loglik(Y = Y_test,
                                        sigma_est = sigma_est,
-                                       method.type="supervised",
                                        method.grid=method.grid,
                                        funs_est=funs_est)
 
@@ -255,27 +254,17 @@ initialize_grids <- function(Y, grids=100,
 #'
 cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
                                grids=100,
-                               method.type=c("supervised", "unsupervised"),
                                method.grid=c("pca", "uniform")) {
 # import circular
 
   N <- ncol(Y)
   G <- nrow(Y)
 
-  if (method.type=="unsupervised") {
-    theta_choose <- initialize_grids(Y, grids=grids, method.grid="pca")
-    loglik_per_cell_by_celltimes <- matrix(0, N, length(theta_choose))
-    prob_per_cell_by_celltimes <- matrix(0, N, length(theta_choose))
-    colnames(loglik_per_cell_by_celltimes) <- theta_choose
-    colnames(prob_per_cell_by_celltimes) <- theta_choose
-  }
-  if (method.type=="supervised") {
-    theta_choose <- initialize_grids(Y, grids=grids, method.grid="uniform")
-    loglik_per_cell_by_celltimes <- matrix(0, N, grids)
-    prob_per_cell_by_celltimes <- matrix(0, N, grids)
-    colnames(loglik_per_cell_by_celltimes) <- theta_choose
-    colnames(prob_per_cell_by_celltimes) <- theta_choose
-  }
+  theta_choose <- initialize_grids(Y, grids=grids, method.grid=method.grid)
+  loglik_per_cell_by_celltimes <- matrix(0, N, grids)
+  prob_per_cell_by_celltimes <- matrix(0, N, grids)
+  colnames(loglik_per_cell_by_celltimes) <- theta_choose
+  colnames(prob_per_cell_by_celltimes) <- theta_choose
 
   for (n in 1:N) {
 
@@ -333,6 +322,13 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #'
 #' @param Y Gene by sample expression matrix (log2CPM).
 #' @param theta Observed cell times.
+#' @param method.trend How to estimate cyclic trend of gene expression values?
+#'     We offer three options: 'trendfilter' (\code{fit_trendfilter_generic()}),
+#'     'loess' (\code{fit_loess()}) and 'bsplines' (\code{fit_bspline()}).
+#'     'trendfilter' provided the best fit in our study. But 'trendfilter` requires
+#'     cross-validation and take some time. Therefore, we recommend using bspline for
+#'     quick results.
+#' @param ncores How many computing cores to use? We use mclapply function for parallel computing.
 #'
 #' @inheritParams fit_trendfilter_generic
 #' @inheritParams fit_bspline
@@ -341,16 +337,13 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' @return A list with the following elements:
 #'
 #' \item{Y}{Input gene expression data.}
-#'
 #' \item{theta}{Input angles.}
-#'
 #' \item{mu_est}{Estimated expression levels given the cyclic function
-#' for each gene.}
-#'
+#'       for each gene.}
 #' \item{sigma_est}{Estimated standard error of the cyclic trends for
-#' each gene.}
+#'       each gene}
+#' \item{funs}{Estimated cyclic functions}
 #'
-#' \item{funs_est}{Estimated cyclic functions.}
 #'
 #' @author Joyce Hsiao
 #'

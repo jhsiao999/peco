@@ -19,7 +19,7 @@ data_transform_quantile <- function(Y, ncores=2) {
   df <- mclapply(1:G, function(g) {
     y_g <- Y[g,]
     is.zero <- which(y_g == 0)
-    qq.map <- qqnorm(y_g)
+    qq.map <- stats::qqnorm(y_g)
     yy.qq <- qq.map$x
     yy.qq[is.zero] <- sample(qq.map$x[is.zero])
     return(y_g= yy.qq)

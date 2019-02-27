@@ -4,7 +4,24 @@
 \name{fit_predict}
 \alias{fit_predict}
 \title{Results of predicting cell cycle phase for samples from NA19098.}
-\format{\describe{
+\format{A list with the follwing elements
+\describe{
+  \item{Y}{a data.frame (gene by sample) of quantile-normailzed gene expression values}
+  \item{cell_times_est}{a vector of estimated cell cycl phase values (range between 0 to 2pi)}
+  \item{loglik_est}{a vector of estimated log-likelihoods for each cell}
+  \item{Y_reordered}{Y ordered along columns by \code{cell_times-est}}
+  \item{cell_times_reordered}{cell_times_est ordered from 0 to 2pi}
+  \item{funs_reordered}{A lists of estimated cyclic functions for each gene
+        using re-ordered gene expression values (rows of Y_reordered) }
+  \item{mu_reordered}{A data.frame (gene by sample) of estimated expression for each gene
+       across cells in the test data using \code{funs_reordered}}
+  \item{sigma_reordered}{A vector of estimated standard error for each gene in the test data
+       across cells using \code{funs_reordered}}
+  \item{prob_per_cell_by_celltimes}{A data.frame (gene by sample) of log-likelihoods of
+       of gene expression values in the test data}
+}
+
+\describe{
   \item{\code{Y_reordered}}{Normalized expression values (log2CPM , )}
   \item{\code{cell_times_reordered}}{Estimated phase}
  }}

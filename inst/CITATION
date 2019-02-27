@@ -1,0 +1,17 @@
+citHeader("To cite the mixsqp package in publications, please use:")
+
+citEntry(entry   = "Unpublished",
+         title   =
+	   paste("Characterizing and inferring quantitative cell cycle phase",
+                 "in single-cell RNA-seq data analysis"),
+         author  = c("Chiaowen Joyce Hsiao and Matthew Stephens"),
+         journal = "bioRxiv",
+         note    = "10.1101/526848",
+         year    = "2019",
+         textVersion =
+           paste("Chiaowen Joyce Hsiao, PoYuan Tung, John D. Blischak",
+                 "Jonathan Burnett, Kenneth Barr, Kushal D. Dey",
+            		 "Matthew Stephens, and Yoav Gilad. Characterizing and",
+		             "inferring quantitative cell cycle phase in single-cell",
+            		 "RNA-seq data analysis. bioRxiv. (* denotes equal",
+                 "contribution) doi:10.1101/526848"))

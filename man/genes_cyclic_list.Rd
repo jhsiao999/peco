@@ -9,9 +9,7 @@ are ordered according to the proportion of variance explained
 (large to small):
 
 \describe{
-
   \item{ensg}{ENSG gene ID.}
-
   \item{pve}{Proportion of variance explained in the expression
   values by the estimated cyclic trend.}
 }}

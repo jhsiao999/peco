@@ -3,14 +3,17 @@ notes
 
 + Please fix: I don't understand the description of the eset_final_sub
   data set. What are "theta" and "exprs(est_final)"?
+  - fixed
 
 + Please fix: The "fit" data set should be a single object; currently
   it loads two objects, "fit_predict" and "fit_train". Maybe define a
   list with two elements. Also, I suggest using a more descriptive
   name.
+  - made into two separate data objects
 
 + Please fix: Why do "fit_bspline" and "fit_loess" return a list with
   only one element? You don't need the list.
+  - added pve calculations. so now a list of two vectors.
 
 + Please fix: some undocumented arguments that should be added to the
   roxygen2 docs:
@@ -26,17 +29,22 @@ notes
 
 + Please fix: Add an inst/CITATION file; see
   github.com/stephenslab/mixsqp for an example.
+  - fixed!
 
 + Suggestion: In the file circle_npreg.R, the functions are
   "cycle_npreg_*". Maybe hange the name of the file to be consistent.
+  - changed to cycle_npreg.R!
 
 + Suggestion: Explain in "Description" field of DESCRIPTION file why
   it is called "peco". (And in README!)
+  - **P**r**E**dicting **C**ell cycle pr**O**gression in a
+continuum using scRNA-seq data
 
 + Suggestion: If reasonable to do so, reduce size of data sets in
   "data" folder in order to reduce installation time from GitHub.
 
 + Suggestion: Create a "release" on GitHub. (I can show you how.)
+  - First realease 0.6.1
 
 + Suggestion: Add titles to roxygen docs for data sets.
 
