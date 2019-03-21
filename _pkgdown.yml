@@ -1,0 +1,18 @@
+navbar:
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Vignettes"
+      href: articles/index.html
+    - text: "Functions"
+      href: reference/index.html
+  right:
+    - text: "Source"
+      href: https://github.com/jhsiao999/peco
+articles:
+  - title: "Vignettes"
+    desc: >
+      The following vignette provides  a brief demonstration
+      of the peco package.
+    contents:
+      - peco-intro
