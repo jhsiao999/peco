@@ -16,8 +16,8 @@ jobs:
           command: |
             mkdir -p ~/R/Library
             Rscript -e 'install.packages("remotes")'
-            Rscript -e 'remotes::install_deps(dependencies = TRUE)'
             Rscript -e 'remotes::install_bioc("Biobase")'
+            Rscript -e 'remotes::install_deps(dependencies = TRUE)'
       - run:
           name: Session information and installed package versions
           command: |
