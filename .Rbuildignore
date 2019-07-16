@@ -9,3 +9,5 @@
 ^\.Rprofile$
 ^\.circleci/config\.yml$
 ^\.circleci$
+^docs$
+^_pkgdown\.yml$
