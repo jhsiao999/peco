@@ -29,41 +29,30 @@
 #' degree polynomials.
 #'
 #' @return A list with two elements:
-#'
-#' \item{trend.yy}{The estimated cyclic trend.}
-#'
-#' \item{pve}{Proportion of variance explained by the cyclic
-#' trend in the gene expression levels.}
-#'
-#' @author Joyce Hsiao
+#'     \item{trend.yy}{The estimated cyclic trend.}
+#'     \item{pve}{Proportion of variance explained by the cyclic
+#'     trend in the gene expression levels.}
 #'
 #' @examples
-#' library(Biobase)
-#' data(eset_final_sub)
-#' pdata <- pData(eset_final_sub)
+#' data(eset_sub)
+#' pdata <- pData(eset_sub)
 #'
-#' # cell-cycle phase based on FUCCI
+#' # cell cycle phase based on FUCCI scores
 #' theta <- pdata$theta
 #' names(theta) <- rownames(pdata)
 #'
-#' # library size normalization
-#' log2cpm <- t(log2(1+(10^6)*(t(exprs(eset_final_sub))/pdata$molecules)))
+#' # normalize expression counts to counts per million
+#' counts_normed <- t((10^6)*t(exprs(eset_sub)[1:5,])/pData(eset_sub)$molecules)
+#' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 #'
-#' # quantile normalize to normal distribution
-#' yy <- log2cpm[1,]
-#' is.zero <- which(yy == 0)
-#' qq.map <- qqnorm(yy)
-#' yy.qq <- qq.map$x
-#' yy.qq[is.zero] <- sample(qq.map$x[is.zero])
-#' names(yy.qq) <- colnames(log2cpm)
-#'
+#' # order FUCCI phase and expression
 #' theta_ordered <- theta[order(theta)]
-#' yy_ordered <- yy.qq[match(names(theta_ordered), names(yy.qq))]
+#' yy_ordered <- counts_quant[1,match(names(theta_ordered), colnames(counts_quant))]
 #'
 #' fit <- fit_trendfilter_generic(yy_ordered)
 #'
 #' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
-#'   ylab="normalized expression values", xlab="FUCCI phase",
+#'   ylab="quantile-normalized expression values", xlab="FUCCI phase",
 #'   main = "trendfilter fit")
 #' points(x=theta_ordered, y=fit$trend.yy, col="blue", pch=16, cex=.7)
 #' axis(2)
@@ -72,21 +61,22 @@
 #'   expression(2*pi)))
 #' abline(h=0, lty=1, col="black", lwd=.7)
 #'
+#' @author Joyce Hsiao
+#' @export
 #'
 #' @importFrom stats var
 #' @importFrom genlasso trendfilter
 #' @importFrom genlasso cv.trendfilter
 #' @importFrom genlasso predict.genlasso
-#'
-#' @export
-#'
+#' @import methods Biobase MASS Matrix ggplot2
+NULL
 fit_trendfilter_generic <- function(yy, polyorder=2) {
 
   yy.rep <- rep(yy,3)
   include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
 
   fit.trend <- trendfilter(yy.rep,
-                           ord=polyorder, approx = F, maxsteps = 1000)
+                           ord=polyorder, approx=FALSE, maxsteps = 1000)
   cv.trend <- cv.trendfilter(fit.trend)
   which.lambda <- cv.trend$i.1se
   yy.trend.pred <- predict(fit.trend, lambda=cv.trend$lambda.1se,
@@ -112,32 +102,25 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #' @author Joyce Hsiao
 #'
 #' @examples
-#' library(Biobase)
-#' data(eset_final_sub)
-#' pdata <- pData(eset_final_sub)
+#' data(eset_sub)
+#' pdata <- pData(eset_sub)
 #'
-#' # cell-cycle phase based on FUCCI
+#' # cell cycle phase based on FUCCI scores
 #' theta <- pdata$theta
 #' names(theta) <- rownames(pdata)
 #'
-#' # library size normalization
-#' log2cpm <- t(log2(1+(10^6)*(t(exprs(eset_final_sub))/pdata$molecules)))
+#' # normalize expression counts to counts per million
+#' counts_normed <- t((10^6)*t(exprs(eset_sub)[1:5,])/pData(eset_sub)$molecules)
+#' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 #'
-#' # quantile normalize to normal distribution
-#' yy <- log2cpm[1,]
-#' is.zero <- which(yy == 0)
-#' qq.map <- qqnorm(yy)
-#' yy.qq <- qq.map$x
-#' yy.qq[is.zero] <- sample(qq.map$x[is.zero])
-#' names(yy.qq) <- colnames(log2cpm)
-#'
+#' # order FUCCI phase and expression
 #' theta_ordered <- theta[order(theta)]
-#' yy_ordered <- yy.qq[match(names(theta_ordered), names(yy.qq))]
+#' yy_ordered <- counts_quant[1,match(names(theta_ordered), colnames(counts_quant))]
 #'
 #' fit <- fit_bspline(yy_ordered, time=theta_ordered)
 #'
 #' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
-#'   ylab="normalized expression values", xlab="FUCCI phase",
+#'   ylab="quantile-normalized expression values", xlab="FUCCI phase",
 #'   main = "bspline fit")
 #' points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)
 #' axis(2)
@@ -146,11 +129,12 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #'   expression(2*pi)))
 #' abline(h=0, lty=1, col="black", lwd=.7)
 #'
-#' @importFrom stats smooth.spline
-#' @importFrom stats predict
-#'
 #' @export
 #'
+#' @importFrom stats smooth.spline
+#' @importFrom stats predict
+#' @import methods Biobase MASS Matrix ggplot2
+NULL
 fit_bspline <- function(yy, time) {
 
   yy.rep <- rep(yy,3)
@@ -181,32 +165,25 @@ fit_bspline <- function(yy, time) {
 #' @author Joyce Hsiao
 #'
 #' @examples
-#' library(Biobase)
-#' data(eset_final_sub)
-#' pdata <- pData(eset_final_sub)
+#' data(eset_sub)
+#' pdata <- pData(eset_sub)
 #'
-#' # cell-cycle phase based on FUCCI
+#' # cell cycle phase based on FUCCI scores
 #' theta <- pdata$theta
 #' names(theta) <- rownames(pdata)
 #'
-#' # library size normalization
-#' log2cpm <- t(log2(1+(10^6)*(t(exprs(eset_final_sub))/pdata$molecules)))
+#' # normalize expression counts to counts per million
+#' counts_normed <- t((10^6)*t(exprs(eset_sub)[1:5,])/pData(eset_sub)$molecules)
+#' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 #'
-#' # quantile normalize to normal distribution
-#' yy <- log2cpm[1,]
-#' is.zero <- which(yy == 0)
-#' qq.map <- qqnorm(yy)
-#' yy.qq <- qq.map$x
-#' yy.qq[is.zero] <- sample(qq.map$x[is.zero])
-#' names(yy.qq) <- colnames(log2cpm)
-#'
+#' # order FUCCI phase and expression
 #' theta_ordered <- theta[order(theta)]
-#' yy_ordered <- yy.qq[match(names(theta_ordered), names(yy.qq))]
+#' yy_ordered <- counts_quant[1,match(names(theta_ordered), colnames(counts_quant))]
 #'
 #' fit <- fit_loess(yy_ordered, time=theta_ordered)
 #'
 #' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
-#'   ylab="normalized expression values", xlab="FUCCI phase",
+#'   ylab="quantile-normalized expression values", xlab="FUCCI phase",
 #'   main = "loess fit")
 #' points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)
 #' axis(2)
@@ -215,10 +192,11 @@ fit_bspline <- function(yy, time) {
 #'   expression(2*pi)))
 #' abline(h=0, lty=1, col="black", lwd=.7)
 #'
-#' @importFrom stats loess
-#'
 #' @export
 #'
+#' @importFrom stats loess
+#' @import methods Biobase MASS Matrix ggplot2
+NULL
 fit_loess <- function(yy, time) {
 
   yy.rep <- rep(yy,3)

@@ -44,6 +44,25 @@ gene expression data three times, with one added after another. The
 quadratic trend filtering was applied to the concatenated data
 series of each gene.
 }
+\examples{
+data(eset_sub)
+pdata <- pData(eset_sub)
+
+# cell cycle phase based on FUCCI scores
+theta <- pdata$theta
+names(theta) <- rownames(pdata)
+
+# normalize expression counts to counts per million
+counts_normed <- t((10^6)*t(exprs(eset_sub)[1:5,])/pData(eset_sub)$molecules)
+counts_quant <- data_transform_quantile(counts_normed, ncores=2)
+
+# order FUCCI phase and expression
+theta_ordered <- theta[order(theta)]
+yy_ordered <- counts_quant[,match(names(theta_ordered), colnames(counts_quant))]
+
+fit <- fit_cyclical_many(yy_ordered, theta=theta_ordered)
+
+}
 \author{
 Joyce Hsiao
 }

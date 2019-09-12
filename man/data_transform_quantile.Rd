@@ -7,7 +7,8 @@
 data_transform_quantile(Y, ncores = 2)
 }
 \arguments{
-\item{Y}{A gene by sample matrix. Contains library size-normalized molecule counts.}
+\item{Y}{A gene by sample matrix. Contains library size-normalized
+molecule counts.}
 
 \item{ncores}{We use mclapply function for parallel computing.}
 }
@@ -16,7 +17,21 @@ A gene by sample expression matrix.
 }
 \description{
 For each gene, transform the log counts to a normal distribution.
-  This way the zero-count cells are assigned the lowest qunatiles.
+This way the zero-count cells are assigned the lowest qunatiles.
+}
+\examples{
+# use our data
+library(Biobase)
+data(eset_sub)
+
+# normalize expression counts to counts per million
+counts_normed<-t((10^6)*t(exprs(eset_sub)[1:5,])/pData(eset_sub)$molecules)
+counts_quant <- data_transform_quantile(counts_normed, ncores=2)
+
+plot(x=counts_normed[1,], y=counts_quant[1,],
+    xlab = "Before quantile-normalization",
+    ylab = "After quantile-normalization")
+
 }
 \author{
 Joyce Hsiao

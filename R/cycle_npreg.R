@@ -38,10 +38,85 @@
 #' \item{funs_est}{A list of functions for approximating the cyclic
 #' trends of gene express levels for each gene.}
 #'
+#' @examples
+#' # import data
+#' data(eset_sub)
+#'
+#' # select top 5 cyclic genes
+#' eset_top5 <- eset_sub[order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+#'
+#' # normalize molecule count for differencese in library sizes
+#' counts_normed <- t((10^6)*(t(exprs(eset_top5))/pData(eset_top5)$molecules))
+#'
+#' # reordering the data according to FUCCI phase
+#' counts_normed <- counts_normed[,order(pData(eset_top5)$theta_shifted)]
+#' pdata <- pData(eset_top5)[order(pData(eset_top5)$theta_shifted),]
+#'
+#' # quantile-transform each gene to normal distribution
+#' expr_quant <- do.call(rbind, lapply(seq_len(nrow(counts_normed)), function(g) {
+#'   yy <- counts_normed[g,]
+#'   is.zero <- which(yy == 0)
+#'   qq.map <- qqnorm(yy, plot.it = FALSE)
+#'   yy.qq <- qq.map$x
+#'   yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+#'   return(yy.qq)
+#' }) )
+#' rownames(expr_quant) <- rownames(counts_normed)
+#' colnames(expr_quant) <- colnames(counts_normed)
+#'
+#'
+#' # Select samples from NA18511 for our prediction example
+#' which_samples_train <- rownames(pdata)[which(pdata$chip_id != "NA18511")]
+#' which_samples_predict <- rownames(pdata)[which(pdata$chip_id == "NA18511")]
+#'
+#' # make an example of using data from 5 individuals to predict phase in one indivdual
+#' Y_train <- expr_quant[, which(colnames(expr_quant) %in% which_samples_train)]
+#' theta_train <- pdata$theta_shifted[which(rownames(pdata) %in% which_samples_train)]
+#' names(theta_train) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_train)]
+#'
+#' # obtain cyclic function estimates
+#' fit_train <- cycle_npreg_insample(Y = Y_train,
+#'                                   theta = theta_train,
+#'                                   polyorder=2,
+#'                                   ncores=2,
+#'                                   method.trend="trendfilter")
+#'
+#' Y_predict <- expr_quant[, which(colnames(expr_quant) %in% which_samples_predict)]
+#'
+#' theta_test <- pdata$theta[which(rownames(pdata) %in% which_samples_predict)]
+#' names(theta_test) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_predict)]
+#'
+#' fit_predict <- cycle_npreg_outsample(Y_test=Y_predict,
+#'                                     sigma_est=fit_train$sigma_est,
+#'                                     funs_est=fit_train$funs_est,
+#'                                     method.trend="trendfilter",
+#'                                     ncores=1,
+#'                                     get_trend_estimates=TRUE)
+#'
+#' par(mfrow=c(2,3), mar=c(4,4,3,1))
+#' for (g in seq_len(5)) {
+#'   plot(fit_predict$Y_reordered[g,],
+#'        x=fit_predict$cell_times_reordered, axes=FALSE,
+#'        xlab="FUCCI phase",
+#'        ylab="Predicted phase")
+#'   points(y=fit_predict$funs_reordered[[g]](fit_predict$cell_times_reordered),
+#'          x=fit_predict$cell_times_reordered,
+#'          pch=16, col="royalblue")
+#'   axis(2);
+#'   axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
+#'            labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
+#'                     expression(2*pi)))
+#'   abline(h=0, lty=1, col="black", lwd=.7)
+#'   title(rownames(fit_predict$Y_reordered)[g])
+#' }
+#' title("Predicting cell cycle phase for NA18511", outer=TRUE)
+#'
 #' @author Joyce Hsiao
 #'
 #' @export
 #'
+#' @import methods Biobase MASS Matrix ggplot2
+NULL
 cycle_npreg_insample <- function(Y, theta,
                                  ncores=4,
                                  polyorder=2,
@@ -90,9 +165,9 @@ cycle_npreg_insample <- function(Y, theta,
 #'
 #' @param grids number of bins to be selected along 0 to 2pi.
 #'
-#' @param get_trend_estimates To re-estimate the cylic trend based on the predicted
-#'   cell cycle phase or not (T or F). Default FALSE. This step calls trendfilter
-#'   and is computationally intensive.
+#' @param get_trend_estimates To re-estimate the cylic trend based on
+#'   the predicted cell cycle phase or not (T or F). Default FALSE. This step
+#'   calls trendfilter and is computationally intensive.
 #' @param ncores We use mclapply function for parallel computing.
 #'
 #' @inheritParams cycle_npreg_mstep
@@ -126,8 +201,84 @@ cycle_npreg_insample <- function(Y, theta,
 #' \item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
 #' to each bin.}
 #'
+#' @examples
+#' # import data
+#' library(Biobase)
+#' data(eset_sub)
+#'
+#' # select top 5 cyclic genes
+#' eset_top5 <- eset_sub[order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+#'
+#' # normalize molecule count for differencese in library sizes
+#' counts_normed <- t((10^6)*(t(exprs(eset_top5))/pData(eset_top5)$molecules))
+#'
+#' # reordering the data according to FUCCI phase
+#' counts_normed <- counts_normed[,order(pData(eset_top5)$theta_shifted)]
+#' pdata <- pData(eset_top5)[order(pData(eset_top5)$theta_shifted),]
+#'
+#' # quantile-transform each gene to normal distribution
+#' expr_quant <- do.call(rbind, lapply(seq_len(nrow(counts_normed)), function(g) {
+#'   yy <- counts_normed[g,]
+#'   is.zero <- which(yy == 0)
+#'   qq.map <- qqnorm(yy, plot.it = FALSE)
+#'   yy.qq <- qq.map$x
+#'   yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+#'   return(yy.qq)
+#' }) )
+#' rownames(expr_quant) <- rownames(counts_normed)
+#' colnames(expr_quant) <- colnames(counts_normed)
+#'
+#'
+#' # Select samples from NA18511 for our prediction example
+#' which_samples_train <- rownames(pdata)[which(pdata$chip_id != "NA18511")]
+#' which_samples_predict <- rownames(pdata)[which(pdata$chip_id == "NA18511")]
+#'
+#' # make an example of using data from 5 individuals to predict phase in one indivdual
+#' Y_train <- expr_quant[, which(colnames(expr_quant) %in% which_samples_train)]
+#' theta_train <- pdata$theta_shifted[which(rownames(pdata) %in% which_samples_train)]
+#' names(theta_train) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_train)]
+#'
+#' # obtain cyclic function estimates
+#' fit_train <- cycle_npreg_insample(Y = Y_train,
+#'                                   theta = theta_train,
+#'                                   polyorder=2,
+#'                                   ncores=2,
+#'                                   method.trend="trendfilter")
+#'
+#' Y_predict <- expr_quant[, which(colnames(expr_quant) %in% which_samples_predict)]
+#'
+#' theta_test <- pdata$theta[which(rownames(pdata) %in% which_samples_predict)]
+#' names(theta_test) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_predict)]
+#'
+#' fit_predict <- cycle_npreg_outsample(Y_test=Y_predict,
+#'                                     sigma_est=fit_train$sigma_est,
+#'                                     funs_est=fit_train$funs_est,
+#'                                     method.trend="trendfilter",
+#'                                     ncores=1,
+#'                                     get_trend_estimates=TRUE)
+#'
+#' par(mfrow=c(2,3), mar=c(4,4,3,1))
+#' for (g in seq_len(5)) {
+#'   plot(fit_predict$Y_reordered[g,],
+#'        x=fit_predict$cell_times_reordered, axes=FALSE,
+#'        xlab="FUCCI phase",
+#'        ylab="Predicted phase")
+#'   points(y=fit_predict$funs_reordered[[g]](fit_predict$cell_times_reordered),
+#'          x=fit_predict$cell_times_reordered,
+#'          pch=16, col="royalblue")
+#'   axis(2);
+#'   axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
+#'            labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
+#'                     expression(2*pi)))
+#'   abline(h=0, lty=1, col="black", lwd=.7)
+#'   title(rownames(fit_predict$Y_reordered)[g])
+#' }
+#' title("Predicting cell cycle phase for NA18511", outer=TRUE)
+#'
 #' @export
 #'
+#' @import methods Biobase MASS Matrix ggplot2
+NULL
 cycle_npreg_outsample <- function(Y_test,
                                   sigma_est,
                                   funs_est,
@@ -137,7 +288,7 @@ cycle_npreg_outsample <- function(Y_test,
                                   method.grid="uniform",
                                   ncores=4,
                                   grids=100,
-                                  get_trend_estimates=F) {
+                                  get_trend_estimates=FALSE) {
 
   # compute expected cell time for the test samples
   # under mu and sigma estimated from the training samples
@@ -147,30 +298,33 @@ cycle_npreg_outsample <- function(Y_test,
                                        funs_est = funs_est,
                                        grids = grids)
 
-  if (get_trend_estimates==T) {
+  if (get_trend_estimates) {
     updated_estimates <- cycle_npreg_mstep(Y = Y_test,
-                                           theta = initial_loglik$cell_times_est,
-                                           method.trend = method.trend,
-                                           polyorder = polyorder,
-                                           ncores = ncores)
-    out <- list(Y=Y_test,
-                cell_times_est=initial_loglik$cell_times_est,
-                loglik_est=initial_loglik$loglik_est,
-                Y_reordered=updated_estimates$Y,
-                cell_times_reordered=updated_estimates$theta,
-                mu_reordered=updated_estimates$mu_est,
-                sigma_reordered=updated_estimates$sigma_est,
-                funs_reordered=updated_estimates$funs,
-                prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
+                                         theta = initial_loglik$cell_times_est,
+                                         method.trend = method.trend,
+                                         polyorder = polyorder,
+                                         ncores = ncores)
+    out <- list(
+          Y=Y_test,
+          cell_times_est=initial_loglik$cell_times_est,
+          loglik_est=initial_loglik$loglik_est,
+          Y_reordered=updated_estimates$Y,
+          cell_times_reordered=updated_estimates$theta,
+          mu_reordered=updated_estimates$mu_est,
+          sigma_reordered=updated_estimates$sigma_est,
+          funs_reordered=updated_estimates$funs,
+          prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
   } else {
-    out <- list(Y=Y_test,
-                cell_times_est=initial_loglik$cell_times_est,
-                loglik_est=initial_loglik$loglik_est,
-                prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
+    out <- list(
+          Y=Y_test,
+          cell_times_est=initial_loglik$cell_times_est,
+          loglik_est=initial_loglik$loglik_est,
+          prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
   }
 
   return(out)
 }
+
 
 #------ Supporting functions
 
@@ -194,9 +348,8 @@ cycle_npreg_outsample <- function(Y_test,
 #'
 #' @importFrom stats prcomp
 #' @importFrom circular coord2rad
-#'
-#' @export
-#'
+#' @import methods Biobase MASS Matrix ggplot2
+NULL
 initialize_grids <- function(Y, grids=100,
                              method.grid=c("pca", "uniform")) {
 
@@ -214,7 +367,7 @@ initialize_grids <- function(Y, grids=100,
     names(theta_initial) <- names(grid_approx)
     names(theta_initial_ind) <- names(grid_approx)
 
-    for (i in 1:length(grid_approx)) {
+    for (i in seq_len(length(grid_approx))) {
       theta_initial_ind[i] <-
         which.min(pmin(abs(theta_grids-grid_approx[i]),
                        abs(theta_grids-(2*pi-grid_approx[i]))))
@@ -252,11 +405,9 @@ initialize_grids <- function(Y, grids=100,
 #' to each bin.}
 #'
 #' @author Joyce Hsiao
-#'
 #' @importFrom stats dnorm
-#'
-#' @export
-#'
+#' @import methods Biobase MASS Matrix ggplot2
+NULL
 cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
                                grids=100,
                                method.grid=c("pca", "uniform")) {
@@ -271,11 +422,11 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
   colnames(loglik_per_cell_by_celltimes) <- theta_choose
   colnames(prob_per_cell_by_celltimes) <- theta_choose
 
-  for (n in 1:N) {
+  for (n in seq_len(N)) {
 
     # for each cell, sum up the loglikelihood for each gene
     # at the observed cell times
-    loglik_per_cell <- do.call(rbind, lapply(1:G, function(g) {
+    loglik_per_cell <- do.call(rbind, lapply(seq_len(G), function(g) {
       dnorm(Y[g,n], funs_est[[g]](theta_choose), sigma_est[g], log = TRUE)
     }))
     loglik_per_cell <- colSums(loglik_per_cell)
@@ -284,28 +435,28 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
   }
 
   # use max likelihood to assign samples
-  for (n in 1:N) {
-    sumll <- sum(exp(loglik_per_cell_by_celltimes)[n,], na.rm=T)
+  for (n in seq_len(N)) {
+    sumll <- sum(exp(loglik_per_cell_by_celltimes)[n,], na.rm=TRUE)
     if (sumll == 0) {
       prob_per_cell_by_celltimes[n,] <- rep(0, grids)
     } else {
       prob_per_cell_by_celltimes[n,] <- exp(loglik_per_cell_by_celltimes)[n,]/sumll
     }
   }
-  cell_times_samp_ind <- sapply(1:N, function(n) {
-    if (max(prob_per_cell_by_celltimes[n,], na.rm=T)==0) {
-      sample(1:grids, 1, replace=F)
+  cell_times_samp_ind <- sapply(seq_len(N), function(n) {
+    if (max(prob_per_cell_by_celltimes[n,], na.rm=TRUE)==0) {
+      sample(seq_len(grids), 1, replace=FALSE)
     } else {
       which.max(prob_per_cell_by_celltimes[n,])
     }
   })
-  cell_times_est <- sapply(1:N, function(n) {
+  cell_times_est <- sapply(seq_len(N), function(n) {
     theta_choose[cell_times_samp_ind[n]]
   })
   names(cell_times_est) <- colnames(Y)
 
   # compute likelihood based on the selected cell times
-  loglik_max_per_cell <- sapply(1:N, function(n) {
+  loglik_max_per_cell <- sapply(seq_len(N), function(n) {
     ll <- loglik_per_cell_by_celltimes[n,]
     ll[cell_times_samp_ind[n]]
   })
@@ -355,9 +506,8 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' @importFrom assertthat assert_that
 #' @importFrom parallel mclapply
 #' @importFrom stats approxfun
-#'
-#' @export
-#'
+#' @import methods Biobase MASS Matrix ggplot2
+NULL
 cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                                                        "loess", "bspline"),
                               polyorder=2,
@@ -379,7 +529,7 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
 
       # for each gene, estimate the cyclical pattern of gene expression
       # conditioned on the given cell times
-      fit <- mclapply(1:G, function(g) {
+      fit <- mclapply(seq_len(G), function(g) {
         y_g <- Y_ordered[g,]
 
         if (method.trend=="trendfilter") {

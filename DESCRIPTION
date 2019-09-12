@@ -14,6 +14,7 @@ Authors@R: c(person("Chiaowen Joyce","Hsiao",email="joyce.hsiao1@gmail.com",
               role="ctb", comment = c(ORCID = "0000-0003-2634-9879")),
        person("Peter","Carbonetto", email = "peter.carbonetto@gmail.com",
               role="ctb", comment = c(ORCID = "0000-0003-1144-6780")))
+Maintainer: Chiaowen Joyce Hsiao <joyce.hsiao1@gmail.com>
 Description: Our approach provides a way to assign continuous cell cycle phase 
     using scRNA-seq data, and consequently, allows to identify cyclic trend 
     of gene expression levels along the cell cycle. This package provides method
@@ -23,16 +24,18 @@ Description: Our approach provides a way to assign continuous cell cycle phase
 URL: https://github.com/jhsiao999/peco
 BugReports: https://github.com/jhsiao999/peco/issues
 License: GPL (>= 3)
-Depends: R (>= 3.2)
+Depends: R (>= 3.5)
 Imports:
     assertthat,
     Biobase,
     circular,
+    conicfit,
     genlasso,
     ggplot2,
     graphics,
     MASS,
     Matrix,
+    parallel,
     stats
 Suggests: 
     knitr,
