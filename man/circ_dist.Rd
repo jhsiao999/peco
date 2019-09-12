@@ -18,6 +18,21 @@ A vector of distances between angles.
 We define distance between two angles: the minimum of
 the differences in both clockwise and counterclockwise directions.
 }
+\examples{
+# a vector of angles
+theta_ref <- seq(0,2*pi, length.out=100)
+
+# shift the origin of theta_ref to pi
+theta_compare <- shift_origin(theta_ref, origin = pi)
+mean(circ_dist(theta_ref, theta_compare))
+
+# after rotation of angles, difference is 0 between the original
+# and the shifted angles
+theta_compare_rotated <- rotation(ref_var=theta_ref, shift_var=theta_compare)
+mean(circ_dist(theta_ref, theta_compare_rotated))
+
+
+}
 \author{
 Joyce Hsiao, Matthew Stephens
 }

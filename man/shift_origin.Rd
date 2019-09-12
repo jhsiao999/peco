@@ -17,6 +17,16 @@ A vector of angles shifted to the new origin.
 \description{
 Shift origin of the angles for visualization
 }
+\examples{
+# make a vector of angles
+theta <- seq(0,2*pi, length.out=100)
+
+# shift the origin of theta to pi
+theta_shifted <- shift_origin(theta, origin = pi)
+
+plot(x=theta, y = theta_shifted)
+
+}
 \author{
 Joyce Hsiao
 }

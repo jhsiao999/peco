@@ -24,7 +24,7 @@ Description: Our approach provides a way to assign continuous cell cycle phase
 URL: https://github.com/jhsiao999/peco
 BugReports: https://github.com/jhsiao999/peco/issues
 License: GPL (>= 3)
-Depends: R (>= 3.2)
+Depends: R (>= 3.5)
 Imports:
     assertthat,
     Biobase,
@@ -35,6 +35,7 @@ Imports:
     graphics,
     MASS,
     Matrix,
+    parallel,
     stats
 Suggests: 
     knitr,

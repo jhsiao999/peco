@@ -21,32 +21,25 @@ estimated cyclic trend.
 Use loess to estimate cyclic trends of expression values
 }
 \examples{
-library(Biobase)
-data(eset_final_sub)
-pdata <- pData(eset_final_sub)
+data(eset_sub)
+pdata <- pData(eset_sub)
 
-# cell-cycle phase based on FUCCI
+# cell cycle phase based on FUCCI scores
 theta <- pdata$theta
 names(theta) <- rownames(pdata)
 
-# library size normalization
-log2cpm <- t(log2(1+(10^6)*(t(exprs(eset_final_sub))/pdata$molecules)))
+# normalize expression counts to counts per million
+counts_normed <- t((10^6)*t(exprs(eset_sub)[1:5,])/pData(eset_sub)$molecules)
+counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 
-# quantile normalize to normal distribution
-yy <- log2cpm[1,]
-is.zero <- which(yy == 0)
-qq.map <- qqnorm(yy)
-yy.qq <- qq.map$x
-yy.qq[is.zero] <- sample(qq.map$x[is.zero])
-names(yy.qq) <- colnames(log2cpm)
-
+# order FUCCI phase and expression
 theta_ordered <- theta[order(theta)]
-yy_ordered <- yy.qq[match(names(theta_ordered), names(yy.qq))]
+yy_ordered <- counts_quant[1,match(names(theta_ordered), colnames(counts_quant))]
 
 fit <- fit_loess(yy_ordered, time=theta_ordered)
 
 plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
-  ylab="normalized expression values", xlab="FUCCI phase",
+  ylab="quantile-normalized expression values", xlab="FUCCI phase",
   main = "loess fit")
 points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)
 axis(2)

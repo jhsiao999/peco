@@ -22,26 +22,45 @@
 #' @param Y A matrix (gene by sample) of gene expression values.  The
 #' expression values are assumed to have been normalized and
 #' transformed to standard normal distribution.
-#' 
+#'
 #' @param theta A vector of cell cycle phase (angles) for single-cell
 #' samples.
-#' 
+#'
 #' @param polyorder We estimate cyclic trends of gene expression
 #' levels using nonparamtric trend filtering. The default fits second
 #' degree polynomials.
-#' 
+#'
 #' @param ncores mclapply from the parallel package is used to perform
 #' parallel computing to reduce computational time.
 #'
 #' @return A vector of proportion of variance explained for each gene.
 #'
+#' @examples
+#' data(eset_sub)
+#' pdata <- pData(eset_sub)
+#'
+#' # cell cycle phase based on FUCCI scores
+#' theta <- pdata$theta
+#' names(theta) <- rownames(pdata)
+#'
+#' # normalize expression counts to counts per million
+#' counts_normed <- t((10^6)*t(exprs(eset_sub)[1:5,])/pData(eset_sub)$molecules)
+#' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
+#'
+#' # order FUCCI phase and expression
+#' theta_ordered <- theta[order(theta)]
+#' yy_ordered <- counts_quant[,match(names(theta_ordered), colnames(counts_quant))]
+#'
+#' fit <- fit_cyclical_many(yy_ordered, theta=theta_ordered)
+#'
 #' @author Joyce Hsiao
+#'
+#' @export
 #'
 #' @importFrom assertthat assert_that
 #' @importFrom parallel mclapply
-#' 
-#' @export
-#' 
+#' @import methods Biobase MASS Matrix ggplot2
+NULL
 fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=4) {
   G <- nrow(Y)
   N <- ncol(Y)
@@ -59,7 +78,7 @@ fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=4) {
 
   # For each gene, estimate the cyclical pattern of gene expression
   # conditioned on the given cell times.
-  fit <- mclapply(1:G, function(g) {
+  fit <- mclapply(seq_len(G), function(g) {
     y_g <- Y_ordered[g,]
     fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
     return(fit_g$pve)

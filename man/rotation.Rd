@@ -23,6 +23,22 @@ arbitrary, we transform the angles prior to computing the distance
 vectors. After this, one can apply circ_dist to compute the
 distance between the output value and ref_var.
 }
+\examples{
+# a vector of angles
+theta_ref <- seq(0,2*pi, length.out=100)
+
+# shift the origin of theta_ref to pi
+theta_compare <- shift_origin(theta_ref, origin = pi)
+
+# rotate theta_compare in a such a way that the distance
+# between theta_ref and thet_compare is minimized
+theta_compare_rotated <- rotation(ref_var=theta_ref, shift_var=theta_compare)
+
+par(mofrow=c(1,2))
+plot(x=theta_ref, y = theta_compare)
+plot(x=theta_ref, y = theta_compare_rotated)
+
+}
 \author{
 Matthew Stephens
 }

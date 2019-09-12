@@ -5,7 +5,7 @@
 \title{Infer angles for each single-cell samples using fluorescence
 intensities}
 \usage{
-intensity2circle(mat, plot.it = F, method = c("trig", "algebraic"))
+intensity2circle(mat, plot.it = FALSE, method = c("trig", "algebraic"))
 }
 \arguments{
 \item{mat}{A matrix of two columns of summarized fluorescence
@@ -27,6 +27,17 @@ We use FUCCI intensities to infer the position of the
 cells in cell cycle progression. The result is a vector of angles
 on a unit circle corresponding to the positions of the cells in
 cell cycle progression.
+}
+\examples{
+# use our data
+data(eset_sub)
+
+# FUCCI scores - log10 transformed sum of intensities that were
+# corrected for background noise
+ints <- pData(eset_sub)[,c("rfp.median.log10sum.adjust",
+                          "gfp.median.log10sum.adjust")]
+intensity2circle(ints, plot.it=TRUE, method = "trig")
+
 }
 \author{
 Joyce Hsiao
