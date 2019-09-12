@@ -3,7 +3,7 @@
 \docType{data}
 \name{fit_predict}
 \alias{fit_predict}
-\title{Results of predicting cell cycle phase for samples from NA19098.}
+\title{Results of predicting cell cycle phase for samples from NA18511.}
 \format{A list with the follwing elements
 \describe{
   \item{Y}{a data.frame (gene by sample) of quantile-normailzed gene expression values}
