@@ -134,7 +134,7 @@ cycle_npreg_outsample <- function(Y_test,
                                   method.trend=c("trendfilter",
                                                  "loess", "bspline"),
                                   polyorder=2,
-                                  method.grid=c("pca", "uniform"),
+                                  method.grid="uniform",
                                   ncores=4,
                                   grids=100,
                                   get_trend_estimates=F) {

@@ -1,45 +1,48 @@
 Encoding: UTF-8
 Type: Package
 Package: peco
-Version: 0.6.2
-Date: 2019-02-27
-Title: Predicting Cell Cycle Progression in a Contiuum using
-    Single-Cell RNA-Seq Data
+Version: 0.99.0
+Date: 2019-09-11
+Title: A supervised approach for **P**r**e**dicting **c**ell cycle
+    pr**o**gression using scRNA-seq data
 Authors@R: c(person("Chiaowen Joyce","Hsiao",email="joyce.hsiao1@gmail.com", 
-                    role=c("aut","cre")),
-             person("Matthew","Stephens",
-	           email="stephens999@gmail.com",role="aut"),
-             person("John","Blischak",role="ctb"),
-             person("Peter","Carbonetto",role="ctb"))
-Description: A supervised approach for **P**r**e**dicting **c**ell cycle
-    pr**o**gression in induced pluripotent stem cells (iPSCs) using
-    scRNA-seq data. We provide gene-specific estimates of cyclic
-    trends of gene expression based on our training data. These
-    gene-specific estimates can be applied to other scRNA-seq data to
-    predict cell cycle phases (measured as angles on a unit
-    cirlce). The training data consists of fluorescence imaging data
-    and scRNA-seq data from iPSCs derived from 6 Yoruba cell lines.
+                    role=c("aut","cre"),
+                    comment = c(ORCID = "0000-0001-8961-7522")),
+       person("Matthew","Stephens", email="stephens999@gmail.com",
+              role="aut", comment = c(ORCID = "0000-0001-5397-9257")),
+       person("John","Blischak", email = "jdblischak@gmail.com",
+              role="ctb", comment = c(ORCID = "0000-0003-2634-9879")),
+       person("Peter","Carbonetto", email = "peter.carbonetto@gmail.com",
+              role="ctb", comment = c(ORCID = "0000-0003-1144-6780")))
+Description: Our approach provides a way to assign continuous cell cycle phase 
+    using scRNA-seq data, and consequently, allows to identify cyclic trend 
+    of gene expression levels along the cell cycle. This package provides method
+    and training data, which includes scRNA-seq data collected from 6 individual 
+    cell lines of induced pluripotent stem cells (iPSCs), and also continuous cell 
+    cycle phase derived from FUCCI fluorescence imaging data. 
 URL: https://github.com/jhsiao999/peco
 BugReports: https://github.com/jhsiao999/peco/issues
 License: GPL (>= 3)
 Depends: R (>= 3.2)
 Imports:
-    stats,
-    graphics,
-    Matrix,
     assertthat,
+    Biobase,
     circular,
-    conicfit,
     genlasso,
     ggplot2,
+    graphics,
     MASS,
-    parallel
+    Matrix,
+    stats
 Suggests: 
     knitr,
-    rmarkdown,
-    Biobase
+    rmarkdown
+Enchances:
+    parallel
 Remotes:
   glmgen/genlasso
+biocViews:
+  Sequencing, RNASeq, GeneExpression, Transcriptomics, SingleCell,
+  Software, StatisticalMethod, Classification, Visualization
 VignetteBuilder: knitr
-LazyData: true
 RoxygenNote: 6.1.1

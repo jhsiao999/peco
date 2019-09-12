@@ -1,4 +1,4 @@
-#' Molecule counts of top 100 cyclical genes in 888 samples analyzed
+#' Molecule counts of the 101 significant cyclical genes in 888 samples analyzed
 #' in the study.
 #'
 #' An ExpressionSet object (require Biobase package) including
@@ -6,38 +6,17 @@
 #' contains sample phenotype information and the `featureData()` slot contains
 #' gene feature information.
 #'
-#' @format An ExpressionSet object with 888 samples and top 100 cyclic genes,
+#' @format An ExpressionSet object with 888 samples and the 101 significant cyclic genes,
 #' \describe{
-#'   \item{pData(eset_final_sub)$theta}{Inferred angles of each cell along
+#'   \item{pData(eset_sub)$theta}{Inferred angles of each cell along
 #'     a circle, also known as FUCCI phase.}
-#'   \item{exprs(est_final_sub)}{Molecule counts of top 100 cyclical genes.}
+#'   \item{exprs(eset_sub)}{Molecule counts of the 101 significant cyclical genes.}
 #' }
 #'
 #' @docType data
 #'
 #' @keywords data
-"eset_final_sub"
-
-#' @title List of top 100 cyclic genes
-#'
-#' @description Top 100 cyclic genes ordered by their cyclic trend (strong to weak)
-#'   across 888 samples analyzed in the study.
-#'
-#' @format A data frame with the following columns, in which the rows
-#' are ordered according to the proportion of variance explained
-#' (large to small):
-#'
-#' \describe{
-#'   \item{ensg}{ENSG gene ID.}
-#'   \item{pve}{Proportion of variance explained in the expression
-#'   values by the estimated cyclic trend.}
-#' }
-#'
-#' @docType data
-#'
-#' @keywords data
-#'
-"genes_cyclic_list"
+"eset_sub"
 
 #' @title Traing model results among samples from 5 individuals.
 #'
@@ -59,7 +38,7 @@
 #'
 "fit_train"
 
-#' @title Results of predicting cell cycle phase for samples from NA19098.
+#' @title Results of predicting cell cycle phase for samples from NA18511.
 #'
 #' @description Pre-computed results. Applied \code{cycle_npreg_outsample} and
 #'   results stored in \code{fit_train} to predict cell cycle phase for

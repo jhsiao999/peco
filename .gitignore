@@ -5,4 +5,4 @@ peco.Rcheck/
 peco*tar.gz
 vignettes/*.html
 vignettes/*.R
-
+NOTES.txt
