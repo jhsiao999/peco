@@ -36,7 +36,7 @@ for questions on the package or the methods.
 ## How to cite
 
 > Hsiao, C. J., Tung, P., Blischak, J. D., Burnett, J., Dey, K. K.,
-> Barr, K., Stephens, M., and Gilad, Y. (2018). [Characterizing and
+> Barr, A. K., Stephens, M., and Gilad, Y. (2018). [Characterizing and
 > inferring quantitative cell-cycle phase in single-cell RNA-seq data
 > analysis.](https://doi.org/10.1101/526848) bioRxiv doi:10.1101/526848
 
@@ -56,8 +56,8 @@ commands in the command-line shell:
 
 ```bash
 R CMD build --resave-data peco
-R CMD INSTALL peco_0.6.0.tar.gz
+R CMD INSTALL peco_0.99.0.tar.gz
 ```
 
-<!--- R CMD check --as-cran peco_0.6.0.tar.gz---!>
+<!--- R CMD check --as-cran peco_0.99.0.tar.gz---!>
 
