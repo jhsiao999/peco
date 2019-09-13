@@ -38,7 +38,7 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown
-Enchances:
+Enhances:
     parallel
 Remotes:
   glmgen/genlasso

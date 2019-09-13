@@ -74,7 +74,7 @@
 #'
 #' @docType data
 #'
-#' @usage data(fit_predit)
+#' @usage data(fit_predict)
 #'
 #' @keywords data
 "fit_predict"
