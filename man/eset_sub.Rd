@@ -12,7 +12,7 @@ analyzed in the study.}
     a circle, also known as FUCCI phase.}
 }}
 \usage{
-eset_sub
+data(eset_sub)
 }
 \description{
 An ExpressionSet object (require Biobase package) including

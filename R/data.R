@@ -15,6 +15,8 @@
 #'
 #' @docType data
 #'
+#' @usage data(eset_sub)
+#'
 #' @keywords data
 "eset_sub"
 
@@ -34,6 +36,8 @@
 #' }
 #'
 #' @docType data
+#'
+#' @usage data(fit_train)
 #'
 #' @keywords data
 "fit_train"
@@ -69,6 +73,8 @@
 #'  }
 #'
 #' @docType data
+#'
+#' @usage data(fit_predit)
 #'
 #' @keywords data
 "fit_predict"

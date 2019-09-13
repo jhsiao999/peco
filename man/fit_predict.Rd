@@ -28,7 +28,7 @@
   \item{cell_times_reordered}{Estimated phase}
  }}
 \usage{
-fit_predict
+data(fit_predit)
 }
 \description{
 Pre-computed results. Applied \emph{cycle_npreg_outsample} and

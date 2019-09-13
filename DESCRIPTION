@@ -28,6 +28,8 @@ Imports:
     Biobase,
     circular,
     conicfit,
+    doParallel,
+    foreach,
     genlasso,
     graphics,
     methods,

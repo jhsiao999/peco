@@ -17,7 +17,7 @@
 #'
 #' @param theta A vector of angles.
 #'
-#' @param ncores We use mclapply function for parallel computing.
+#' @param ncores We use doParallel package for parallel computing.
 #'
 #' @param polyorder We estimate cyclic trends of gene expression
 #' levels using nonparamtric trend filtering. The default fits second
@@ -122,6 +122,7 @@
 #'
 #' @import Biobase
 #' @import methods
+#'
 #' @export
 cycle_npreg_insample <- function(Y, theta,
                                  ncores=4,
@@ -176,7 +177,7 @@ cycle_npreg_insample <- function(Y, theta,
 #' @param get_trend_estimates To re-estimate the cylic trend based on
 #'   the predicted cell cycle phase or not (T or F). Default FALSE. This step
 #'   calls trendfilter and is computationally intensive.
-#' @param ncores We use mclapply function for parallel computing.
+#' @param ncores We use doParallel package for parallel computing.
 #'
 #' @inheritParams cycle_npreg_mstep
 #' @inheritParams cycle_npreg_loglik
@@ -493,7 +494,7 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #'     'trendfilter' provided the best fit in our study. But 'trendfilter`
 #'     uses cross-validation and takes some time. Therefore, we recommend
 #'     using bspline for quick results.
-#' @param ncores How many computing cores to use? We use mclapply function for
+#' @param ncores How many computing cores to use? We use doParallel package for
 #'     parallel computing.
 #'
 #' @inheritParams fit_trendfilter_generic
@@ -511,13 +512,26 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' \item{funs}{Estimated cyclic functions}
 #'
 #' @importFrom assertthat assert_that
-#' @importFrom parallel mclapply
 #' @importFrom stats dnorm approxfun
+#' @import doParallel
+#' @import parallel
+#' @import foreach
+#'
 #' @author Joyce Hsiao
 cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                                                        "loess", "bspline"),
                               polyorder=2,
                               ncores=4) {
+
+      if (is.null(ncores)) {
+        cl <- parallel::makeCluster(2)
+        doParallel::registerDoParallel(cl)
+        message(paste("computing on",ncores,"cores"))
+      } else {
+        cl <- parallel::makeCluster(ncores)
+        doParallel::registerDoParallel(cl)
+        message(paste("computing on",ncores,"cores"))
+      }
 
       G <- nrow(Y)
       N <- ncol(Y)
@@ -535,7 +549,38 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
 
       # for each gene, estimate the cyclical pattern of gene expression
       # conditioned on the given cell times
-      fit <- mclapply(seq_len(G), function(g) {
+      # fit <- mclapply(seq_len(G), function(g) {
+      #   y_g <- Y_ordered[g,]
+      #
+      #   if (method.trend=="trendfilter") {
+      #     fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
+      #     fun_g <- approxfun(x=as.numeric(theta_ordered),
+      #                        y=as.numeric(fit_g$trend.yy), rule=2)
+      #     mu_g <- fit_g$trend.yy
+      #   }
+      #   if (method.trend=="bspline") {
+      #     fit_g <- fit_bspline(yy=y_g, time = theta_ordered)
+      #     fun_g <- approxfun(x=as.numeric(theta_ordered),
+      #                        y=as.numeric(fit_g$pred.yy), rule=2)
+      #     mu_g <- fit_g$pred.yy
+      #   }
+      #
+      #   if (method.trend=="loess") {
+      #     fit_g <- fit_loess(yy=y_g, time = theta_ordered)
+      #     fun_g <- approxfun(x=as.numeric(theta_ordered),
+      #                        y=as.numeric(fit_g$pred.yy), rule=2)
+      #     mu_g <- fit_g$pred.yy
+      #   }
+      #
+      #   sigma_g <- sqrt(sum((y_g-mu_g)^2)/N)
+      #
+      #   list(y_g =y_g,
+      #        mu_g=mu_g,
+      #        sigma_g=sigma_g,
+      #        fun_g=fun_g)
+      # }, mc.cores = ncores)
+
+      fit <- foreach::foreach(g=seq_len(G)) %dopar% {
         y_g <- Y_ordered[g,]
 
         if (method.trend=="trendfilter") {
@@ -564,7 +609,8 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
              mu_g=mu_g,
              sigma_g=sigma_g,
              fun_g=fun_g)
-      }, mc.cores = ncores)
+      }
+      parallel::stopCluster(cl)
 
       sigma_est <- sapply(fit, "[[", "sigma_g")
       names(sigma_est) <- rownames(Y_ordered)

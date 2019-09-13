@@ -13,7 +13,7 @@
   \item{funs_est}{a list of estimated cyclic functions}
 }}
 \usage{
-fit_train
+data(fit_train)
 }
 \description{
 Pre-computed results. Applied \emph{cycle_npreg_insample} to

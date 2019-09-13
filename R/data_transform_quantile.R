@@ -8,7 +8,7 @@
 #'
 #' @param Y A gene by sample matrix. Contains library size-normalized
 #' molecule counts.
-#' @param ncores We use mclapply function for parallel computing.
+#' @param ncores We use doParallel package for parallel computing.
 #'
 #' @return A gene by sample expression matrix.
 #'
@@ -29,20 +29,45 @@
 #'
 #' @import Biobase
 #' @import methods
+#' @import doParallel
+#' @import parallel
+#' @import foreach
 #' @export
 data_transform_quantile <- function(Y, ncores=2) {
+
+  if (is.null(ncores)) {
+    cl <- parallel::makeCluster(2)
+    doParallel::registerDoParallel(cl)
+    message(paste("computing on",ncores,"cores"))
+  } else {
+    cl <- parallel::makeCluster(ncores)
+    doParallel::registerDoParallel(cl)
+    message(paste("computing on",ncores,"cores"))
+  }
+
   G <- nrow(Y)
 
-  df <- mclapply(seq_len(G), function(g) {
+  # df <- mclapply(seq_len(G), function(g) {
+  #   y_g <- Y[g,]
+  #   is.zero <- which(y_g == 0)
+  #   qq.map <- stats::qqnorm(y_g, plot.it=FALSE)
+  #   yy.qq <- qq.map$x
+  #   yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+  #   return(y_g= yy.qq)
+  # }, mc.cores = ncores)
+  df <- foreach::foreach(g=seq_len(G)) %dopar% {
     y_g <- Y[g,]
     is.zero <- which(y_g == 0)
-    qq.map <- stats::qqnorm(y_g)
+    qq.map <- stats::qqnorm(y_g, plot.it=FALSE)
     yy.qq <- qq.map$x
     yy.qq[is.zero] <- sample(qq.map$x[is.zero])
     return(y_g= yy.qq)
-  }, mc.cores = ncores)
+  }
+  parallel::stopCluster(cl)
+
   df <- do.call(rbind, df)
   colnames(df) <- colnames(Y)
+  rownames(df) <- rownames(Y)
 
   return(df)
   }
