@@ -12,7 +12,6 @@ Authors@R: c(
        person("John", "Blischak", email = "jdblischak@gmail.com", role="ctb"),
        person("Peter", "Carbonetto", email = "peter.carbonetto@gmail.com",
               role="ctb"))
-Maintainer: Chiaowen Joyce Hsiao <joyce.hsiao1@gmail.com>
 Description: Our approach provides a way to assign continuous cell cycle phase 
     using scRNA-seq data, and consequently, allows to identify cyclic trend 
     of gene expression levels along the cell cycle. This package provides method
@@ -34,14 +33,11 @@ Imports:
     graphics,
     methods,
     parallel,
-    stats
+    stats,
+    utils
 Suggests: 
     knitr,
     rmarkdown
-Enhances:
-    parallel
-Remotes:
-  glmgen/genlasso
 biocViews:
   Sequencing, RNASeq, GeneExpression, Transcriptomics, SingleCell,
   Software, StatisticalMethod, Classification, Visualization

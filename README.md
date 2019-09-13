@@ -2,6 +2,7 @@
 
 [![Travis-CI Build Status](https://travis-ci.com/jhsiao999/peco.svg?branch=master)](https://travis-ci.com/jhsiao999/peco)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/jhsiao999/peco?branch=master&svg=true)](https://ci.appveyor.com/project/jhsiao999/peco)
+[![CircleCI build status](https://circleci.com/gh/jhsiao999/peco.svg?style=svg)](https://circleci.com/gh/jhsiao999/peco)
 
 **peco** is an R package for **P**r**E**dicting **C**ell cycle pr**O**gression in a
 continuum using scRNA-seq data.
