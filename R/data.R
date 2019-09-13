@@ -36,7 +36,6 @@
 #' @docType data
 #'
 #' @keywords data
-#'
 "fit_train"
 
 #' @title Results of predicting cell cycle phase for samples from NA18511.
@@ -72,5 +71,4 @@
 #' @docType data
 #'
 #' @keywords data
-#'
 "fit_predict"
