@@ -17,13 +17,15 @@ expression — fit_trendfilter_generic • peco</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -65,6 +67,7 @@ series of each gene." />
 <![endif]-->
 
 
+
   </head>
 
   <body>
@@ -81,41 +84,26 @@ series of each gene." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../index.html">Home</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/index.html">Vignettes</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/example_ipsc.html">An example of predicting cell cycle phase using peco</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Functions</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/jhsiao999/peco">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
+  <a href="https://github.com/jhsiao999/peco">Source</a>
 </li>
       </ul>
       
@@ -124,6 +112,7 @@ series of each gene." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -181,41 +170,33 @@ degree polynomials.</p></td>
 
     <p>A list with two elements:</p>
 <dt>trend.yy</dt><dd><p>The estimated cyclic trend.</p></dd>
-
-<dt>pve</dt><dd><p>Proportion of variance explained by the cyclic
-trend in the gene expression levels.</p></dd>
+    <dt>pve</dt><dd><p>Proportion of variance explained by the cyclic
+    trend in the gene expression levels.</p></dd>
 
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>Biobase</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>eset_final_sub</span>)
-<span class='no'>pdata</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/Biobase/topics/phenoData'>pData</a></span>(<span class='no'>eset_final_sub</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>Biobase</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>eset_sub</span>)
+<span class='no'>pdata</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/Biobase/man/phenoData.html'>pData</a></span>(<span class='no'>eset_sub</span>)
 
-<span class='co'># cell-cycle phase based on FUCCI</span>
+<span class='co'># cell cycle phase based on FUCCI scores</span>
 <span class='no'>theta</span> <span class='kw'>&lt;-</span> <span class='no'>pdata</span>$<span class='no'>theta</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>theta</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>rownames</a></span>(<span class='no'>pdata</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>theta</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>pdata</span>)
 
-<span class='co'># library size normalization</span>
-<span class='no'>log2cpm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log2</a></span>(<span class='fl'>1</span>+(<span class='fl'>10</span>^<span class='fl'>6</span>)*(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/t'>t</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/Biobase/topics/exprs'>exprs</a></span>(<span class='no'>eset_final_sub</span>))/<span class='no'>pdata</span>$<span class='no'>molecules</span>)))
-
-<span class='co'># quantile normalize to normal distribution</span>
-<span class='no'>yy</span> <span class='kw'>&lt;-</span> <span class='no'>log2cpm</span>[<span class='fl'>1</span>,]
-<span class='no'>is.zero</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/which'>which</a></span>(<span class='no'>yy</span> <span class='kw'>==</span> <span class='fl'>0</span>)
-<span class='no'>qq.map</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/qqnorm'>qqnorm</a></span>(<span class='no'>yy</span>)</div><div class='img'><img src='fit_trendfilter_generic-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>yy.qq</span> <span class='kw'>&lt;-</span> <span class='no'>qq.map</span>$<span class='no'>x</span>
-<span class='no'>yy.qq</span>[<span class='no'>is.zero</span>] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>qq.map</span>$<span class='no'>x</span>[<span class='no'>is.zero</span>])
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>yy.qq</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>log2cpm</span>)
-
-<span class='no'>theta_ordered</span> <span class='kw'>&lt;-</span> <span class='no'>theta</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></span>(<span class='no'>theta</span>)]
-<span class='no'>yy_ordered</span> <span class='kw'>&lt;-</span> <span class='no'>yy.qq</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/match'>match</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>theta_ordered</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>yy.qq</span>))]
+<span class='co'># normalize expression counts to counts per million</span>
+<span class='no'>counts_normed</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>((<span class='fl'>10</span>^<span class='fl'>6</span>)*<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/Biobase/man/exprs.html'>exprs</a></span>(<span class='no'>eset_sub</span>)[<span class='fl'>1</span>:<span class='fl'>5</span>,])/<span class='fu'><a href='https://rdrr.io/pkg/Biobase/man/phenoData.html'>pData</a></span>(<span class='no'>eset_sub</span>)$<span class='no'>molecules</span>)
+<span class='no'>counts_quant</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='data_transform_quantile.html'>data_transform_quantile</a></span>(<span class='no'>counts_normed</span>, <span class='kw'>ncores</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>computing on 2 cores</span></div><div class='input'>
+<span class='co'># order FUCCI phase and expression</span>
+<span class='no'>theta_ordered</span> <span class='kw'>&lt;-</span> <span class='no'>theta</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='no'>theta</span>)]
+<span class='no'>yy_ordered</span> <span class='kw'>&lt;-</span> <span class='no'>counts_quant</span>[<span class='fl'>1</span>,<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>theta_ordered</span>), <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>counts_quant</span>))]
 
 <span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>fit_trendfilter_generic</span>(<span class='no'>yy_ordered</span>)</div><div class='output co'>#&gt; Fold 1 ... Fold 2 ... Fold 3 ... Fold 4 ... Fold 5 ... </div><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ordered</span>, <span class='kw'>y</span><span class='kw'>=</span><span class='no'>yy_ordered</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>.7</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>FALSE</span>,
-  <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>"normalized expression values"</span>, <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>"FUCCI phase"</span>,
-  <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"trendfilter fit"</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/points'>points</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ordered</span>, <span class='kw'>y</span><span class='kw'>=</span><span class='no'>fit</span>$<span class='no'>trend.yy</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"blue"</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>.7</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/axis'>axis</a></span>(<span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/axis'>axis</a></span>(<span class='fl'>1</span>,<span class='kw'>at</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>,<span class='no'>pi</span>/<span class='fl'>2</span>, <span class='no'>pi</span>, <span class='fl'>3</span>*<span class='no'>pi</span>/<span class='fl'>2</span>, <span class='fl'>2</span>*<span class='no'>pi</span>),
-  <span class='kw'>labels</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/expression'>expression</a></span>(<span class='no'>pi</span>/<span class='fl'>2</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/expression'>expression</a></span>(<span class='no'>pi</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/expression'>expression</a></span>(<span class='fl'>3</span>*<span class='no'>pi</span>/<span class='fl'>2</span>),
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/expression'>expression</a></span>(<span class='fl'>2</span>*<span class='no'>pi</span>)))</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/abline'>abline</a></span>(<span class='kw'>h</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"black"</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>.7</span>)</div><div class='img'><img src='fit_trendfilter_generic-2.png' alt='' width='700' height='433' /></div><div class='input'>
-
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ordered</span>, <span class='kw'>y</span><span class='kw'>=</span><span class='no'>yy_ordered</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>.7</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>FALSE</span>,
+  <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>"quantile-normalized expression values"</span>, <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>"FUCCI phase"</span>,
+  <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"trendfilter fit"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ordered</span>, <span class='kw'>y</span><span class='kw'>=</span><span class='no'>fit</span>$<span class='no'>trend.yy</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"blue"</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>.7</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>1</span>,<span class='kw'>at</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='no'>pi</span>/<span class='fl'>2</span>, <span class='no'>pi</span>, <span class='fl'>3</span>*<span class='no'>pi</span>/<span class='fl'>2</span>, <span class='fl'>2</span>*<span class='no'>pi</span>),
+  <span class='kw'>labels</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>pi</span>/<span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>pi</span>), <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fl'>3</span>*<span class='no'>pi</span>/<span class='fl'>2</span>),
+  <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fl'>2</span>*<span class='no'>pi</span>)))</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>h</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"black"</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>.7</span>)</div><div class='img'><img src='fit_trendfilter_generic-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -233,19 +214,23 @@ trend in the gene expression levels.</p></dd>
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Chiaowen Joyce Hsiao, Matthew Stephens.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.0.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
