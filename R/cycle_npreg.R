@@ -46,7 +46,8 @@
 #' data(eset_sub)
 #'
 #' # select top 5 cyclic genes
-#' eset_top5 <- eset_sub[order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+#' eset_top5 <- eset_sub[
+#'     order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 #'
 #' # normalize molecule count for differencese in library sizes
 #' counts_normed <- t((10^6)*(t(exprs(eset_top5))/pData(eset_top5)$molecules))
@@ -56,7 +57,8 @@
 #' pdata <- pData(eset_top5)[order(pData(eset_top5)$theta_shifted),]
 #'
 #' # quantile-transform each gene to normal distribution
-#' expr_quant <- do.call(rbind, lapply(seq_len(nrow(counts_normed)), function(g) {
+#' expr_quant <- do.call(rbind,
+#'  lapply(seq_len(nrow(counts_normed)), function(g) {
 #'   yy <- counts_normed[g,]
 #'   is.zero <- which(yy == 0)
 #'   qq.map <- qqnorm(yy, plot.it = FALSE)
@@ -72,7 +74,8 @@
 #' which_samples_train <- rownames(pdata)[which(pdata$chip_id != "NA18511")]
 #' which_samples_predict <- rownames(pdata)[which(pdata$chip_id == "NA18511")]
 #'
-#' # make an example of using data from 5 individuals to predict phase in one indivdual
+#' # make an example of using data from 5 individuals to predict
+#' # phase in one indivdual
 #' Y_train <- expr_quant[, which(colnames(expr_quant) %in% which_samples_train)]
 #' theta_train <- pdata$theta_shifted[which(rownames(pdata) %in% which_samples_train)]
 #' names(theta_train) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_train)]
@@ -84,7 +87,8 @@
 #'                                   ncores=2,
 #'                                   method.trend="trendfilter")
 #'
-#' Y_predict <- expr_quant[, which(colnames(expr_quant) %in% which_samples_predict)]
+#' Y_predict <- expr_quant[,
+#'     which(colnames(expr_quant) %in% which_samples_predict)]
 #'
 #' theta_test <- pdata$theta[which(rownames(pdata) %in% which_samples_predict)]
 #' names(theta_test) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_predict)]
@@ -117,6 +121,7 @@
 #' @author Joyce Hsiao
 #'
 #' @import Biobase
+#' @import methods
 #' @export
 cycle_npreg_insample <- function(Y, theta,
                                  ncores=4,
@@ -210,7 +215,8 @@ cycle_npreg_insample <- function(Y, theta,
 #' data(eset_sub)
 #'
 #' # select top 5 cyclic genes
-#' eset_top5 <- eset_sub[order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+#' eset_top5 <- eset_sub[
+#'     order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 #'
 #' # normalize molecule count for differencese in library sizes
 #' counts_normed <- t((10^6)*(t(exprs(eset_top5))/pData(eset_top5)$molecules))
@@ -220,7 +226,8 @@ cycle_npreg_insample <- function(Y, theta,
 #' pdata <- pData(eset_top5)[order(pData(eset_top5)$theta_shifted),]
 #'
 #' # quantile-transform each gene to normal distribution
-#' expr_quant <- do.call(rbind, lapply(seq_len(nrow(counts_normed)), function(g) {
+#' expr_quant <- do.call(rbind,
+#' lapply(seq_len(nrow(counts_normed)), function(g) {
 #'   yy <- counts_normed[g,]
 #'   is.zero <- which(yy == 0)
 #'   qq.map <- qqnorm(yy, plot.it = FALSE)
@@ -248,7 +255,8 @@ cycle_npreg_insample <- function(Y, theta,
 #'                                   ncores=2,
 #'                                   method.trend="trendfilter")
 #'
-#' Y_predict <- expr_quant[, which(colnames(expr_quant) %in% which_samples_predict)]
+#' Y_predict <- expr_quant[,
+#'     which(colnames(expr_quant) %in% which_samples_predict)]
 #'
 #' theta_test <- pdata$theta[which(rownames(pdata) %in% which_samples_predict)]
 #' names(theta_test) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_predict)]
@@ -279,6 +287,7 @@ cycle_npreg_insample <- function(Y, theta,
 #' title("Predicting cell cycle phase for NA18511", outer=TRUE)
 #'
 #' @import Biobase
+#' @import methods
 #' @export
 cycle_npreg_outsample <- function(Y_test,
                                   sigma_est,
@@ -481,10 +490,11 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' @param method.trend How to estimate cyclic trend of gene expression values?
 #'     We offer three options: 'trendfilter' (\code{fit_trendfilter_generic()}),
 #'     'loess' (\code{fit_loess()}) and 'bsplines' (\code{fit_bspline()}).
-#'     'trendfilter' provided the best fit in our study. But 'trendfilter` requires
-#'     cross-validation and take some time. Therefore, we recommend using bspline for
-#'     quick results.
-#' @param ncores How many computing cores to use? We use mclapply function for parallel computing.
+#'     'trendfilter' provided the best fit in our study. But 'trendfilter`
+#'     uses cross-validation and takes some time. Therefore, we recommend
+#'     using bspline for quick results.
+#' @param ncores How many computing cores to use? We use mclapply function for
+#'     parallel computing.
 #'
 #' @inheritParams fit_trendfilter_generic
 #' @inheritParams fit_bspline

@@ -28,6 +28,7 @@
 #' @author Joyce Hsiao
 #'
 #' @import Biobase
+#' @import methods
 #' @export
 data_transform_quantile <- function(Y, ncores=2) {
   G <- nrow(Y)
