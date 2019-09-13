@@ -10,7 +10,7 @@ data_transform_quantile(Y, ncores = 2)
 \item{Y}{A gene by sample matrix. Contains library size-normalized
 molecule counts.}
 
-\item{ncores}{We use mclapply function for parallel computing.}
+\item{ncores}{We use doParallel package for parallel computing.}
 }
 \value{
 A gene by sample expression matrix.

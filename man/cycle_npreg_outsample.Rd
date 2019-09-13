@@ -26,7 +26,7 @@ nonparamtric trend filtering. The default fits second degree polynomials.}
 
 \item{method.grid}{Method for defining bins along the circle.}
 
-\item{ncores}{We use mclapply function for parallel computing.}
+\item{ncores}{We use doParallel package for parallel computing.}
 
 \item{grids}{number of bins to be selected along 0 to 2pi.}
 
@@ -74,7 +74,8 @@ library(Biobase)
 data(eset_sub)
 
 # select top 5 cyclic genes
-eset_top5 <- eset_sub[order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+eset_top5 <- eset_sub[
+    order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 
 # normalize molecule count for differencese in library sizes
 counts_normed <- t((10^6)*(t(exprs(eset_top5))/pData(eset_top5)$molecules))
@@ -84,7 +85,8 @@ counts_normed <- counts_normed[,order(pData(eset_top5)$theta_shifted)]
 pdata <- pData(eset_top5)[order(pData(eset_top5)$theta_shifted),]
 
 # quantile-transform each gene to normal distribution
-expr_quant <- do.call(rbind, lapply(seq_len(nrow(counts_normed)), function(g) {
+expr_quant <- do.call(rbind,
+lapply(seq_len(nrow(counts_normed)), function(g) {
   yy <- counts_normed[g,]
   is.zero <- which(yy == 0)
   qq.map <- qqnorm(yy, plot.it = FALSE)
@@ -112,7 +114,8 @@ fit_train <- cycle_npreg_insample(Y = Y_train,
                                   ncores=2,
                                   method.trend="trendfilter")
 
-Y_predict <- expr_quant[, which(colnames(expr_quant) \%in\% which_samples_predict)]
+Y_predict <- expr_quant[,
+    which(colnames(expr_quant) \%in\% which_samples_predict)]
 
 theta_test <- pdata$theta[which(rownames(pdata) \%in\% which_samples_predict)]
 names(theta_test) <- rownames(pdata)[which(rownames(pdata) \%in\% which_samples_predict)]

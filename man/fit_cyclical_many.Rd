@@ -5,7 +5,7 @@
 \title{Compute proportation of variance explained by cyclic trends
 in the gene expression levels for each gene.}
 \usage{
-fit_cyclical_many(Y, theta, polyorder = 2, ncores = 4)
+fit_cyclical_many(Y, theta, polyorder = 2, ncores = 2)
 }
 \arguments{
 \item{Y}{A matrix (gene by sample) of gene expression values.  The
@@ -19,7 +19,7 @@ samples.}
 levels using nonparamtric trend filtering. The default fits second
 degree polynomials.}
 
-\item{ncores}{mclapply from the parallel package is used to perform
+\item{ncores}{doParallel package is used to perform
 parallel computing to reduce computational time.}
 }
 \value{
@@ -45,6 +45,7 @@ quadratic trend filtering was applied to the concatenated data
 series of each gene.
 }
 \examples{
+library(Biobase)
 data(eset_sub)
 pdata <- pData(eset_sub)
 
@@ -60,7 +61,7 @@ counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 theta_ordered <- theta[order(theta)]
 yy_ordered <- counts_quant[,match(names(theta_ordered), colnames(counts_quant))]
 
-fit <- fit_cyclical_many(yy_ordered, theta=theta_ordered)
+fit <- fit_cyclical_many(Y=yy_ordered, theta=theta_ordered)
 
 }
 \author{

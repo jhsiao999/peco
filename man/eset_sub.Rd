@@ -3,21 +3,21 @@
 \docType{data}
 \name{eset_sub}
 \alias{eset_sub}
-\title{Molecule counts of the 101 significant cyclical genes in 888 samples analyzed
-in the study.}
-\format{An ExpressionSet object with 888 samples and the 101 significant cyclic genes,
+\title{Molecule counts of the 101 significant cyclical genes in the 888 samples
+analyzed in the study.}
+\format{An ExpressionSet object with 888 samples and the 101 significant
+    cyclic genes,
 \describe{
-  \item{pData(eset_sub)$theta}{Inferred angles of each cell along
+  \item{theta}{Inferred angles of each cell along
     a circle, also known as FUCCI phase.}
-  \item{exprs(eset_sub)}{Molecule counts of the 101 significant cyclical genes.}
 }}
 \usage{
-eset_sub
+data(eset_sub)
 }
 \description{
 An ExpressionSet object (require Biobase package) including
-molecule count data after gene and smaple filtering. The `phenotypeData()` slot
-contains sample phenotype information and the `featureData()` slot contains
-gene feature information.
+molecule count data after gene and smaple filtering. The `phenotypeData()`
+slot contains sample phenotype information and the `featureData()` slot
+contains gene feature information.
 }
 \keyword{data}

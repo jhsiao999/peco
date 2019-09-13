@@ -1,3 +1,5 @@
+#' @name fit_cyclical_many
+#'
 #' @title Compute proportation of variance explained by cyclic trends
 #' in the gene expression levels for each gene.
 #'
@@ -30,12 +32,13 @@
 #' levels using nonparamtric trend filtering. The default fits second
 #' degree polynomials.
 #'
-#' @param ncores mclapply from the parallel package is used to perform
+#' @param ncores doParallel package is used to perform
 #' parallel computing to reduce computational time.
 #'
 #' @return A vector of proportion of variance explained for each gene.
 #'
 #' @examples
+#' library(Biobase)
 #' data(eset_sub)
 #' pdata <- pData(eset_sub)
 #'
@@ -51,17 +54,26 @@
 #' theta_ordered <- theta[order(theta)]
 #' yy_ordered <- counts_quant[,match(names(theta_ordered), colnames(counts_quant))]
 #'
-#' fit <- fit_cyclical_many(yy_ordered, theta=theta_ordered)
+#' fit <- fit_cyclical_many(Y=yy_ordered, theta=theta_ordered)
 #'
 #' @author Joyce Hsiao
 #'
+#' @import doParallel
+#' @import foreach
+#' @import parallel
 #' @export
-#'
-#' @importFrom assertthat assert_that
-#' @importFrom parallel mclapply
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
-fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=4) {
+fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=2) {
+
+  if (is.null(ncores)) {
+    cl <- parallel::makeCluster(2)
+    doParallel::registerDoParallel(cl)
+    message(paste("computing on",ncores,"cores"))
+  } else {
+    cl <- parallel::makeCluster(ncores)
+    doParallel::registerDoParallel(cl)
+    message(paste("computing on",ncores,"cores"))
+  }
+
   G <- nrow(Y)
   N <- ncol(Y)
 
@@ -78,11 +90,17 @@ fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=4) {
 
   # For each gene, estimate the cyclical pattern of gene expression
   # conditioned on the given cell times.
-  fit <- mclapply(seq_len(G), function(g) {
-    y_g <- Y_ordered[g,]
-    fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
-    return(fit_g$pve)
-  }, mc.cores = ncores)
+  fit <- foreach::foreach(g=seq_len(G)) %dopar% {
+      y_g <- Y_ordered[g,]
+      fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
+      return(unlist(fit_g$pve))
+  }
+  parallel::stopCluster(cl)
+  # fit <- mclapply(seq_len(G), function(g) {
+  #   y_g <- Y_ordered[g,]
+  #   fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
+  #   return(fit_g$pve)
+  # }, mc.cores = ncores)
 
   out <- do.call(rbind, fit)
   out <- as.data.frame(out)

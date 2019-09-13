@@ -21,6 +21,7 @@ estimated cyclic trend.
 Use bsplies to cyclic trend of gene expression levels
 }
 \examples{
+library(Biobase)
 data(eset_sub)
 pdata <- pData(eset_sub)
 

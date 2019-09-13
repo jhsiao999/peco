@@ -5,6 +5,8 @@
 # to another gene expression dataset to infer an angle or cell cycle
 # phase for each cell.
 
+#' @name cycle_npreg_insample
+#'
 #' @title Obtain cyclic trend estimates from the training data
 #'
 #' @description Estimates cyclic trends of gene expression levels
@@ -15,7 +17,7 @@
 #'
 #' @param theta A vector of angles.
 #'
-#' @param ncores We use mclapply function for parallel computing.
+#' @param ncores We use doParallel package for parallel computing.
 #'
 #' @param polyorder We estimate cyclic trends of gene expression
 #' levels using nonparamtric trend filtering. The default fits second
@@ -39,11 +41,13 @@
 #' trends of gene express levels for each gene.}
 #'
 #' @examples
+#' library(Biobase)
 #' # import data
 #' data(eset_sub)
 #'
 #' # select top 5 cyclic genes
-#' eset_top5 <- eset_sub[order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+#' eset_top5 <- eset_sub[
+#'     order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 #'
 #' # normalize molecule count for differencese in library sizes
 #' counts_normed <- t((10^6)*(t(exprs(eset_top5))/pData(eset_top5)$molecules))
@@ -53,7 +57,8 @@
 #' pdata <- pData(eset_top5)[order(pData(eset_top5)$theta_shifted),]
 #'
 #' # quantile-transform each gene to normal distribution
-#' expr_quant <- do.call(rbind, lapply(seq_len(nrow(counts_normed)), function(g) {
+#' expr_quant <- do.call(rbind,
+#'  lapply(seq_len(nrow(counts_normed)), function(g) {
 #'   yy <- counts_normed[g,]
 #'   is.zero <- which(yy == 0)
 #'   qq.map <- qqnorm(yy, plot.it = FALSE)
@@ -69,7 +74,8 @@
 #' which_samples_train <- rownames(pdata)[which(pdata$chip_id != "NA18511")]
 #' which_samples_predict <- rownames(pdata)[which(pdata$chip_id == "NA18511")]
 #'
-#' # make an example of using data from 5 individuals to predict phase in one indivdual
+#' # make an example of using data from 5 individuals to predict
+#' # phase in one indivdual
 #' Y_train <- expr_quant[, which(colnames(expr_quant) %in% which_samples_train)]
 #' theta_train <- pdata$theta_shifted[which(rownames(pdata) %in% which_samples_train)]
 #' names(theta_train) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_train)]
@@ -81,7 +87,8 @@
 #'                                   ncores=2,
 #'                                   method.trend="trendfilter")
 #'
-#' Y_predict <- expr_quant[, which(colnames(expr_quant) %in% which_samples_predict)]
+#' Y_predict <- expr_quant[,
+#'     which(colnames(expr_quant) %in% which_samples_predict)]
 #'
 #' theta_test <- pdata$theta[which(rownames(pdata) %in% which_samples_predict)]
 #' names(theta_test) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_predict)]
@@ -113,10 +120,10 @@
 #'
 #' @author Joyce Hsiao
 #'
-#' @export
+#' @import Biobase
+#' @import methods
 #'
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
+#' @export
 cycle_npreg_insample <- function(Y, theta,
                                  ncores=4,
                                  polyorder=2,
@@ -142,6 +149,8 @@ cycle_npreg_insample <- function(Y, theta,
               funs_est=initial_mstep$funs))
 }
 
+#' @name cycle_npreg_outsample
+#'
 #' @title Predict test-sample ordering using training labels (no update)
 #'
 #' @description Apply the estimates of cycle_npreg_insample to another
@@ -168,7 +177,7 @@ cycle_npreg_insample <- function(Y, theta,
 #' @param get_trend_estimates To re-estimate the cylic trend based on
 #'   the predicted cell cycle phase or not (T or F). Default FALSE. This step
 #'   calls trendfilter and is computationally intensive.
-#' @param ncores We use mclapply function for parallel computing.
+#' @param ncores We use doParallel package for parallel computing.
 #'
 #' @inheritParams cycle_npreg_mstep
 #' @inheritParams cycle_npreg_loglik
@@ -207,7 +216,8 @@ cycle_npreg_insample <- function(Y, theta,
 #' data(eset_sub)
 #'
 #' # select top 5 cyclic genes
-#' eset_top5 <- eset_sub[order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+#' eset_top5 <- eset_sub[
+#'     order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 #'
 #' # normalize molecule count for differencese in library sizes
 #' counts_normed <- t((10^6)*(t(exprs(eset_top5))/pData(eset_top5)$molecules))
@@ -217,7 +227,8 @@ cycle_npreg_insample <- function(Y, theta,
 #' pdata <- pData(eset_top5)[order(pData(eset_top5)$theta_shifted),]
 #'
 #' # quantile-transform each gene to normal distribution
-#' expr_quant <- do.call(rbind, lapply(seq_len(nrow(counts_normed)), function(g) {
+#' expr_quant <- do.call(rbind,
+#' lapply(seq_len(nrow(counts_normed)), function(g) {
 #'   yy <- counts_normed[g,]
 #'   is.zero <- which(yy == 0)
 #'   qq.map <- qqnorm(yy, plot.it = FALSE)
@@ -245,7 +256,8 @@ cycle_npreg_insample <- function(Y, theta,
 #'                                   ncores=2,
 #'                                   method.trend="trendfilter")
 #'
-#' Y_predict <- expr_quant[, which(colnames(expr_quant) %in% which_samples_predict)]
+#' Y_predict <- expr_quant[,
+#'     which(colnames(expr_quant) %in% which_samples_predict)]
 #'
 #' theta_test <- pdata$theta[which(rownames(pdata) %in% which_samples_predict)]
 #' names(theta_test) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_predict)]
@@ -275,10 +287,9 @@ cycle_npreg_insample <- function(Y, theta,
 #' }
 #' title("Predicting cell cycle phase for NA18511", outer=TRUE)
 #'
+#' @import Biobase
+#' @import methods
 #' @export
-#'
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 cycle_npreg_outsample <- function(Y_test,
                                   sigma_est,
                                   funs_est,
@@ -328,6 +339,8 @@ cycle_npreg_outsample <- function(Y_test,
 
 #------ Supporting functions
 
+#' @name initialize_grids
+#'
 #' @title For prediction, initialize grid points for cell cycle phase
 #' on a circle.
 #'
@@ -346,10 +359,6 @@ cycle_npreg_outsample <- function(Y_test,
 #'
 #' @author Joyce Hsiao
 #'
-#' @importFrom stats prcomp
-#' @importFrom circular coord2rad
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 initialize_grids <- function(Y, grids=100,
                              method.grid=c("pca", "uniform")) {
 
@@ -382,6 +391,8 @@ initialize_grids <- function(Y, grids=100,
   return(theta_initial)
 }
 
+#' @name cycle_npreg_loglik
+#'
 #' @title Infer angles or cell cycle phase based on gene expression data
 #'
 #' @param Y Gene by sample expression matrix.
@@ -405,9 +416,6 @@ initialize_grids <- function(Y, grids=100,
 #' to each bin.}
 #'
 #' @author Joyce Hsiao
-#' @importFrom stats dnorm
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
                                grids=100,
                                method.grid=c("pca", "uniform")) {
@@ -467,6 +475,8 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
               prob_per_cell_by_celltimes=prob_per_cell_by_celltimes))
 }
 
+#' @name cycle_npreg_mstep
+#'
 #' @title Estimate parameters of the cyclic trends
 #'
 #' @description This is used in both cycle_npreg_insample (training
@@ -481,10 +491,11 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' @param method.trend How to estimate cyclic trend of gene expression values?
 #'     We offer three options: 'trendfilter' (\code{fit_trendfilter_generic()}),
 #'     'loess' (\code{fit_loess()}) and 'bsplines' (\code{fit_bspline()}).
-#'     'trendfilter' provided the best fit in our study. But 'trendfilter` requires
-#'     cross-validation and take some time. Therefore, we recommend using bspline for
-#'     quick results.
-#' @param ncores How many computing cores to use? We use mclapply function for parallel computing.
+#'     'trendfilter' provided the best fit in our study. But 'trendfilter`
+#'     uses cross-validation and takes some time. Therefore, we recommend
+#'     using bspline for quick results.
+#' @param ncores How many computing cores to use? We use doParallel package for
+#'     parallel computing.
 #'
 #' @inheritParams fit_trendfilter_generic
 #' @inheritParams fit_bspline
@@ -500,18 +511,27 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #'       each gene}
 #' \item{funs}{Estimated cyclic functions}
 #'
+#' @importFrom assertthat assert_that
+#' @importFrom stats dnorm approxfun
+#' @import doParallel
+#' @import parallel
+#' @import foreach
 #'
 #' @author Joyce Hsiao
-#'
-#' @importFrom assertthat assert_that
-#' @importFrom parallel mclapply
-#' @importFrom stats approxfun
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                                                        "loess", "bspline"),
                               polyorder=2,
                               ncores=4) {
+
+      if (is.null(ncores)) {
+        cl <- parallel::makeCluster(2)
+        doParallel::registerDoParallel(cl)
+        message(paste("computing on",ncores,"cores"))
+      } else {
+        cl <- parallel::makeCluster(ncores)
+        doParallel::registerDoParallel(cl)
+        message(paste("computing on",ncores,"cores"))
+      }
 
       G <- nrow(Y)
       N <- ncol(Y)
@@ -529,7 +549,38 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
 
       # for each gene, estimate the cyclical pattern of gene expression
       # conditioned on the given cell times
-      fit <- mclapply(seq_len(G), function(g) {
+      # fit <- mclapply(seq_len(G), function(g) {
+      #   y_g <- Y_ordered[g,]
+      #
+      #   if (method.trend=="trendfilter") {
+      #     fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
+      #     fun_g <- approxfun(x=as.numeric(theta_ordered),
+      #                        y=as.numeric(fit_g$trend.yy), rule=2)
+      #     mu_g <- fit_g$trend.yy
+      #   }
+      #   if (method.trend=="bspline") {
+      #     fit_g <- fit_bspline(yy=y_g, time = theta_ordered)
+      #     fun_g <- approxfun(x=as.numeric(theta_ordered),
+      #                        y=as.numeric(fit_g$pred.yy), rule=2)
+      #     mu_g <- fit_g$pred.yy
+      #   }
+      #
+      #   if (method.trend=="loess") {
+      #     fit_g <- fit_loess(yy=y_g, time = theta_ordered)
+      #     fun_g <- approxfun(x=as.numeric(theta_ordered),
+      #                        y=as.numeric(fit_g$pred.yy), rule=2)
+      #     mu_g <- fit_g$pred.yy
+      #   }
+      #
+      #   sigma_g <- sqrt(sum((y_g-mu_g)^2)/N)
+      #
+      #   list(y_g =y_g,
+      #        mu_g=mu_g,
+      #        sigma_g=sigma_g,
+      #        fun_g=fun_g)
+      # }, mc.cores = ncores)
+
+      fit <- foreach::foreach(g=seq_len(G)) %dopar% {
         y_g <- Y_ordered[g,]
 
         if (method.trend=="trendfilter") {
@@ -558,7 +609,8 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
              mu_g=mu_g,
              sigma_g=sigma_g,
              fun_g=fun_g)
-      }, mc.cores = ncores)
+      }
+      parallel::stopCluster(cl)
 
       sigma_est <- sapply(fit, "[[", "sigma_g")
       names(sigma_est) <- rownames(Y_ordered)

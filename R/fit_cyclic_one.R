@@ -1,3 +1,5 @@
+#' @name fit_trendfilter_generic
+#'
 #' @title Using trendfiltering to estimate cyclic trend of gene
 #' expression
 #'
@@ -34,6 +36,7 @@
 #'     trend in the gene expression levels.}
 #'
 #' @examples
+#' library(Biobase)
 #' data(eset_sub)
 #' pdata <- pData(eset_sub)
 #'
@@ -62,14 +65,10 @@
 #' abline(h=0, lty=1, col="black", lwd=.7)
 #'
 #' @author Joyce Hsiao
-#' @export
 #'
-#' @importFrom stats var
-#' @importFrom genlasso trendfilter
-#' @importFrom genlasso cv.trendfilter
-#' @importFrom genlasso predict.genlasso
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
+#' @importFrom genlasso trendfilter cv.trendfilter
+#' @importFrom stats var predict
+#' @export
 fit_trendfilter_generic <- function(yy, polyorder=2) {
 
   yy.rep <- rep(yy,3)
@@ -88,6 +87,8 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
               pve=pve))
 }
 
+#' @name fit_bspline
+#'
 #' @title Use bsplies to cyclic trend of gene expression levels
 #'
 #' @param yy A vector of gene expression values for one gene. The
@@ -102,6 +103,7 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #' @author Joyce Hsiao
 #'
 #' @examples
+#' library(Biobase)
 #' data(eset_sub)
 #' pdata <- pData(eset_sub)
 #'
@@ -129,12 +131,8 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #'   expression(2*pi)))
 #' abline(h=0, lty=1, col="black", lwd=.7)
 #'
+#' @importFrom stats smooth.spline var predict
 #' @export
-#'
-#' @importFrom stats smooth.spline
-#' @importFrom stats predict
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 fit_bspline <- function(yy, time) {
 
   yy.rep <- rep(yy,3)
@@ -151,7 +149,9 @@ fit_bspline <- function(yy, time) {
               pve=pve))
 }
 
-#' Use loess to estimate cyclic trends of expression values
+#' @name fit_loess
+#'
+#' @title Use loess to estimate cyclic trends of expression values
 #'
 #' @param yy A vector of gene expression values for one gene. The
 #' expression values are assumed to have been normalized and
@@ -165,6 +165,7 @@ fit_bspline <- function(yy, time) {
 #' @author Joyce Hsiao
 #'
 #' @examples
+#' library(Biobase)
 #' data(eset_sub)
 #' pdata <- pData(eset_sub)
 #'
@@ -192,11 +193,8 @@ fit_bspline <- function(yy, time) {
 #'   expression(2*pi)))
 #' abline(h=0, lty=1, col="black", lwd=.7)
 #'
+#' @importFrom stats loess var predict
 #' @export
-#'
-#' @importFrom stats loess
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 fit_loess <- function(yy, time) {
 
   yy.rep <- rep(yy,3)

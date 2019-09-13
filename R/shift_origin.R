@@ -1,3 +1,5 @@
+#' @name shift_origin
+#'
 #' @title Shift origin of the angles
 #'
 #' @description Shift origin of the angles for visualization

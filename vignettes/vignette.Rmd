@@ -50,7 +50,7 @@ pdata <- pData(eset)
 fdata <- fData(eset)
 
 # select top 5 cyclic genes
-eset_top5 <- eset_sub[order(fData(eset_sub)$pve_fucci, decreasing=T)[c(1:5)],]
+eset_top5 <- eset_sub[order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 
 # normalize molecule count for differencese in library sizes
 counts_normed <- t((10^6)*(t(exprs(eset_top5))/pData(eset_top5)$molecules))

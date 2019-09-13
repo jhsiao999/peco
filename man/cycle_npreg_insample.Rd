@@ -13,7 +13,7 @@ values.  Gene by sample.}
 
 \item{theta}{A vector of angles.}
 
-\item{ncores}{We use mclapply function for parallel computing.}
+\item{ncores}{We use doParallel package for parallel computing.}
 
 \item{polyorder}{We estimate cyclic trends of gene expression
 levels using nonparamtric trend filtering. The default fits second
@@ -40,12 +40,13 @@ Estimates cyclic trends of gene expression levels
 using training data.
 }
 \examples{
-# import data
 library(Biobase)
+# import data
 data(eset_sub)
 
 # select top 5 cyclic genes
-eset_top5 <- eset_sub[order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+eset_top5 <- eset_sub[
+    order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 
 # normalize molecule count for differencese in library sizes
 counts_normed <- t((10^6)*(t(exprs(eset_top5))/pData(eset_top5)$molecules))
@@ -55,7 +56,8 @@ counts_normed <- counts_normed[,order(pData(eset_top5)$theta_shifted)]
 pdata <- pData(eset_top5)[order(pData(eset_top5)$theta_shifted),]
 
 # quantile-transform each gene to normal distribution
-expr_quant <- do.call(rbind, lapply(seq_len(nrow(counts_normed)), function(g) {
+expr_quant <- do.call(rbind,
+ lapply(seq_len(nrow(counts_normed)), function(g) {
   yy <- counts_normed[g,]
   is.zero <- which(yy == 0)
   qq.map <- qqnorm(yy, plot.it = FALSE)
@@ -71,7 +73,8 @@ colnames(expr_quant) <- colnames(counts_normed)
 which_samples_train <- rownames(pdata)[which(pdata$chip_id != "NA18511")]
 which_samples_predict <- rownames(pdata)[which(pdata$chip_id == "NA18511")]
 
-# make an example of using data from 5 individuals to predict phase in one indivdual
+# make an example of using data from 5 individuals to predict
+# phase in one indivdual
 Y_train <- expr_quant[, which(colnames(expr_quant) \%in\% which_samples_train)]
 theta_train <- pdata$theta_shifted[which(rownames(pdata) \%in\% which_samples_train)]
 names(theta_train) <- rownames(pdata)[which(rownames(pdata) \%in\% which_samples_train)]
@@ -83,7 +86,8 @@ fit_train <- cycle_npreg_insample(Y = Y_train,
                                   ncores=2,
                                   method.trend="trendfilter")
 
-Y_predict <- expr_quant[, which(colnames(expr_quant) \%in\% which_samples_predict)]
+Y_predict <- expr_quant[,
+    which(colnames(expr_quant) \%in\% which_samples_predict)]
 
 theta_test <- pdata$theta[which(rownames(pdata) \%in\% which_samples_predict)]
 names(theta_test) <- rownames(pdata)[which(rownames(pdata) \%in\% which_samples_predict)]

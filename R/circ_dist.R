@@ -1,3 +1,5 @@
+#' @name circ_dist
+#'
 #' @title Pairwise distance between two circular variables
 #'
 #' @description We define distance between two angles: the minimum of
@@ -24,11 +26,12 @@
 #'
 #' @author Joyce Hsiao, Matthew Stephens
 #' @export
-#'
 circ_dist <- function(y1,y2) {
     pmin(abs(y2-y1), abs(2*pi-(abs(y2-y1))))
 }
 
+#' @name rotation
+#'
 #' @title Rotate circular variable shift_var to minimize distance
 #' between ref_var and shift_var
 #'

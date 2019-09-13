@@ -15,15 +15,16 @@ cycle_npreg_mstep(Y, theta, method.trend = c("trendfilter", "loess",
 \item{method.trend}{How to estimate cyclic trend of gene expression values?
 We offer three options: 'trendfilter' (\code{fit_trendfilter_generic()}),
 'loess' (\code{fit_loess()}) and 'bsplines' (\code{fit_bspline()}).
-'trendfilter' provided the best fit in our study. But 'trendfilter` requires
-cross-validation and take some time. Therefore, we recommend using bspline for
-quick results.}
+'trendfilter' provided the best fit in our study. But 'trendfilter`
+uses cross-validation and takes some time. Therefore, we recommend
+using bspline for quick results.}
 
 \item{polyorder}{We estimate cyclic trends of gene expression
 levels using nonparamtric trend filtering. The default fits second
 degree polynomials.}
 
-\item{ncores}{How many computing cores to use? We use mclapply function for parallel computing.}
+\item{ncores}{How many computing cores to use? We use doParallel package for
+parallel computing.}
 }
 \value{
 A list with the following elements:
