@@ -1,3 +1,5 @@
+#' @name data_transform_quantile
+#'
 #' @title Quantile-normalize log counts of gene expression values
 #'
 #' @description
@@ -12,6 +14,7 @@
 #'
 #' @examples
 #' # use our data
+#' library(Biobase)
 #' data(eset_sub)
 #'
 #' # normalize expression counts to counts per million
@@ -24,10 +27,6 @@
 #'
 #' @author Joyce Hsiao
 #' @export
-#'
-#' @importFrom parallel mclapply
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 data_transform_quantile <- function(Y, ncores=2) {
   G <- nrow(Y)
 

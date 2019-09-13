@@ -40,8 +40,8 @@ Estimates cyclic trends of gene expression levels
 using training data.
 }
 \examples{
-# import data
 library(Biobase)
+# import data
 data(eset_sub)
 
 # select top 5 cyclic genes

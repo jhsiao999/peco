@@ -1,3 +1,5 @@
+#' @name fit_cyclical_many
+#'
 #' @title Compute proportation of variance explained by cyclic trends
 #' in the gene expression levels for each gene.
 #'
@@ -36,6 +38,7 @@
 #' @return A vector of proportion of variance explained for each gene.
 #'
 #' @examples
+#' library(Biobase)
 #' data(eset_sub)
 #' pdata <- pData(eset_sub)
 #'
@@ -56,11 +59,6 @@
 #' @author Joyce Hsiao
 #'
 #' @export
-#'
-#' @importFrom assertthat assert_that
-#' @importFrom parallel mclapply
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=4) {
   G <- nrow(Y)
   N <- ncol(Y)

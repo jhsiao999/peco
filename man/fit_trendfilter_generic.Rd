@@ -43,6 +43,7 @@ quadratic trend filtering was applied to the concatenated data
 series of each gene.
 }
 \examples{
+library(Biobase)
 data(eset_sub)
 pdata <- pData(eset_sub)
 
@@ -69,7 +70,6 @@ axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
   labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
   expression(2*pi)))
 abline(h=0, lty=1, col="black", lwd=.7)
-
 
 }
 \author{

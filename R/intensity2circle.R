@@ -19,6 +19,8 @@
 #'
 #' @examples
 #' # use our data
+#' library(Biobase)
+#'
 #' data(eset_sub)
 #'
 #' # FUCCI scores - log10 transformed sum of intensities that were

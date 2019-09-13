@@ -5,6 +5,8 @@
 # to another gene expression dataset to infer an angle or cell cycle
 # phase for each cell.
 
+#' @name cycle_npreg_insample
+#'
 #' @title Obtain cyclic trend estimates from the training data
 #'
 #' @description Estimates cyclic trends of gene expression levels
@@ -39,6 +41,7 @@
 #' trends of gene express levels for each gene.}
 #'
 #' @examples
+#' library(Biobase)
 #' # import data
 #' data(eset_sub)
 #'
@@ -114,9 +117,6 @@
 #' @author Joyce Hsiao
 #'
 #' @export
-#'
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 cycle_npreg_insample <- function(Y, theta,
                                  ncores=4,
                                  polyorder=2,
@@ -142,6 +142,8 @@ cycle_npreg_insample <- function(Y, theta,
               funs_est=initial_mstep$funs))
 }
 
+#' @name cycle_npreg_outsample
+#'
 #' @title Predict test-sample ordering using training labels (no update)
 #'
 #' @description Apply the estimates of cycle_npreg_insample to another
@@ -276,9 +278,6 @@ cycle_npreg_insample <- function(Y, theta,
 #' title("Predicting cell cycle phase for NA18511", outer=TRUE)
 #'
 #' @export
-#'
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 cycle_npreg_outsample <- function(Y_test,
                                   sigma_est,
                                   funs_est,
@@ -328,6 +327,8 @@ cycle_npreg_outsample <- function(Y_test,
 
 #------ Supporting functions
 
+#' @name initialize_grids
+#'
 #' @title For prediction, initialize grid points for cell cycle phase
 #' on a circle.
 #'
@@ -346,10 +347,6 @@ cycle_npreg_outsample <- function(Y_test,
 #'
 #' @author Joyce Hsiao
 #'
-#' @importFrom stats prcomp
-#' @importFrom circular coord2rad
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 initialize_grids <- function(Y, grids=100,
                              method.grid=c("pca", "uniform")) {
 
@@ -382,6 +379,8 @@ initialize_grids <- function(Y, grids=100,
   return(theta_initial)
 }
 
+#' @name cycle_npreg_loglik
+#'
 #' @title Infer angles or cell cycle phase based on gene expression data
 #'
 #' @param Y Gene by sample expression matrix.
@@ -405,9 +404,6 @@ initialize_grids <- function(Y, grids=100,
 #' to each bin.}
 #'
 #' @author Joyce Hsiao
-#' @importFrom stats dnorm
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
 cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
                                grids=100,
                                method.grid=c("pca", "uniform")) {
@@ -467,6 +463,8 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
               prob_per_cell_by_celltimes=prob_per_cell_by_celltimes))
 }
 
+#' @name cycle_npreg_mstep
+#'
 #' @title Estimate parameters of the cyclic trends
 #'
 #' @description This is used in both cycle_npreg_insample (training
@@ -500,14 +498,10 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #'       each gene}
 #' \item{funs}{Estimated cyclic functions}
 #'
-#'
-#' @author Joyce Hsiao
-#'
 #' @importFrom assertthat assert_that
 #' @importFrom parallel mclapply
-#' @importFrom stats approxfun
-#' @import methods Biobase MASS Matrix ggplot2
-NULL
+#' @importFrom stats dnorm approxfun
+#' @author Joyce Hsiao
 cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                                                        "loess", "bspline"),
                               polyorder=2,
