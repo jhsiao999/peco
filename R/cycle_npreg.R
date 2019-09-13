@@ -116,6 +116,7 @@
 #'
 #' @author Joyce Hsiao
 #'
+#' @import Biobase
 #' @export
 cycle_npreg_insample <- function(Y, theta,
                                  ncores=4,
@@ -277,6 +278,7 @@ cycle_npreg_insample <- function(Y, theta,
 #' }
 #' title("Predicting cell cycle phase for NA18511", outer=TRUE)
 #'
+#' @import Biobase
 #' @export
 cycle_npreg_outsample <- function(Y_test,
                                   sigma_est,

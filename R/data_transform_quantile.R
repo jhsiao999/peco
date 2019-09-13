@@ -26,6 +26,8 @@
 #'     ylab = "After quantile-normalization")
 #'
 #' @author Joyce Hsiao
+#'
+#' @import Biobase
 #' @export
 data_transform_quantile <- function(Y, ncores=2) {
   G <- nrow(Y)
