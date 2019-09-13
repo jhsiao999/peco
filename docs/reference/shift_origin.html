@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rotate circular variable shift_var to minimize distance
-between ref_var and shift_var — rotation • peco</title>
+<title>Shift origin of the angles — shift_origin • peco</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -33,14 +32,9 @@ between ref_var and shift_var — rotation • peco</title>
 
 
 
-<meta property="og:title" content="Rotate circular variable shift_var to minimize distance
-between ref_var and shift_var — rotation" />
+<meta property="og:title" content="Shift origin of the angles — shift_origin" />
 
-<meta property="og:description" content="Because the origin of the cell cycle phases is
-arbitrary, we transform the angles prior to computing the distance
-(rotation and shifting) to minimize the distance between two
-vectors. After this, one can apply circ_dist to compute the
-distance between the output value and ref_var." />
+<meta property="og:description" content="Shift origin of the angles for visualization" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -106,55 +100,45 @@ distance between the output value and ref_var." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Rotate circular variable shift_var to minimize distance
-between ref_var and shift_var</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/circ_dist.R'><code>R/circ_dist.R</code></a></small>
-    <div class="hidden name"><code>rotation.Rd</code></div>
+    <h1>Shift origin of the angles</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/shift_origin.R'><code>R/shift_origin.R</code></a></small>
+    <div class="hidden name"><code>shift_origin.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Because the origin of the cell cycle phases is
-arbitrary, we transform the angles prior to computing the distance
-(rotation and shifting) to minimize the distance between two
-vectors. After this, one can apply circ_dist to compute the
-distance between the output value and ref_var.</p>
+    <p>Shift origin of the angles for visualization</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>rotation</span>(<span class='no'>ref_var</span>, <span class='no'>shift_var</span>)</pre>
+    <pre class="usage"><span class='fu'>shift_origin</span>(<span class='no'>phase</span>, <span class='no'>origin</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>ref_var</th>
-      <td><p>A vector of reference angles.</p></td>
+      <th>phase</th>
+      <td><p>A vector of angles (in radians).</p></td>
     </tr>
     <tr>
-      <th>shift_var</th>
-      <td><p>A vector of angles to be compared to ref_var.</p></td>
+      <th>origin</th>
+      <td><p>the new origin of the angles.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The transformed values of shift_var after rotation and
-shifting.</p>
+    <p>A vector of angles shifted to the new origin.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># a vector of angles</span>
-<span class='no'>theta_ref</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>,<span class='fl'>2</span>*<span class='no'>pi</span>, <span class='kw'>length.out</span><span class='kw'>=</span><span class='fl'>100</span>)
+    <pre class="examples"><div class='input'><span class='co'># make a vector of angles</span>
+<span class='no'>theta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>,<span class='fl'>2</span>*<span class='no'>pi</span>, <span class='kw'>length.out</span><span class='kw'>=</span><span class='fl'>100</span>)
 
-<span class='co'># shift the origin of theta_ref to pi</span>
-<span class='no'>theta_compare</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='shift_origin.html'>shift_origin</a></span>(<span class='no'>theta_ref</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='no'>pi</span>)
+<span class='co'># shift the origin of theta to pi</span>
+<span class='no'>theta_shifted</span> <span class='kw'>&lt;-</span> <span class='fu'>shift_origin</span>(<span class='no'>theta</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='no'>pi</span>)
 
-<span class='co'># rotate theta_compare in a such a way that the distance</span>
-<span class='co'># between theta_ref and thet_compare is minimized</span>
-<span class='no'>theta_compare_rotated</span> <span class='kw'>&lt;-</span> <span class='fu'>rotation</span>(<span class='kw'>ref_var</span><span class='kw'>=</span><span class='no'>theta_ref</span>, <span class='kw'>shift_var</span><span class='kw'>=</span><span class='no'>theta_compare</span>)
-
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mofrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: "mofrow" is not a graphical parameter</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ref</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>theta_compare</span>)</div><div class='img'><img src='rotation-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ref</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>theta_compare_rotated</span>)</div><div class='img'><img src='rotation-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>theta_shifted</span>)</div><div class='img'><img src='shift_origin-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -168,7 +152,7 @@ shifting.</p>
     </ul>
 
     <h2>Author</h2>
-    <p>Matthew Stephens</p>
+    <p>Joyce Hsiao</p>
   </div>
 </div>
 
