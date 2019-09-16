@@ -146,3 +146,19 @@ for (g in seq_len(5)) {
 title("Predicting cell cycle phase for NA18511", outer=TRUE)
 
 }
+\seealso{
+\code{\link{cycle_npreg_insample}} for obtaining parameteres for
+    cyclic functions from training data,
+    \code{\link{cycle_npreg_loglik}} for log-likehood at
+    angles between 0 to 2pi,
+    \code{\link{initialize_grids}} for selecting
+    angles in \code{\link{cycle_npreg_loglik}},
+    \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
+    inferred phases from  \code{\link{cycle_npreg_loglik}}
+
+Other peco classifier functions: \code{\link{cycle_npreg_insample}},
+  \code{\link{cycle_npreg_loglik}},
+  \code{\link{cycle_npreg_mstep}},
+  \code{\link{initialize_grids}}
+}
+\concept{peco classifier functions}

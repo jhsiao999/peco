@@ -40,8 +40,9 @@ Estimates cyclic trends of gene expression levels
 using training data.
 }
 \examples{
-library(Biobase)
+\dontrun{
 # import data
+library(Biobase)
 data(eset_sub)
 
 # select top 5 cyclic genes
@@ -57,7 +58,7 @@ pdata <- pData(eset_top5)[order(pData(eset_top5)$theta_shifted),]
 
 # quantile-transform each gene to normal distribution
 expr_quant <- do.call(rbind,
- lapply(seq_len(nrow(counts_normed)), function(g) {
+lapply(seq_len(nrow(counts_normed)), function(g) {
   yy <- counts_normed[g,]
   is.zero <- which(yy == 0)
   qq.map <- qqnorm(yy, plot.it = FALSE)
@@ -73,8 +74,7 @@ colnames(expr_quant) <- colnames(counts_normed)
 which_samples_train <- rownames(pdata)[which(pdata$chip_id != "NA18511")]
 which_samples_predict <- rownames(pdata)[which(pdata$chip_id == "NA18511")]
 
-# make an example of using data from 5 individuals to predict
-# phase in one indivdual
+# make an example of using data from 5 individuals to predict phase in one indivdual
 Y_train <- expr_quant[, which(colnames(expr_quant) \%in\% which_samples_train)]
 theta_train <- pdata$theta_shifted[which(rownames(pdata) \%in\% which_samples_train)]
 names(theta_train) <- rownames(pdata)[which(rownames(pdata) \%in\% which_samples_train)]
@@ -116,8 +116,21 @@ for (g in seq_len(5)) {
   title(rownames(fit_predict$Y_reordered)[g])
 }
 title("Predicting cell cycle phase for NA18511", outer=TRUE)
+}
 
+}
+\seealso{
+\code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
+    inferred phases from  \code{\link{cycle_npreg_loglik}},
+    \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
+     using parameters learned from \code{\link{cycle_npreg_insample}}
+
+Other peco classifier functions: \code{\link{cycle_npreg_loglik}},
+  \code{\link{cycle_npreg_mstep}},
+  \code{\link{cycle_npreg_outsample}},
+  \code{\link{initialize_grids}}
 }
 \author{
 Joyce Hsiao
 }
+\concept{peco classifier functions}

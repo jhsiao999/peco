@@ -45,6 +45,7 @@ quadratic trend filtering was applied to the concatenated data
 series of each gene.
 }
 \examples{
+\dontrun{
 library(Biobase)
 data(eset_sub)
 pdata <- pData(eset_sub)
@@ -62,7 +63,11 @@ theta_ordered <- theta[order(theta)]
 yy_ordered <- counts_quant[,match(names(theta_ordered), colnames(counts_quant))]
 
 fit <- fit_cyclical_many(Y=yy_ordered, theta=theta_ordered)
+}
 
+}
+\seealso{
+\code{\link{fit_cyclic_one}} for fitting one gene
 }
 \author{
 Joyce Hsiao

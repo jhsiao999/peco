@@ -41,8 +41,9 @@
 #' trends of gene express levels for each gene.}
 #'
 #' @examples
-#' library(Biobase)
+#' \dontrun{
 #' # import data
+#' library(Biobase)
 #' data(eset_sub)
 #'
 #' # select top 5 cyclic genes
@@ -58,7 +59,7 @@
 #'
 #' # quantile-transform each gene to normal distribution
 #' expr_quant <- do.call(rbind,
-#'  lapply(seq_len(nrow(counts_normed)), function(g) {
+#' lapply(seq_len(nrow(counts_normed)), function(g) {
 #'   yy <- counts_normed[g,]
 #'   is.zero <- which(yy == 0)
 #'   qq.map <- qqnorm(yy, plot.it = FALSE)
@@ -74,8 +75,7 @@
 #' which_samples_train <- rownames(pdata)[which(pdata$chip_id != "NA18511")]
 #' which_samples_predict <- rownames(pdata)[which(pdata$chip_id == "NA18511")]
 #'
-#' # make an example of using data from 5 individuals to predict
-#' # phase in one indivdual
+#' # make an example of using data from 5 individuals to predict phase in one indivdual
 #' Y_train <- expr_quant[, which(colnames(expr_quant) %in% which_samples_train)]
 #' theta_train <- pdata$theta_shifted[which(rownames(pdata) %in% which_samples_train)]
 #' names(theta_train) <- rownames(pdata)[which(rownames(pdata) %in% which_samples_train)]
@@ -117,12 +117,19 @@
 #'   title(rownames(fit_predict$Y_reordered)[g])
 #' }
 #' title("Predicting cell cycle phase for NA18511", outer=TRUE)
+#' }
 #'
 #' @author Joyce Hsiao
 #'
+#' @family peco classifier functions
+#' @seealso
+#'     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
+#'     inferred phases from  \code{\link{cycle_npreg_loglik}},
+#'     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
+#'      using parameters learned from \code{\link{cycle_npreg_insample}}
+#'
 #' @import Biobase
 #' @import methods
-#'
 #' @export
 cycle_npreg_insample <- function(Y, theta,
                                  ncores=4,
@@ -289,6 +296,15 @@ cycle_npreg_insample <- function(Y, theta,
 #'
 #' @import Biobase
 #' @import methods
+#' @family peco classifier functions
+#' @seealso \code{\link{cycle_npreg_insample}} for obtaining parameteres for
+#'     cyclic functions from training data,
+#'     \code{\link{cycle_npreg_loglik}} for log-likehood at
+#'     angles between 0 to 2pi,
+#'     \code{\link{initialize_grids}} for selecting
+#'     angles in \code{\link{cycle_npreg_loglik}},
+#'     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
+#'     inferred phases from  \code{\link{cycle_npreg_loglik}}
 #' @export
 cycle_npreg_outsample <- function(Y_test,
                                   sigma_est,
@@ -357,6 +373,14 @@ cycle_npreg_outsample <- function(Y_test,
 #' @return A vector of initialized angles to be used in
 #' \code{cycle_npreg_loglik} to infer angles.
 #'
+#' @family peco classifier functions
+#' @seealso
+#'     \code{\link{cycle_npreg_loglik}} for log-likehood at
+#'     angles between 0 to 2pi,
+#'     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
+#'     inferred phases from  \code{\link{cycle_npreg_loglik}},
+#'     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
+#'      using parameters learned from \code{\link{cycle_npreg_insample}}
 #' @author Joyce Hsiao
 #'
 initialize_grids <- function(Y, grids=100,
@@ -407,13 +431,19 @@ initialize_grids <- function(Y, grids=100,
 #'
 #' @return A list with the following three elements:
 #'
-#' \item{cell_times_est}{Inferred angles or cell cycle phases, NOT
+#'     \item{cell_times_est}{Inferred angles or cell cycle phases, NOT
 #' ordered.}
-#'
-#' \item{loglik_est}{Log-likelihood estimates for each gene.}
-#'
-#' \item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
+#'     \item{loglik_est}{Log-likelihood estimates for each gene.}
+#'     \item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
 #' to each bin.}
+#'
+#' @family peco classifier functions
+#' @seealso \code{\link{initialize_grids}} for selecting
+#'     angles in \code{\link{cycle_npreg_loglik}},
+#'     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
+#'     inferred phases from  \code{\link{cycle_npreg_loglik}},
+#'     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
+#'      using parameters learned from \code{\link{cycle_npreg_insample}}
 #'
 #' @author Joyce Hsiao
 cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
@@ -517,6 +547,13 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' @import parallel
 #' @import foreach
 #'
+#' @family peco classifier functions
+#' @seealso
+#'     \code{\link{cycle_npreg_insample}} for estimating cyclic functions
+#'     given known phasesfrom training data,
+#'     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
+#'      using parameters learned from \code{\link{cycle_npreg_insample}}
+#'
 #' @author Joyce Hsiao
 cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                                                        "loess", "bspline"),
@@ -546,39 +583,6 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
         theta_ordered <- theta[ord]
         Y_ordered <- Y[,ord]
       }
-
-      # for each gene, estimate the cyclical pattern of gene expression
-      # conditioned on the given cell times
-      # fit <- mclapply(seq_len(G), function(g) {
-      #   y_g <- Y_ordered[g,]
-      #
-      #   if (method.trend=="trendfilter") {
-      #     fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
-      #     fun_g <- approxfun(x=as.numeric(theta_ordered),
-      #                        y=as.numeric(fit_g$trend.yy), rule=2)
-      #     mu_g <- fit_g$trend.yy
-      #   }
-      #   if (method.trend=="bspline") {
-      #     fit_g <- fit_bspline(yy=y_g, time = theta_ordered)
-      #     fun_g <- approxfun(x=as.numeric(theta_ordered),
-      #                        y=as.numeric(fit_g$pred.yy), rule=2)
-      #     mu_g <- fit_g$pred.yy
-      #   }
-      #
-      #   if (method.trend=="loess") {
-      #     fit_g <- fit_loess(yy=y_g, time = theta_ordered)
-      #     fun_g <- approxfun(x=as.numeric(theta_ordered),
-      #                        y=as.numeric(fit_g$pred.yy), rule=2)
-      #     mu_g <- fit_g$pred.yy
-      #   }
-      #
-      #   sigma_g <- sqrt(sum((y_g-mu_g)^2)/N)
-      #
-      #   list(y_g =y_g,
-      #        mu_g=mu_g,
-      #        sigma_g=sigma_g,
-      #        fun_g=fun_g)
-      # }, mc.cores = ncores)
 
       fit <- foreach::foreach(g=seq_len(G)) %dopar% {
         y_g <- Y_ordered[g,]
