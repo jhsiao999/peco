@@ -1,3 +1,7 @@
+Changes in version 0.99.1 (2019-09-16)
++ Fixed R CMD Check warnings and errors
++ Fixed R CMD BiocCheck warnings and errors
+
 Changes in version 0.99.0 (2019-09-11)
 + Submitted to Bioconductor
 

@@ -38,6 +38,7 @@
 #' @return A vector of proportion of variance explained for each gene.
 #'
 #' @examples
+#' \dontrun{
 #' library(Biobase)
 #' data(eset_sub)
 #' pdata <- pData(eset_sub)
@@ -55,9 +56,11 @@
 #' yy_ordered <- counts_quant[,match(names(theta_ordered), colnames(counts_quant))]
 #'
 #' fit <- fit_cyclical_many(Y=yy_ordered, theta=theta_ordered)
+#' }
 #'
 #' @author Joyce Hsiao
-#'
+#' @seealso
+#'     \code{\link{fit_cyclic_one}} for fitting one gene
 #' @import doParallel
 #' @import foreach
 #' @import parallel

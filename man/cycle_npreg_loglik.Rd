@@ -27,17 +27,29 @@ closest bin (as defined by \code{uniform}).}
 \value{
 A list with the following three elements:
 
-\item{cell_times_est}{Inferred angles or cell cycle phases, NOT
+    \item{cell_times_est}{Inferred angles or cell cycle phases, NOT
 ordered.}
-
-\item{loglik_est}{Log-likelihood estimates for each gene.}
-
-\item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
+    \item{loglik_est}{Log-likelihood estimates for each gene.}
+    \item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
 to each bin.}
 }
 \description{
 Infer angles or cell cycle phase based on gene expression data
 }
+\seealso{
+\code{\link{initialize_grids}} for selecting
+    angles in \code{\link{cycle_npreg_loglik}},
+    \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
+    inferred phases from  \code{\link{cycle_npreg_loglik}},
+    \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
+     using parameters learned from \code{\link{cycle_npreg_insample}}
+
+Other peco classifier functions: \code{\link{cycle_npreg_insample}},
+  \code{\link{cycle_npreg_mstep}},
+  \code{\link{cycle_npreg_outsample}},
+  \code{\link{initialize_grids}}
+}
 \author{
 Joyce Hsiao
 }
+\concept{peco classifier functions}

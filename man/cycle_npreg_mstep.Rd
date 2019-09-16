@@ -45,6 +45,18 @@ outputs for each gene standard error of the cyclic trend, cyclic
 function, and the estimated expression levels given the cyclic
 function.
 }
+\seealso{
+\code{\link{cycle_npreg_insample}} for estimating cyclic functions
+    given known phasesfrom training data,
+    \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
+     using parameters learned from \code{\link{cycle_npreg_insample}}
+
+Other peco classifier functions: \code{\link{cycle_npreg_insample}},
+  \code{\link{cycle_npreg_loglik}},
+  \code{\link{cycle_npreg_outsample}},
+  \code{\link{initialize_grids}}
+}
 \author{
 Joyce Hsiao
 }
+\concept{peco classifier functions}
