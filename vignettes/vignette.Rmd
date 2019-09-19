@@ -31,6 +31,7 @@ These five genes are: _CDK1_, _UBE2C_, _TOP2A_, _HISTH1E_, and _HISTH1C_, all of
 ### 1. Load data and packages
 
 ```{r, message=FALSE}
+library(SingleCellExperiment)
 library(peco)
 
 # expression set of top 101 cyclic genes
@@ -49,14 +50,14 @@ coldata <- colData(sce)
 rowdata <- rowData(sce)
 
 # select top 5 cyclic genes
-sce_top5 <- sce_sub[order(fData(sce_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+sce_top5 <- sce_sub[order(rowData(sce_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 
 # normalize molecule count for differencese in library sizes
-counts_normed <- t((10^6)*(t(exprs(sce_top5))/colData(sce_top5)$molecules))
+counts_normed <- t((10^6)*(t(assay(sce_top5))/colData(sce_top5)$molecules))
 
 # reordering the data according to FUCCI phase
 counts_normed <- counts_normed[,order(colData(sce_top5)$theta_shifted)]
-coldata <- colData(sce_top5)[order(colData(col_top5)$theta_shifted),]
+coldata <- colData(sce_top5)[order(colData(sce_top5)$theta_shifted),]
 
 
 # quantile-transform each gene to normal distribution
