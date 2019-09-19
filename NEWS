@@ -1,4 +1,4 @@
-Changes in version 0.99.2 (2019-09-19)
+Changes in version 0.99.3 (2019-09-19)
 + Changed to store data in SingleCellExperiment objects
 
 Changes in version 0.99.1 (2019-09-16)
