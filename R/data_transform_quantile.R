@@ -14,11 +14,10 @@
 #'
 #' @examples
 #' # use our data
-#' library(Biobase)
-#' data(eset_sub)
+#' data(sce_sub)
 #'
 #' # normalize expression counts to counts per million
-#' counts_normed<-t((10^6)*t(exprs(eset_sub)[1:5,])/pData(eset_sub)$molecules)
+#' counts_normed<-t((10^6)*t(assay(sce_sub)[1:5,])/colData(sce_sub)$molecules)
 #' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 #'
 #' plot(x=counts_normed[1,], y=counts_quant[1,],
@@ -27,7 +26,7 @@
 #'
 #' @author Joyce Hsiao
 #'
-#' @import Biobase
+#' @import SingleCellExperiment
 #' @import methods
 #' @import doParallel
 #' @import parallel
