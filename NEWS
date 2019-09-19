@@ -1,3 +1,6 @@
+Changes in version 0.99.2 (2019-09-19)
++ Changed to store data in SingleCellExperiment objects
+
 Changes in version 0.99.1 (2019-09-16)
 + Fixed R CMD Check warnings and errors
 + Fixed R CMD BiocCheck warnings and errors

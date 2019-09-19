@@ -70,19 +70,18 @@ each cell.
 }
 \examples{
 # import data
-library(Biobase)
-data(eset_sub)
+data(sce_sub)
 
 # select top 5 cyclic genes
-eset_top5 <- eset_sub[
-    order(fData(eset_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+sce_top5 <- sce_sub[
+    order(rowData(sce_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 
 # normalize molecule count for differencese in library sizes
-counts_normed <- t((10^6)*(t(exprs(eset_top5))/pData(eset_top5)$molecules))
+counts_normed <- t((10^6)*(t(assay(sce_top5))/pData(sce_top5)$molecules))
 
 # reordering the data according to FUCCI phase
-counts_normed <- counts_normed[,order(pData(eset_top5)$theta_shifted)]
-pdata <- pData(eset_top5)[order(pData(eset_top5)$theta_shifted),]
+counts_normed <- counts_normed[,order(colData(sce_top5)$theta_shifted)]
+coldata <- colData(eset_top5)[order(colData(sce_top5)$theta_shifted),]
 
 # quantile-transform each gene to normal distribution
 expr_quant <- do.call(rbind,
@@ -99,13 +98,13 @@ colnames(expr_quant) <- colnames(counts_normed)
 
 
 # Select samples from NA18511 for our prediction example
-which_samples_train <- rownames(pdata)[which(pdata$chip_id != "NA18511")]
-which_samples_predict <- rownames(pdata)[which(pdata$chip_id == "NA18511")]
+which_samples_train <- rownames(coldata)[which(coldata$chip_id != "NA18511")]
+which_samples_predict <- rownames(coldata)[which(coldata$chip_id == "NA18511")]
 
 # make an example of using data from 5 individuals to predict phase in one indivdual
 Y_train <- expr_quant[, which(colnames(expr_quant) \%in\% which_samples_train)]
-theta_train <- pdata$theta_shifted[which(rownames(pdata) \%in\% which_samples_train)]
-names(theta_train) <- rownames(pdata)[which(rownames(pdata) \%in\% which_samples_train)]
+theta_train <- coldata$theta_shifted[which(rownames(coldata) \%in\% which_samples_train)]
+names(theta_train) <- rownames(coldata)[which(rownames(coldata) \%in\% which_samples_train)]
 
 # obtain cyclic function estimates
 fit_train <- cycle_npreg_insample(Y = Y_train,
@@ -117,8 +116,8 @@ fit_train <- cycle_npreg_insample(Y = Y_train,
 Y_predict <- expr_quant[,
     which(colnames(expr_quant) \%in\% which_samples_predict)]
 
-theta_test <- pdata$theta[which(rownames(pdata) \%in\% which_samples_predict)]
-names(theta_test) <- rownames(pdata)[which(rownames(pdata) \%in\% which_samples_predict)]
+theta_test <- pdata$theta[which(rownames(coldata) \%in\% which_samples_predict)]
+names(theta_test) <- rownames(coldata)[which(rownames(coldata) \%in\% which_samples_predict)]
 
 fit_predict <- cycle_npreg_outsample(Y_test=Y_predict,
                                     sigma_est=fit_train$sigma_est,

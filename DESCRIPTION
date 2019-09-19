@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Type: Package
 Package: peco
-Version: 0.99.1
+Version: 0.99.2
 Date: 2019-09-11
 Title: A Supervised Approach for **P**r**e**dicting **c**ell Cycle
     Pr**o**gression using scRNA-seq data
@@ -24,7 +24,6 @@ License: GPL (>= 3)
 Depends: R (>= 3.6)
 Imports:
     assertthat,
-    Biobase,
     circular,
     conicfit,
     doParallel,
@@ -33,6 +32,7 @@ Imports:
     graphics,
     methods,
     parallel,
+    SingleCellExperiment,
     stats,
     utils
 Suggests: 

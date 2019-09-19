@@ -36,16 +36,15 @@
 #'     trend in the gene expression levels.}
 #'
 #' @examples
-#' library(Biobase)
-#' data(eset_sub)
-#' pdata <- pData(eset_sub)
+#' data(sce_sub)
+#' coldata <- colData(sce_sub)
 #'
 #' # cell cycle phase based on FUCCI scores
-#' theta <- pdata$theta
+#' theta <- coldata$theta
 #' names(theta) <- rownames(pdata)
 #'
 #' # normalize expression counts to counts per million
-#' counts_normed <- t((10^6)*t(exprs(eset_sub)[1:5,])/pData(eset_sub)$molecules)
+#' counts_normed <- t((10^6)*t(assay(sce_sub)[1:5,])/colData(sce_sub)$molecules)
 #' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 #'
 #' # order FUCCI phase and expression
@@ -103,16 +102,15 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #' @author Joyce Hsiao
 #'
 #' @examples
-#' library(Biobase)
-#' data(eset_sub)
-#' pdata <- pData(eset_sub)
+#' data(sce_sub)
+#' coldata <- colData(sce_sub)
 #'
 #' # cell cycle phase based on FUCCI scores
-#' theta <- pdata$theta
+#' theta <- coldata$theta
 #' names(theta) <- rownames(pdata)
 #'
 #' # normalize expression counts to counts per million
-#' counts_normed <- t((10^6)*t(exprs(eset_sub)[1:5,])/pData(eset_sub)$molecules)
+#' counts_normed <- t((10^6)*t(assay(sce_sub)[1:5,])/colData(sce_sub)$molecules)
 #' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 #'
 #' # order FUCCI phase and expression
@@ -165,16 +163,15 @@ fit_bspline <- function(yy, time) {
 #' @author Joyce Hsiao
 #'
 #' @examples
-#' library(Biobase)
-#' data(eset_sub)
-#' pdata <- pData(eset_sub)
+#' data(sce_sub)
+#' coldata <- colData(sce_sub)
 #'
 #' # cell cycle phase based on FUCCI scores
-#' theta <- pdata$theta
+#' theta <- coldata$theta
 #' names(theta) <- rownames(pdata)
 #'
 #' # normalize expression counts to counts per million
-#' counts_normed <- t((10^6)*t(exprs(eset_sub)[1:5,])/pData(eset_sub)$molecules)
+#' counts_normed <- t((10^6)*t(assay(sce_sub)[1:5,])/colData(sce_sub)$molecules)
 #' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 #'
 #' # order FUCCI phase and expression
