@@ -30,13 +30,12 @@ cell cycle progression.
 }
 \examples{
 # use our data
-library(Biobase)
-
-data(eset_sub)
+library(SingleCellExperiment)
+data(sce_sub)
 
 # FUCCI scores - log10 transformed sum of intensities that were
 # corrected for background noise
-ints <- pData(eset_sub)[,c("rfp.median.log10sum.adjust",
+ints <- colData(sce_sub)[,c("rfp.median.log10sum.adjust",
                           "gfp.median.log10sum.adjust")]
 intensity2circle(ints, plot.it=TRUE, method = "trig")
 

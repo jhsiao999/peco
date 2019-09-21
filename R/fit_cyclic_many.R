@@ -59,7 +59,8 @@
 #'
 #' @author Joyce Hsiao
 #' @seealso
-#'     \code{\link{fit_cyclic_one}} for fitting one gene
+#'     \code{\link{fit_trendfilter_generic}} for fitting one gene
+#'     using trendfilter
 #' @import doParallel
 #' @import foreach
 #' @import parallel

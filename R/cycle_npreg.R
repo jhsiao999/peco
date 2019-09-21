@@ -50,11 +50,11 @@
 #'     order(rowData(sce_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 #'
 #' # normalize molecule count for differencese in library sizes
-#' counts_normed <- t((10^6)*(t(assay(sce_top5))/pData(sce_top5)$molecules))
+#' counts_normed <- t((10^6)*(t(assay(sce_top5))/colData(sce_top5)$molecules))
 #'
 #' # reordering the data according to FUCCI phase
 #' counts_normed <- counts_normed[,order(colData(sce_top5)$theta_shifted)]
-#' coldata <- colData(eset_top5)[order(colData(sce_top5)$theta_shifted),]
+#' coldata <- colData(sce_top5)[order(colData(sce_top5)$theta_shifted),]
 #'
 #' # quantile-transform each gene to normal distribution
 #' expr_quant <- do.call(rbind,
@@ -89,7 +89,7 @@
 #' Y_predict <- expr_quant[,
 #'     which(colnames(expr_quant) %in% which_samples_predict)]
 #'
-#' theta_test <- pdata$theta[which(rownames(coldata) %in% which_samples_predict)]
+#' theta_test <- coldata$theta[which(rownames(coldata) %in% which_samples_predict)]
 #' names(theta_test) <- rownames(coldata)[which(rownames(coldata) %in% which_samples_predict)]
 #'
 #' fit_predict <- cycle_npreg_outsample(Y_test=Y_predict,
@@ -218,6 +218,7 @@ cycle_npreg_insample <- function(Y, theta,
 #'
 #' @examples
 #' # import data
+#' library(SingleCellExperiment)
 #' data(sce_sub)
 #'
 #' # select top 5 cyclic genes
@@ -225,11 +226,11 @@ cycle_npreg_insample <- function(Y, theta,
 #'     order(rowData(sce_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 #'
 #' # normalize molecule count for differencese in library sizes
-#' counts_normed <- t((10^6)*(t(assay(sce_top5))/pData(sce_top5)$molecules))
+#' counts_normed <- t((10^6)*(t(assay(sce_top5))/colData(sce_top5)$molecules))
 #'
 #' # reordering the data according to FUCCI phase
 #' counts_normed <- counts_normed[,order(colData(sce_top5)$theta_shifted)]
-#' coldata <- colData(eset_top5)[order(colData(sce_top5)$theta_shifted),]
+#' coldata <- colData(sce_top5)[order(colData(sce_top5)$theta_shifted),]
 #'
 #' # quantile-transform each gene to normal distribution
 #' expr_quant <- do.call(rbind,
@@ -264,7 +265,7 @@ cycle_npreg_insample <- function(Y, theta,
 #' Y_predict <- expr_quant[,
 #'     which(colnames(expr_quant) %in% which_samples_predict)]
 #'
-#' theta_test <- pdata$theta[which(rownames(coldata) %in% which_samples_predict)]
+#' theta_test <- coldata$theta[which(rownames(coldata) %in% which_samples_predict)]
 #' names(theta_test) <- rownames(coldata)[which(rownames(coldata) %in% which_samples_predict)]
 #'
 #' fit_predict <- cycle_npreg_outsample(Y_test=Y_predict,
