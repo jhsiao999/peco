@@ -56,7 +56,7 @@ commands in the command-line shell:
 
 ```bash
 R CMD build --resave-data peco
-R CMD INSTALL peco_0.99.0.tar.gz
+R CMD INSTALL peco_0.99.3.tar.gz
 ```
 
 <!--- R CMD check --as-cran peco_0.99.0.tar.gz---!>

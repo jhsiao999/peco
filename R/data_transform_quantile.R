@@ -14,6 +14,7 @@
 #'
 #' @examples
 #' # use our data
+#' library(SingleCellExperiment)
 #' data(sce_sub)
 #'
 #' # normalize expression counts to counts per million

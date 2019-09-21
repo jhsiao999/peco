@@ -21,6 +21,7 @@ This way the zero-count cells are assigned the lowest qunatiles.
 }
 \examples{
 # use our data
+library(SingleCellExperiment)
 data(sce_sub)
 
 # normalize expression counts to counts per million

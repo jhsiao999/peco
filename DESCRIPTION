@@ -23,16 +23,16 @@ BugReports: https://github.com/jhsiao999/peco/issues
 License: GPL (>= 3)
 Depends: R (>= 3.5)
 Imports:
-    assertthat,
-    circular,
-    conicfit,
-    doParallel,
-    foreach,
-    genlasso,
+    assertthat (>= 0.2.1),
+    circular (>= 0.4-93),
+    conicfit (>= 1.0.4),
+    doParallel (>= 1.0.14),
+    foreach (>= 1.4.4),
+    genlasso (>= 1.4),
     graphics,
-    methods,
-    parallel,
-    SingleCellExperiment,
+    methods (>= 1.7.1),
+    parallel (>= 3.5.1),
+    SingleCellExperiment (>= 1.4.1),
     stats,
     utils
 Suggests: 

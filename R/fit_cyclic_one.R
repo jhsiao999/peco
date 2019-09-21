@@ -36,12 +36,13 @@
 #'     trend in the gene expression levels.}
 #'
 #' @examples
+#' library(SingleCellExperiment)
 #' data(sce_sub)
 #' coldata <- colData(sce_sub)
 #'
 #' # cell cycle phase based on FUCCI scores
 #' theta <- coldata$theta
-#' names(theta) <- rownames(pdata)
+#' names(theta) <- rownames(coldata)
 #'
 #' # normalize expression counts to counts per million
 #' counts_normed <- t((10^6)*t(assay(sce_sub)[1:5,])/colData(sce_sub)$molecules)
@@ -64,7 +65,7 @@
 #' abline(h=0, lty=1, col="black", lwd=.7)
 #'
 #' @author Joyce Hsiao
-#'
+#' @import SingleCellExperiment
 #' @importFrom genlasso trendfilter cv.trendfilter
 #' @importFrom stats var predict
 #' @export
@@ -102,12 +103,13 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #' @author Joyce Hsiao
 #'
 #' @examples
+#' library(SingleCellExperiment)
 #' data(sce_sub)
 #' coldata <- colData(sce_sub)
 #'
 #' # cell cycle phase based on FUCCI scores
 #' theta <- coldata$theta
-#' names(theta) <- rownames(pdata)
+#' names(theta) <- rownames(coldata)
 #'
 #' # normalize expression counts to counts per million
 #' counts_normed <- t((10^6)*t(assay(sce_sub)[1:5,])/colData(sce_sub)$molecules)
@@ -129,6 +131,7 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #'   expression(2*pi)))
 #' abline(h=0, lty=1, col="black", lwd=.7)
 #'
+#' @import SingleCellExperiment
 #' @importFrom stats smooth.spline var predict
 #' @export
 fit_bspline <- function(yy, time) {
@@ -163,12 +166,13 @@ fit_bspline <- function(yy, time) {
 #' @author Joyce Hsiao
 #'
 #' @examples
+#' library(SingleCellExperiment)
 #' data(sce_sub)
 #' coldata <- colData(sce_sub)
 #'
 #' # cell cycle phase based on FUCCI scores
 #' theta <- coldata$theta
-#' names(theta) <- rownames(pdata)
+#' names(theta) <- rownames(coldata)
 #'
 #' # normalize expression counts to counts per million
 #' counts_normed <- t((10^6)*t(assay(sce_sub)[1:5,])/colData(sce_sub)$molecules)
@@ -190,6 +194,7 @@ fit_bspline <- function(yy, time) {
 #'   expression(2*pi)))
 #' abline(h=0, lty=1, col="black", lwd=.7)
 #'
+#' @import SingleCellExperiment
 #' @importFrom stats loess var predict
 #' @export
 fit_loess <- function(yy, time) {

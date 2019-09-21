@@ -43,12 +43,13 @@ quadratic trend filtering was applied to the concatenated data
 series of each gene.
 }
 \examples{
+library(SingleCellExperiment)
 data(sce_sub)
 coldata <- colData(sce_sub)
 
 # cell cycle phase based on FUCCI scores
 theta <- coldata$theta
-names(theta) <- rownames(pdata)
+names(theta) <- rownames(coldata)
 
 # normalize expression counts to counts per million
 counts_normed <- t((10^6)*t(assay(sce_sub)[1:5,])/colData(sce_sub)$molecules)

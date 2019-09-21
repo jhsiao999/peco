@@ -66,7 +66,8 @@ fit <- fit_cyclical_many(Y=yy_ordered, theta=theta_ordered)
 
 }
 \seealso{
-\code{\link{fit_cyclic_one}} for fitting one gene
+\code{\link{fit_trendfilter_generic}} for fitting one gene
+    using trendfilter
 }
 \author{
 Joyce Hsiao
