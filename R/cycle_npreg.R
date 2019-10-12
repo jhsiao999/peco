@@ -480,23 +480,24 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
       prob_per_cell_by_celltimes[n,] <- exp(loglik_per_cell_by_celltimes)[n,]/sumll
     }
   }
-  cell_times_samp_ind <- sapply(seq_len(N), function(n) {
+  cell_times_samp_ind <- do.call(c, lapply(seq_len(N), function(n) {
     if (max(prob_per_cell_by_celltimes[n,], na.rm=TRUE)==0) {
       sample(seq_len(grids), 1, replace=FALSE)
     } else {
       which.max(prob_per_cell_by_celltimes[n,])
     }
-  })
-  cell_times_est <- sapply(seq_len(N), function(n) {
+  }) )
+
+  cell_times_est <- do.call(c, lapply(seq_len(N), function(n) {
     theta_choose[cell_times_samp_ind[n]]
-  })
+  }) )
   names(cell_times_est) <- colnames(Y)
 
   # compute likelihood based on the selected cell times
-  loglik_max_per_cell <- sapply(seq_len(N), function(n) {
+  loglik_max_per_cell <- do.call(c, lapply(seq_len(N), function(n) {
     ll <- loglik_per_cell_by_celltimes[n,]
     ll[cell_times_samp_ind[n]]
-  })
+  }) )
   loglik_est <- sum(loglik_max_per_cell)
 
   return(list(loglik_est=loglik_est,
@@ -615,14 +616,14 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
       }
       parallel::stopCluster(cl)
 
-      sigma_est <- sapply(fit, "[[", "sigma_g")
+      sigma_est <- do.call(c, lapply(fit, "[[", "sigma_g"))
       names(sigma_est) <- rownames(Y_ordered)
 
       mu_est <- do.call(rbind, lapply(fit, "[[", "mu_g"))
       colnames(mu_est) <- colnames(Y_ordered)
       rownames(mu_est) <- rownames(Y_ordered)
 
-      funs <- sapply(fit, "[[", "fun_g")
+      funs <- do.call(c, lapply(fit, "[[", "fun_g"))
       names(funs) <- rownames(Y_ordered)
 
       return(list(Y = Y_ordered,
