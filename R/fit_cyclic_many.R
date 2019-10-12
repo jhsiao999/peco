@@ -99,11 +99,6 @@ fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=2) {
       return(unlist(fit_g$pve))
   }
   parallel::stopCluster(cl)
-  # fit <- mclapply(seq_len(G), function(g) {
-  #   y_g <- Y_ordered[g,]
-  #   fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
-  #   return(fit_g$pve)
-  # }, mc.cores = ncores)
 
   out <- do.call(rbind, fit)
   out <- as.data.frame(out)

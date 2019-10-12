@@ -399,7 +399,7 @@ initialize_grids <- function(Y, grids=100,
     names(theta_initial) <- names(grid_approx)
     names(theta_initial_ind) <- names(grid_approx)
 
-    for (i in seq_len(length(grid_approx))) {
+    for (i in seq_along(grid_approx)) {
       theta_initial_ind[i] <-
         which.min(pmin(abs(theta_grids-grid_approx[i]),
                        abs(theta_grids-(2*pi-grid_approx[i]))))
