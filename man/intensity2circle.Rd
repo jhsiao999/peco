@@ -31,11 +31,11 @@ cell cycle progression.
 \examples{
 # use our data
 library(SingleCellExperiment)
-data(sce_sub)
+data(sce_top101genes)
 
 # FUCCI scores - log10 transformed sum of intensities that were
 # corrected for background noise
-ints <- colData(sce_sub)[,c("rfp.median.log10sum.adjust",
+ints <- colData(sce_top101genes)[,c("rfp.median.log10sum.adjust",
                           "gfp.median.log10sum.adjust")]
 intensity2circle(ints, plot.it=TRUE, method = "trig")
 
