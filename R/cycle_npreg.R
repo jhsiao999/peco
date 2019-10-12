@@ -312,7 +312,7 @@ cycle_npreg_outsample <- function(Y_test,
                                                  "loess", "bspline"),
                                   polyorder=2,
                                   method.grid="uniform",
-                                  ncores=4,
+                                  ncores=2,
                                   grids=100,
                                   get_trend_estimates=FALSE) {
 
@@ -557,7 +557,7 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                                                        "loess", "bspline"),
                               polyorder=2,
-                              ncores=4) {
+                              ncores=2) {
 
       if (is.null(ncores)) {
         cl <- parallel::makeCluster(2)
