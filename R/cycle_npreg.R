@@ -43,11 +43,11 @@
 #' @examples
 #' \dontrun{
 #' # import data
-#' data(sce_sub)
+#' data(sce_top101genes)
 #'
 #' # select top 5 cyclic genes
-#' sce_top5 <- sce_sub[
-#'     order(rowData(sce_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+#' sce_top5 <- sce_top101genes[
+#'     order(rowData(sce_top101genes)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 #'
 #' # normalize molecule count for differencese in library sizes
 #' counts_normed <- t((10^6)*(t(assay(sce_top5))/colData(sce_top5)$molecules))
@@ -80,7 +80,7 @@
 #' names(theta_train) <- rownames(coldata)[which(rownames(coldata) %in% which_samples_train)]
 #'
 #' # obtain cyclic function estimates
-#' fit_train <- cycle_npreg_insample(Y = Y_train,
+#' model_5genes_train <- cycle_npreg_insample(Y = Y_train,
 #'                                   theta = theta_train,
 #'                                   polyorder=2,
 #'                                   ncores=2,
@@ -92,28 +92,28 @@
 #' theta_test <- coldata$theta[which(rownames(coldata) %in% which_samples_predict)]
 #' names(theta_test) <- rownames(coldata)[which(rownames(coldata) %in% which_samples_predict)]
 #'
-#' fit_predict <- cycle_npreg_outsample(Y_test=Y_predict,
-#'                                     sigma_est=fit_train$sigma_est,
-#'                                     funs_est=fit_train$funs_est,
+#' model_5genes_predict <- cycle_npreg_outsample(Y_test=Y_predict,
+#'                                     sigma_est=model_5genes_train$sigma_est,
+#'                                     funs_est=model_5genes_train$funs_est,
 #'                                     method.trend="trendfilter",
 #'                                     ncores=1,
 #'                                     get_trend_estimates=TRUE)
 #'
 #' par(mfrow=c(2,3), mar=c(4,4,3,1))
 #' for (g in seq_len(5)) {
-#'   plot(fit_predict$Y_reordered[g,],
-#'        x=fit_predict$cell_times_reordered, axes=FALSE,
+#'   plot(model_5genes_predict$Y_reordered[g,],
+#'        x=model_5genes_predict$cell_times_reordered, axes=FALSE,
 #'        xlab="FUCCI phase",
 #'        ylab="Predicted phase")
-#'   points(y=fit_predict$funs_reordered[[g]](fit_predict$cell_times_reordered),
-#'          x=fit_predict$cell_times_reordered,
+#'   points(y=model_5genes_predict$funs_reordered[[g]](model_5genes_predict$cell_times_reordered),
+#'          x=model_5genes_predict$cell_times_reordered,
 #'          pch=16, col="royalblue")
 #'   axis(2);
 #'   axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
 #'            labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
 #'                     expression(2*pi)))
 #'   abline(h=0, lty=1, col="black", lwd=.7)
-#'   title(rownames(fit_predict$Y_reordered)[g])
+#'   title(rownames(model_5genes_predict$Y_reordered)[g])
 #' }
 #' title("Predicting cell cycle phase for NA18511", outer=TRUE)
 #' }
@@ -219,11 +219,11 @@ cycle_npreg_insample <- function(Y, theta,
 #' @examples
 #' # import data
 #' library(SingleCellExperiment)
-#' data(sce_sub)
+#' data(sce_top101genes)
 #'
 #' # select top 5 cyclic genes
-#' sce_top5 <- sce_sub[
-#'     order(rowData(sce_sub)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+#' sce_top5 <- sce_top101genes[
+#'     order(rowData(sce_top101genes)$pve_fucci, decreasing=TRUE)[c(1:5)],]
 #'
 #' # normalize molecule count for differencese in library sizes
 #' counts_normed <- t((10^6)*(t(assay(sce_top5))/colData(sce_top5)$molecules))
@@ -256,7 +256,7 @@ cycle_npreg_insample <- function(Y, theta,
 #' names(theta_train) <- rownames(coldata)[which(rownames(coldata) %in% which_samples_train)]
 #'
 #' # obtain cyclic function estimates
-#' fit_train <- cycle_npreg_insample(Y = Y_train,
+#' model_5genes_train <- cycle_npreg_insample(Y = Y_train,
 #'                                   theta = theta_train,
 #'                                   polyorder=2,
 #'                                   ncores=2,
@@ -268,28 +268,28 @@ cycle_npreg_insample <- function(Y, theta,
 #' theta_test <- coldata$theta[which(rownames(coldata) %in% which_samples_predict)]
 #' names(theta_test) <- rownames(coldata)[which(rownames(coldata) %in% which_samples_predict)]
 #'
-#' fit_predict <- cycle_npreg_outsample(Y_test=Y_predict,
-#'                                     sigma_est=fit_train$sigma_est,
-#'                                     funs_est=fit_train$funs_est,
+#' model_5genes_predict <- cycle_npreg_outsample(Y_test=Y_predict,
+#'                                     sigma_est=model_5genes_train$sigma_est,
+#'                                     funs_est=model_5genes_train$funs_est,
 #'                                     method.trend="trendfilter",
 #'                                     ncores=1,
 #'                                     get_trend_estimates=TRUE)
 #'
 #' par(mfrow=c(2,3), mar=c(4,4,3,1))
 #' for (g in seq_len(5)) {
-#'   plot(fit_predict$Y_reordered[g,],
-#'        x=fit_predict$cell_times_reordered, axes=FALSE,
+#'   plot(model_5genes_predict$Y_reordered[g,],
+#'        x=model_5genes_predict$cell_times_reordered, axes=FALSE,
 #'        xlab="FUCCI phase",
 #'        ylab="Predicted phase")
-#'   points(y=fit_predict$funs_reordered[[g]](fit_predict$cell_times_reordered),
-#'          x=fit_predict$cell_times_reordered,
+#'   points(y=model_5genes_predict$funs_reordered[[g]](model_5genes_predict$cell_times_reordered),
+#'          x=model_5genes_predict$cell_times_reordered,
 #'          pch=16, col="royalblue")
 #'   axis(2);
 #'   axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
 #'            labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
 #'                     expression(2*pi)))
 #'   abline(h=0, lty=1, col="black", lwd=.7)
-#'   title(rownames(fit_predict$Y_reordered)[g])
+#'   title(rownames(model_5genes_predict$Y_reordered)[g])
 #' }
 #' title("Predicting cell cycle phase for NA18511", outer=TRUE)
 #'
