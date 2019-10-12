@@ -47,14 +47,6 @@ data_transform_quantile <- function(Y, ncores=2) {
 
   G <- nrow(Y)
 
-  # df <- mclapply(seq_len(G), function(g) {
-  #   y_g <- Y[g,]
-  #   is.zero <- which(y_g == 0)
-  #   qq.map <- stats::qqnorm(y_g, plot.it=FALSE)
-  #   yy.qq <- qq.map$x
-  #   yy.qq[is.zero] <- sample(qq.map$x[is.zero])
-  #   return(y_g= yy.qq)
-  # }, mc.cores = ncores)
   df <- foreach::foreach(g=seq_len(G)) %dopar% {
     y_g <- Y[g,]
     is.zero <- which(y_g == 0)

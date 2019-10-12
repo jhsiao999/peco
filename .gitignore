@@ -6,3 +6,5 @@ vignettes/*.html
 vignettes/*.R
 NOTES.txt
 peco.Rproj
+doc
+Meta
