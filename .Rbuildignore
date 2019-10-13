@@ -11,3 +11,5 @@
 ^\.circleci$
 ^docs$
 ^_pkgdown\.yml$
+^doc$
+^Meta$

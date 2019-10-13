@@ -20,11 +20,11 @@
 #' @examples
 #' # use our data
 #' library(SingleCellExperiment)
-#' data(sce_sub)
+#' data(sce_top101genes)
 #'
 #' # FUCCI scores - log10 transformed sum of intensities that were
 #' # corrected for background noise
-#' ints <- colData(sce_sub)[,c("rfp.median.log10sum.adjust",
+#' ints <- colData(sce_top101genes)[,c("rfp.median.log10sum.adjust",
 #'                           "gfp.median.log10sum.adjust")]
 #' intensity2circle(ints, plot.it=TRUE, method = "trig")
 #'
@@ -45,7 +45,7 @@
 intensity2circle <- function(mat, plot.it=FALSE,
                              method=c("trig","algebraic")) {
 
-  if (is.matrix(mat)==FALSE)
+  if (!is.matrix(mat))
     mat <- as.matrix(mat)
 
   if (method=="trig") {
@@ -53,7 +53,7 @@ intensity2circle <- function(mat, plot.it=FALSE,
     pca_scores <- pca$x
     theta <- as.numeric(coord2rad(pca_scores[,c(1,2)]))
 
-    if (plot.it==TRUE) {
+    if (plot.it) {
       rng <- c(-1,1)*max(abs(range(pca_scores[,c(1,2)])))
       plot(pca_scores[,c(1,2)], pch=16,col="gray80", cex=.7,
            xlim=rng, ylim=rng)
@@ -74,7 +74,7 @@ intensity2circle <- function(mat, plot.it=FALSE,
                                  ellipDirectG[4], 180/pi*ellipDirectG[5])
     ellipProj <- Residuals.ellipse(pca_scores[,c(1,2)], ellipDirectG)
 
-    if (plot.it==TRUE) {
+    if (plot.it) {
       rng <- c(-1,1)*max(abs(range(xyDirect)))
       plot(pca_scores[,c(1,2)], pch=16,col="gray80", cex=.7,
            xlim=rng, ylim=rng)

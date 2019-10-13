@@ -15,10 +15,10 @@
 #'
 #' @docType data
 #'
-#' @usage data(sce_sub)
+#' @usage data(sce_top101genes)
 #'
 #' @keywords data
-"sce_sub"
+"sce_top101genes"
 
 #' @title Traing model results among samples from 5 individuals.
 #'
@@ -37,10 +37,10 @@
 #'
 #' @docType data
 #'
-#' @usage data(fit_train)
+#' @usage data(model_5genes_train)
 #'
 #' @keywords data
-"fit_train"
+"model_5genes_train"
 
 #' @title Results of predicting cell cycle phase for samples from NA18511.
 #'
@@ -74,7 +74,7 @@
 #'
 #' @docType data
 #'
-#' @usage data(fit_predict)
+#' @usage data(model_5genes_predict)
 #'
 #' @keywords data
-"fit_predict"
+"model_5genes_predict"

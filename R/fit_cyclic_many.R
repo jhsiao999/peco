@@ -39,20 +39,21 @@
 #'
 #' @examples
 #' \dontrun{
-#' data(sce_sub)
-#' coldata <- colData(sce_sub)
+#' data(sce_top101genes)
+#' coldata <- colData(sce_top101genes)
 #'
 #' # cell cycle phase based on FUCCI scores
 #' theta <- coldata$theta
 #' names(theta) <- rownames(coldata)
 #'
 #' # normalize expression counts to counts per million
-#' counts_normed <- t((10^6)*t(assay(sce_sub)[1:5,])/colData(sce_sub)$molecules)
+#' counts_normed <-
+#'  t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
 #' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 #'
 #' # order FUCCI phase and expression
 #' theta_ordered <- theta[order(theta)]
-#' yy_ordered <- counts_quant[,match(names(theta_ordered), colnames(counts_quant))]
+#' yy_ordered <- counts_quant[,names(theta_ordered)]
 #'
 #' fit <- fit_cyclical_many(Y=yy_ordered, theta=theta_ordered)
 #' }
@@ -81,7 +82,7 @@ fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=2) {
   N <- ncol(Y)
 
   if (!assert_that(all.equal(names(theta), colnames(Y)))) {
-    Y_ordered <- Y[,match(names(theta), colnames(Y))]
+    Y_ordered <- Y[,names(theta)]
     ord <- order(theta)
     theta_ordered <- theta[ord]
     Y_ordered <- Y_ordered[,ord]
@@ -99,11 +100,6 @@ fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=2) {
       return(unlist(fit_g$pve))
   }
   parallel::stopCluster(cl)
-  # fit <- mclapply(seq_len(G), function(g) {
-  #   y_g <- Y_ordered[g,]
-  #   fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
-  #   return(fit_g$pve)
-  # }, mc.cores = ncores)
 
   out <- do.call(rbind, fit)
   out <- as.data.frame(out)

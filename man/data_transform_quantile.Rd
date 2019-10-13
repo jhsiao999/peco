@@ -2,33 +2,34 @@
 % Please edit documentation in R/data_transform_quantile.R
 \name{data_transform_quantile}
 \alias{data_transform_quantile}
-\title{Quantile-normalize log counts of gene expression values}
+\title{Transform counts by first computing counts-per-million (CPM), then
+  quantile-normalize CPM for each gene}
 \usage{
-data_transform_quantile(Y, ncores = 2)
+data_transform_quantile(Y_sce, ncores = 2)
 }
 \arguments{
-\item{Y}{A gene by sample matrix. Contains library size-normalized
-molecule counts.}
-
 \item{ncores}{We use doParallel package for parallel computing.}
+
+\item{Y}{SingleCellExperiment Object.}
 }
 \value{
-A gene by sample expression matrix.
+SingleCellExperiment Object with an added slot of cpm_quant,
+    cpm slot is added if it doesn't exist.
 }
 \description{
-For each gene, transform the log counts to a normal distribution.
+For each gene, transform CPM to a normal distribution.
 This way the zero-count cells are assigned the lowest qunatiles.
 }
 \examples{
 # use our data
 library(SingleCellExperiment)
-data(sce_sub)
+data(sce_top101genes)
 
 # normalize expression counts to counts per million
-counts_normed<-t((10^6)*t(assay(sce_sub)[1:5,])/colData(sce_sub)$molecules)
-counts_quant <- data_transform_quantile(counts_normed, ncores=2)
+sce_normed <- data_transform_quantile(sce_top101genes, ncores=2)
 
-plot(x=counts_normed[1,], y=counts_quant[1,],
+plot(y=assay(sce_normed, "cpm_quant")[1,],
+     x=assay(sce_normed, "umi_counts")[1,],
     xlab = "Before quantile-normalization",
     ylab = "After quantile-normalization")
 
