@@ -7,7 +7,7 @@
 #'   For each gene, transform CPM to a normal distribution.
 #' This way the zero-count cells are assigned the lowest qunatiles.
 #'
-#' @param Y SingleCellExperiment Object.
+#' @param Y_sce SingleCellExperiment Object.
 #' @param ncores We use doParallel package for parallel computing.
 #'
 #' @return SingleCellExperiment Object with an added slot of cpm_quant,

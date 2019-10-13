@@ -8,9 +8,9 @@
 data_transform_quantile(Y_sce, ncores = 2)
 }
 \arguments{
-\item{ncores}{We use doParallel package for parallel computing.}
+\item{Y_sce}{SingleCellExperiment Object.}
 
-\item{Y}{SingleCellExperiment Object.}
+\item{ncores}{We use doParallel package for parallel computing.}
 }
 \value{
 SingleCellExperiment Object with an added slot of cpm_quant,
