@@ -45,7 +45,7 @@
 intensity2circle <- function(mat, plot.it=FALSE,
                              method=c("trig","algebraic")) {
 
-  if (is.matrix(mat)==FALSE)
+  if (!is.matrix(mat))
     mat <- as.matrix(mat)
 
   if (method=="trig") {

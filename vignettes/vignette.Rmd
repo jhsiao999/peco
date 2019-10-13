@@ -18,12 +18,16 @@ knitr::opts_chunk$set(
 ```
 
 `peco` is a supervised approach for PrEdicting cell cycle phase in a
-COntinuum using single-cell RNA sequencing data. This vignette provides a simple
-example of predicting cell cycle phase using 5 cyclic genes. We identifeid
-the 5 genes as the top 5 cyclic genes in our study, which also showed thata simple predictor of top 5 cyclic genes performed as well as when including more genes with
-weaker cyclic trends. 
+COntinuum using single-cell RNA sequencing data. This vignette provides a 
+simple example of predicting cell cycle phase using 5 cyclic genes. We 
+identifeid the 5 genes as the top 5 cyclic genes in our study, which also 
+showed thata simple predictor of top 5 cyclic genes performed as well as when 
+including more genes with weaker cyclic trends. 
 
-These five genes are: _CDK1_, _UBE2C_, _TOP2A_, _HISTH1E_, and _HISTH1C_, all of which were identified as cell cycle marker genes in previous studies of the cell cycle using yeast ([Spellman et al., 1998][spellman]) and HeLa cells ([Whitfield et al., 2002][whitfield]).
+These five genes are: _CDK1_, _UBE2C_, _TOP2A_, _HISTH1E_, and _HISTH1C_, 
+which were identified as cell cycle marker genes in previous studies of 
+the cell cycle using yeast ([Spellman et al., 1998][spellman]) and 
+HeLa cells ([Whitfield et al., 2002][whitfield]).
 
 
 ## Preparation
@@ -35,7 +39,7 @@ library(SingleCellExperiment)
 library(peco)
 
 # expression set of top 101 cyclic genes
-sce <- get(data(sce_top101genes))
+data(sce_top101genes)
 ```
 
 ### 2. Data preprocessing
@@ -44,33 +48,21 @@ Note that we mapped our data to GRCh37 Ensembl Assembly.
 
 ```{r}
 # phenotype information
-coldata <- colData(sce)
+coldata <- colData(sce_top101genes)
 
 # gene information
-rowdata <- rowData(sce)
+rowdata <- rowData(sce_top101genes)
 
 # select top 5 cyclic genes
-sce_top5 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci, decreasing=TRUE)[c(1:5)],]
+sce_top5 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
+                                  decreasing=TRUE)[1:5],]
 
-# normalize molecule count for differencese in library sizes
-counts_normed <- t((10^6)*(t(assay(sce_top5))/colData(sce_top5)$molecules))
-
-# reordering the data according to FUCCI phase
-counts_normed <- counts_normed[,order(colData(sce_top5)$theta_shifted)]
 coldata <- colData(sce_top5)[order(colData(sce_top5)$theta_shifted),]
 
-
-# quantile-transform each gene to normal distribution
-expr_quant <- do.call(rbind, lapply(seq_len(nrow(counts_normed)), function(g) {
-  yy <- counts_normed[g,]
-  is.zero <- which(yy == 0)
-  qq.map <- qqnorm(yy, plot.it = FALSE)
-  yy.qq <- qq.map$x
-  yy.qq[is.zero] <- sample(qq.map$x[is.zero])
-  return(yy.qq)
-}) )
-rownames(expr_quant) <- rownames(counts_normed)
-colnames(expr_quant) <- colnames(counts_normed)
+# quantile-transform CPM to normal distribution
+sce_quant <- data_transform_quantile(sce_top5)
+expr_quant <- assay(sce_quant, "cpm_quant")
+counts_normed <- assay(sce_quant, "cpm")
 ```
 
 We quantile-normalize CPM values for each gene to a normal
@@ -110,13 +102,15 @@ individuals.
 
 ```{r, eval=FALSE}
 # Select samples from NA18511 for our prediction example
-which_samples_train <- rownames(coldata)[which(coldata$chip_id != "NA18511")]
-which_samples_predict <- rownames(coldata)[which(coldata$chip_id == "NA18511")]
+which_samples_train <- rownames(coldata)[coldata$chip_id != "NA18511"]
+which_samples_predict <- rownames(coldata)[coldata$chip_id == "NA18511"]
 
 # learning cyclic functions of the genes using our training data
-Y_train <- expr_quant[, which(colnames(expr_quant) %in% which_samples_train)]
-theta_train <- coldata$theta_shifted[which(rownames(coldata) %in% which_samples_train)]
-names(theta_train) <- rownames(coldata)[which(rownames(coldata) %in% which_samples_train)]
+Y_train <- expr_quant[, colnames(expr_quant) %in% which_samples_train]
+theta_train <- 
+    coldata$theta_shifted[rownames(coldata) %in% which_samples_train]
+names(theta_train) <- 
+    rownames(coldata)[rownames(coldata) %in% which_samples_train]
 
 model_5genes_train <- cycle_npreg_insample(Y = Y_train,
                                   theta = theta_train,
@@ -153,7 +147,7 @@ Predicting cell cycle phase for single-cell samples from one individual.
 # predicting cell cycle phase for single-cell samples from one individual
 # that is not included in the training 
 ##------ Predict cell cycle phase
-Y_predict <- expr_quant[, which(colnames(expr_quant) %in% which_samples_predict)]
+Y_predict <- expr_quant[, colnames(expr_quant) %in% which_samples_predict]
 model_5genes_predict <- cycle_npreg_outsample(Y_test=Y_predict,
                                      sigma_est=model_5genes_train$sigma_est,
                                      funs_est=model_5genes_train$funs_est,
@@ -171,8 +165,10 @@ plot(model_5genes_predict$Y_reordered[g,],
      x=model_5genes_predict$cell_times_reordered, axes=FALSE,
      xlab="FUCCI phase",
      ylab="Predicted phase")
-points(y=model_5genes_predict$funs_reordered[[g]](model_5genes_predict$cell_times_reordered),
-     x=model_5genes_predict$cell_times_reordered,
+points(
+  y=model_5genes_predict$funs_reordered[[g]](
+        model_5genes_predict$cell_times_reordered),
+  x=model_5genes_predict$cell_times_reordered,
      pch=16, col="royalblue")
 axis(2); axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
               labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),

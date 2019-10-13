@@ -47,37 +47,26 @@
 #'
 #' # select top 5 cyclic genes
 #' sce_top5 <- sce_top101genes[
-#'     order(rowData(sce_top101genes)$pve_fucci, decreasing=TRUE)[c(1:5)],]
-#'
-#' # normalize molecule count for differencese in library sizes
-#' counts_normed <- t((10^6)*(t(assay(sce_top5))/colData(sce_top5)$molecules))
+#'     order(rowData(sce_top101genes)$pve_fucci, decreasing=TRUE)[1:5],]
 #'
 #' # reordering the data according to FUCCI phase
-#' counts_normed <- counts_normed[,order(colData(sce_top5)$theta_shifted)]
 #' coldata <- colData(sce_top5)[order(colData(sce_top5)$theta_shifted),]
 #'
-#' # quantile-transform each gene to normal distribution
-#' expr_quant <- do.call(rbind,
-#' lapply(seq_len(nrow(counts_normed)), function(g) {
-#'   yy <- counts_normed[g,]
-#'   is.zero <- which(yy == 0)
-#'   qq.map <- qqnorm(yy, plot.it = FALSE)
-#'   yy.qq <- qq.map$x
-#'   yy.qq[is.zero] <- sample(qq.map$x[is.zero])
-#'   return(yy.qq)
-#' }) )
-#' rownames(expr_quant) <- rownames(counts_normed)
-#' colnames(expr_quant) <- colnames(counts_normed)
-#'
+#' # quantile-transform CPM to normal distribution
+#' sce_quant <- data_transform_quantile(sce_top5)
+#' exprs_quant <- assays(sce_quant, "cpm_quant")
 #'
 #' # Select samples from NA18511 for our prediction example
-#' which_samples_train <- rownames(coldata)[which(coldata$chip_id != "NA18511")]
-#' which_samples_predict <- rownames(coldata)[which(coldata$chip_id == "NA18511")]
+#' which_samples_train <- rownames(coldata)[coldata$chip_id != "NA18511"]
+#' which_samples_predict <- rownames(coldata)[coldata$chip_id == "NA18511"]
 #'
-#' # make an example of using data from 5 individuals to predict phase in one indivdual
-#' Y_train <- expr_quant[, which(colnames(expr_quant) %in% which_samples_train)]
-#' theta_train <- coldata$theta_shifted[which(rownames(coldata) %in% which_samples_train)]
-#' names(theta_train) <- rownames(coldata)[which(rownames(coldata) %in% which_samples_train)]
+#' # make an example of using data from 5 individuals to predict phase
+#' # in one indivdual
+#' Y_train <- expr_quant[, colnames(expr_quant) %in% which_samples_train]
+#' theta_train <-
+#'     coldata$theta_shifted[rownames(coldata) %in% which_samples_train]
+#' names(theta_train) <-
+#'     rownames(coldata)[rownames(coldata) %in% which_samples_train]
 #'
 #' # obtain cyclic function estimates
 #' model_5genes_train <- cycle_npreg_insample(Y = Y_train,
@@ -86,11 +75,10 @@
 #'                                   ncores=2,
 #'                                   method.trend="trendfilter")
 #'
-#' Y_predict <- expr_quant[,
-#'     which(colnames(expr_quant) %in% which_samples_predict)]
+#' Y_predict <- expr_quant[, which_samples_predict]
 #'
-#' theta_test <- coldata$theta[which(rownames(coldata) %in% which_samples_predict)]
-#' names(theta_test) <- rownames(coldata)[which(rownames(coldata) %in% which_samples_predict)]
+#' theta_test <- coldata$theta[which_samples_predict]
+#' names(theta_test) <- rownames(coldata)[which_samples_predict]
 #'
 #' model_5genes_predict <- cycle_npreg_outsample(Y_test=Y_predict,
 #'                                     sigma_est=model_5genes_train$sigma_est,
@@ -105,7 +93,8 @@
 #'        x=model_5genes_predict$cell_times_reordered, axes=FALSE,
 #'        xlab="FUCCI phase",
 #'        ylab="Predicted phase")
-#'   points(y=model_5genes_predict$funs_reordered[[g]](model_5genes_predict$cell_times_reordered),
+#'   points(y=model_5genes_predict$funs_reordered[[g]](
+#'       model_5genes_predict$cell_times_reordered),
 #'          x=model_5genes_predict$cell_times_reordered,
 #'          pch=16, col="royalblue")
 #'   axis(2);
@@ -223,37 +212,26 @@ cycle_npreg_insample <- function(Y, theta,
 #'
 #' # select top 5 cyclic genes
 #' sce_top5 <- sce_top101genes[
-#'     order(rowData(sce_top101genes)$pve_fucci, decreasing=TRUE)[c(1:5)],]
-#'
-#' # normalize molecule count for differencese in library sizes
-#' counts_normed <- t((10^6)*(t(assay(sce_top5))/colData(sce_top5)$molecules))
+#'     order(rowData(sce_top101genes)$pve_fucci, decreasing=TRUE)[1:5],]
 #'
 #' # reordering the data according to FUCCI phase
-#' counts_normed <- counts_normed[,order(colData(sce_top5)$theta_shifted)]
 #' coldata <- colData(sce_top5)[order(colData(sce_top5)$theta_shifted),]
 #'
-#' # quantile-transform each gene to normal distribution
-#' expr_quant <- do.call(rbind,
-#' lapply(seq_len(nrow(counts_normed)), function(g) {
-#'   yy <- counts_normed[g,]
-#'   is.zero <- which(yy == 0)
-#'   qq.map <- qqnorm(yy, plot.it = FALSE)
-#'   yy.qq <- qq.map$x
-#'   yy.qq[is.zero] <- sample(qq.map$x[is.zero])
-#'   return(yy.qq)
-#' }) )
-#' rownames(expr_quant) <- rownames(counts_normed)
-#' colnames(expr_quant) <- colnames(counts_normed)
-#'
+#' # quantile-transform CPM to normal distribution
+#' sce_quant <- data_transform_quantile(sce_top5)
+#' exprs_quant <- assays(sce_quant, "cpm_quant")
 #'
 #' # Select samples from NA18511 for our prediction example
-#' which_samples_train <- rownames(coldata)[which(coldata$chip_id != "NA18511")]
-#' which_samples_predict <- rownames(coldata)[which(coldata$chip_id == "NA18511")]
+#' which_samples_train <- rownames(coldata)[coldata$chip_id != "NA18511"]
+#' which_samples_predict <- rownames(coldata)[coldata$chip_id == "NA18511"]
 #'
-#' # make an example of using data from 5 individuals to predict phase in one indivdual
-#' Y_train <- expr_quant[, which(colnames(expr_quant) %in% which_samples_train)]
-#' theta_train <- coldata$theta_shifted[which(rownames(coldata) %in% which_samples_train)]
-#' names(theta_train) <- rownames(coldata)[which(rownames(coldata) %in% which_samples_train)]
+#' # make an example of using data from 5 individuals to predict phase
+#' # in one indivdual
+#' Y_train <- expr_quant[, colnames(expr_quant) %in% which_samples_train]
+#' theta_train <-
+#'     coldata$theta_shifted[rownames(coldata) %in% which_samples_train]
+#' names(theta_train) <-
+#'     rownames(coldata)[rownames(coldata) %in% which_samples_train]
 #'
 #' # obtain cyclic function estimates
 #' model_5genes_train <- cycle_npreg_insample(Y = Y_train,
@@ -262,11 +240,11 @@ cycle_npreg_insample <- function(Y, theta,
 #'                                   ncores=2,
 #'                                   method.trend="trendfilter")
 #'
-#' Y_predict <- expr_quant[,
-#'     which(colnames(expr_quant) %in% which_samples_predict)]
+#' Y_predict <- expr_quant[, colnames(expr_quant) %in% which_samples_predict]
 #'
-#' theta_test <- coldata$theta[which(rownames(coldata) %in% which_samples_predict)]
-#' names(theta_test) <- rownames(coldata)[which(rownames(coldata) %in% which_samples_predict)]
+#' theta_test <- coldata$theta[rownames(coldata) %in% which_samples_predict]
+#' names(theta_test) <-
+#'     rownames(coldata)[rownames(coldata) %in% which_samples_predict]
 #'
 #' model_5genes_predict <- cycle_npreg_outsample(Y_test=Y_predict,
 #'                                     sigma_est=model_5genes_train$sigma_est,
@@ -281,7 +259,8 @@ cycle_npreg_insample <- function(Y, theta,
 #'        x=model_5genes_predict$cell_times_reordered, axes=FALSE,
 #'        xlab="FUCCI phase",
 #'        ylab="Predicted phase")
-#'   points(y=model_5genes_predict$funs_reordered[[g]](model_5genes_predict$cell_times_reordered),
+#'   points(y=model_5genes_predict$funs_reordered[[g]](
+#'       model_5genes_predict$cell_times_reordered),
 #'          x=model_5genes_predict$cell_times_reordered,
 #'          pch=16, col="royalblue")
 #'   axis(2);
@@ -452,17 +431,13 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 
   N <- ncol(Y)
   G <- nrow(Y)
-
   theta_choose <- initialize_grids(Y, grids=grids, method.grid=method.grid)
+
+  # for each cell, sum up the loglikelihood for each gene
+  # at the observed cell times
   loglik_per_cell_by_celltimes <- matrix(0, N, grids)
-  prob_per_cell_by_celltimes <- matrix(0, N, grids)
   colnames(loglik_per_cell_by_celltimes) <- theta_choose
-  colnames(prob_per_cell_by_celltimes) <- theta_choose
-
   for (n in seq_len(N)) {
-
-    # for each cell, sum up the loglikelihood for each gene
-    # at the observed cell times
     loglik_per_cell <- do.call(rbind, lapply(seq_len(G), function(g) {
       dnorm(Y[g,n], funs_est[[g]](theta_choose), sigma_est[g], log = TRUE)
     }))
@@ -472,26 +447,32 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
   }
 
   # use max likelihood to assign samples
-  for (n in seq_len(N)) {
-    sumll <- sum(exp(loglik_per_cell_by_celltimes)[n,], na.rm=TRUE)
-    if (sumll == 0) {
-      prob_per_cell_by_celltimes[n,] <- rep(0, grids)
-    } else {
-      prob_per_cell_by_celltimes[n,] <- exp(loglik_per_cell_by_celltimes)[n,]/sumll
-    }
-  }
-  cell_times_samp_ind <- do.call(c, lapply(seq_len(N), function(n) {
-    if (max(prob_per_cell_by_celltimes[n,], na.rm=TRUE)==0) {
+  prob_per_cell_by_celltimes <- t(apply(loglik_per_cell_by_celltimes, 1,
+                                        function(x) {
+        sumll <- sum(exp(x), na.rm=TRUE)
+        if (sumll == 0) {
+          return(rep(0, grids))
+        } else {
+          return(exp(x)/sumll)
+        } }) )
+  colnames(prob_per_cell_by_celltimes) <- theta_choose
+
+
+  cell_times_samp_ind <- apply(prob_per_cell_by_celltimes, 1, function(x) {
+    if (max(x, na.rm=TRUE)==0) {
       sample(seq_len(grids), 1, replace=FALSE)
     } else {
-      which.max(prob_per_cell_by_celltimes[n,])
+      which.max(x)
     }
-  }) )
+  })
+  names(cell_times_samp_ind) <-
+    colnames(prob_per_cell_by_celltimes)[cell_times_samp_ind]
 
   cell_times_est <- do.call(c, lapply(seq_len(N), function(n) {
     theta_choose[cell_times_samp_ind[n]]
   }) )
   names(cell_times_est) <- colnames(Y)
+
 
   # compute likelihood based on the selected cell times
   loglik_max_per_cell <- do.call(c, lapply(seq_len(N), function(n) {
@@ -574,7 +555,7 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
       N <- ncol(Y)
 
       if (!assert_that(all.equal(names(theta), colnames(Y)))) {
-        Y_ordered <- Y[,match(names(theta), colnames(Y))]
+        Y_ordered <- Y[,names(theta)]
         ord <- order(theta)
         theta_ordered <- theta[ord]
         Y_ordered <- Y_ordered[,ord]

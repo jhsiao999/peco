@@ -8,7 +8,4 @@ NOTES.txt
 peco.Rproj
 doc
 Meta
-# make vignette data
-make_data.R
-# vignette code
-vignette.R
+

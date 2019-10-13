@@ -1,16 +1,17 @@
 #' @name data_transform_quantile
 #'
-#' @title Quantile-normalize log counts of gene expression values
+#' @title Transform counts by first computing counts-per-million (CPM), then
+#'   quantile-normalize CPM for each gene
 #'
 #' @description
-#'   For each gene, transform the log counts to a normal distribution.
+#'   For each gene, transform CPM to a normal distribution.
 #' This way the zero-count cells are assigned the lowest qunatiles.
 #'
-#' @param Y A gene by sample matrix. Contains library size-normalized
-#' molecule counts.
+#' @param Y SingleCellExperiment Object.
 #' @param ncores We use doParallel package for parallel computing.
 #'
-#' @return A gene by sample expression matrix.
+#' @return SingleCellExperiment Object with an added slot of cpm_quant,
+#'     cpm slot is added if it doesn't exist.
 #'
 #' @examples
 #' # use our data
@@ -18,10 +19,10 @@
 #' data(sce_top101genes)
 #'
 #' # normalize expression counts to counts per million
-#' counts_normed<-t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
-#' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
+#' sce_normed <- data_transform_quantile(sce_top101genes, ncores=2)
 #'
-#' plot(x=counts_normed[1,], y=counts_quant[1,],
+#' plot(y=assay(sce_normed, "cpm_quant")[1,],
+#'      x=assay(sce_normed, "umi_counts")[1,],
 #'     xlab = "Before quantile-normalization",
 #'     ylab = "After quantile-normalization")
 #'
@@ -33,7 +34,7 @@
 #' @import parallel
 #' @import foreach
 #' @export
-data_transform_quantile <- function(Y, ncores=2) {
+data_transform_quantile <- function(Y_sce, ncores=2) {
 
   if (is.null(ncores)) {
     cl <- parallel::makeCluster(2)
@@ -45,10 +46,12 @@ data_transform_quantile <- function(Y, ncores=2) {
     message(paste("computing on",ncores,"cores"))
   }
 
-  G <- nrow(Y)
+  cpm <- t((10^6)*t(assay(Y_sce, "umi_counts"))/colData(Y_sce)$molecules)
+
+  G <- nrow(cpm)
 
   df <- foreach::foreach(g=seq_len(G)) %dopar% {
-    y_g <- Y[g,]
+    y_g <- cpm[g,]
     is.zero <- which(y_g == 0)
     qq.map <- stats::qqnorm(y_g, plot.it=FALSE)
     yy.qq <- qq.map$x
@@ -56,11 +59,14 @@ data_transform_quantile <- function(Y, ncores=2) {
     return(y_g= yy.qq)
   }
   parallel::stopCluster(cl)
-
   df <- do.call(rbind, df)
-  colnames(df) <- colnames(Y)
-  rownames(df) <- rownames(Y)
+  colnames(df) <- colnames(cpm)
+  rownames(df) <- rownames(cpm)
 
-  return(df)
+  assays(Y_sce) = list(umi_counts = assay(Y_sce, "umi_counts"),
+                       cpm = cpm,
+                       cpm_quant = df)
+
+  return(Y_sce)
   }
 

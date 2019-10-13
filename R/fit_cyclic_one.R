@@ -45,12 +45,13 @@
 #' names(theta) <- rownames(coldata)
 #'
 #' # normalize expression counts to counts per million
-#' counts_normed <- t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
+#' counts_normed <-
+#'     t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
 #' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 #'
 #' # order FUCCI phase and expression
 #' theta_ordered <- theta[order(theta)]
-#' yy_ordered <- counts_quant[1,match(names(theta_ordered), colnames(counts_quant))]
+#' yy_ordered <- counts_quant[1, names(theta_ordered)]
 #'
 #' fit <- fit_trendfilter_generic(yy_ordered)
 #'
@@ -83,7 +84,7 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
   trend.yy <- yy.trend.pred
   pve <- 1-var(yy-trend.yy)/var(yy)
 
-  return(list(trend.yy=trend.yy[which(include)],
+  return(list(trend.yy=trend.yy[include],
               pve=pve))
 }
 
@@ -112,12 +113,13 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #' names(theta) <- rownames(coldata)
 #'
 #' # normalize expression counts to counts per million
-#' counts_normed <- t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
+#' counts_normed <-
+#'  t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
 #' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 #'
 #' # order FUCCI phase and expression
 #' theta_ordered <- theta[order(theta)]
-#' yy_ordered <- counts_quant[1,match(names(theta_ordered), colnames(counts_quant))]
+#' yy_ordered <- counts_quant[1, names(theta_ordered)]
 #'
 #' fit <- fit_bspline(yy_ordered, time=theta_ordered)
 #'
@@ -142,7 +144,7 @@ fit_bspline <- function(yy, time) {
 
   # trendfilter
   fit <- smooth.spline(x=time.rep, y=yy.rep)
-  pred.yy <- predict(fit, time.rep)$y[which(include==TRUE)]
+  pred.yy <- predict(fit, time.rep)$y[include]
 
   pve <- 1-var(yy-pred.yy)/var(yy)
 
@@ -175,12 +177,13 @@ fit_bspline <- function(yy, time) {
 #' names(theta) <- rownames(coldata)
 #'
 #' # normalize expression counts to counts per million
-#' counts_normed <- t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
+#' counts_normed <-
+#'  t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
 #' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
 #'
 #' # order FUCCI phase and expression
 #' theta_ordered <- theta[order(theta)]
-#' yy_ordered <- counts_quant[1,match(names(theta_ordered), colnames(counts_quant))]
+#' yy_ordered <- counts_quant[1, names(theta_ordered)]
 #'
 #' fit <- fit_loess(yy_ordered, time=theta_ordered)
 #'
@@ -205,7 +208,7 @@ fit_loess <- function(yy, time) {
 
   # trendfilter
   fit <- loess(yy.rep~time.rep)
-  pred.yy <- fit$fitted[which(include==TRUE)]
+  pred.yy <- fit$fitted[include]
 
   pve <- 1-var(yy-pred.yy)/var(yy)
 
