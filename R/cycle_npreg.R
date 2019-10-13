@@ -54,7 +54,7 @@
 #'
 #' # quantile-transform CPM to normal distribution
 #' sce_quant <- data_transform_quantile(sce_top5)
-#' exprs_quant <- assays(sce_quant, "cpm_quant")
+#' expr_quant <- assay(sce_quant, "cpm_quant")
 #'
 #' # Select samples from NA18511 for our prediction example
 #' which_samples_train <- rownames(coldata)[coldata$chip_id != "NA18511"]
@@ -219,7 +219,7 @@ cycle_npreg_insample <- function(Y, theta,
 #'
 #' # quantile-transform CPM to normal distribution
 #' sce_quant <- data_transform_quantile(sce_top5)
-#' exprs_quant <- assays(sce_quant, "cpm_quant")
+#' expr_quant <- assay(sce_quant, "cpm_quant")
 #'
 #' # Select samples from NA18511 for our prediction example
 #' which_samples_train <- rownames(coldata)[coldata$chip_id != "NA18511"]
