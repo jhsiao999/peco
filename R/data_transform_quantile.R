@@ -18,13 +18,14 @@
 #' library(SingleCellExperiment)
 #' data(sce_top101genes)
 #'
-#' # normalize expression counts to counts per million
+#' # perform CPM normalization using scater, and
+#' # quantile-normalize the CPM values of each gene to normal distribution
 #' sce_normed <- data_transform_quantile(sce_top101genes, ncores=2)
 #'
-#' plot(y=assay(sce_normed, "cpm_quant")[1,],
-#'      x=assay(sce_normed, "umi_counts")[1,],
-#'     xlab = "Before quantile-normalization",
-#'     ylab = "After quantile-normalization")
+#' plot(y=assay(sce_normed, "cpm_quantNormed")[1,],
+#'      x=assay(sce_normed, "cpm")[1,],
+#'     xlab = "CPM bbefore quantile-normalization",
+#'     ylab = "CPM after quantile-normalization")
 #'
 #' @author Joyce Hsiao
 #'
@@ -33,8 +34,9 @@
 #' @import doParallel
 #' @import parallel
 #' @import foreach
+#' @import scater
 #' @export
-data_transform_quantile <- function(Y_sce, ncores=2) {
+data_transform_quantile <- function(sce, ncores=2) {
 
   if (is.null(ncores)) {
     cl <- parallel::makeCluster(2)
@@ -46,12 +48,13 @@ data_transform_quantile <- function(Y_sce, ncores=2) {
     message(paste("computing on",ncores,"cores"))
   }
 
-  cpm <- t((10^6)*t(assay(Y_sce, "umi_counts"))/colData(Y_sce)$molecules)
+  cpm(sce) <- calculateCPM(sce)
 
-  G <- nrow(cpm)
+  G <- nrow(sce)
+  cpm_sce <- cpm(sce)
 
-  df <- foreach::foreach(g=seq_len(G)) %dopar% {
-    y_g <- cpm[g,]
+  cpm_quantNormed <- foreach::foreach(g=seq_len(G)) %dopar% {
+    y_g <- cpm_sce[g,]
     is.zero <- which(y_g == 0)
     qq.map <- stats::qqnorm(y_g, plot.it=FALSE)
     yy.qq <- qq.map$x
@@ -59,14 +62,13 @@ data_transform_quantile <- function(Y_sce, ncores=2) {
     return(y_g= yy.qq)
   }
   parallel::stopCluster(cl)
-  df <- do.call(rbind, df)
-  colnames(df) <- colnames(cpm)
-  rownames(df) <- rownames(cpm)
+  cpm_quantNormed <- do.call(rbind, cpm_quantNormed)
+  colnames(cpm_quantNormed) <- colnames(cpm_sce)
+  rownames(cpm_quantNormed) <- rownames(cpm_sce)
 
-  assays(Y_sce) = list(umi_counts = assay(Y_sce, "umi_counts"),
-                       cpm = cpm,
-                       cpm_quant = df)
+  assays(sce)[[3]] <- cpm_quantNormed
+  assayNames(sce)[3] <- "cpm_quantNormed"
 
-  return(Y_sce)
+  return(sce)
   }
 
