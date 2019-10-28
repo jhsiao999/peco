@@ -44,11 +44,15 @@ including gene-specific cyclic functions.
 
 ```{r}
 data("training_human")
-data("sce_top101genes")
-plot(y=assay(sce_top101genes,"cpm_quantNormed")[1,],
-    x=theta, main = "CDK1")
-points(y=training_human$cellcycle_function[[1]](seq(0,2*pi, length.out=100)),
-        x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
+str("training_human")
+```
+
+
+```{r}
+# plot(y=assay(sce_top101genes,"cpm_quantNormed")[1,],
+#     x=colData(sce_top101genes)$theta, main = "CDK1")
+# points(y=training_human$cellcycle_function[[1]](seq(0,2*pi, length.out=100)),
+#         x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
 ```
 
 Below shows an example of inputting `SingleCellExperiment` object to perform
@@ -56,6 +60,15 @@ cell cycle phase prediction. For now, `peco` can be immediatley applied for
 expression data that stores Ensembl ID as default gene labels. In this example,
 `sce_top101genes` is the input data.
 
+
+First transform the expression values to quantile-normalizesd CPM values.
+
+```{r}
+data("sce_top101genes")
+sce_top101genes <- data_transform_quantile(sce_top101genes)
+```
+
+Apply the prediction model.
 
 ```{r}
 model_101genes_predict <- cycle_npreg_outsample(
