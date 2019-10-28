@@ -1,19 +1,19 @@
 ---
-title: "An example of predicting cell cycle phase using peco"
+title: "Predicting cell cycle phase using peco"
 author: "Joyce Hsiao"
 date: "`r Sys.Date()`"
 output: 
-  rmarkdown::html_vignette
+    rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{An example of predicting cell cycle phase using peco}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{An example of predicting cell cycle phase using peco}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+    collapse = TRUE,
+    comment = "#>"
 )
 ```
 
@@ -30,154 +30,203 @@ the cell cycle using yeast ([Spellman et al., 1998][spellman]) and
 HeLa cells ([Whitfield et al., 2002][whitfield]).
 
 
-## Preparation
-
-### 1. Load data and packages
+##  Load data and packages
 
 ```{r, message=FALSE}
 library(SingleCellExperiment)
 library(peco)
-
-# expression set of top 101 cyclic genes
-data(sce_top101genes)
 ```
 
-### 2. Data preprocessing
+## Basic example: predicting cell cycle using pre-trained data
 
-Note that we mapped our data to GRCh37 Ensembl Assembly. 
+`training_human` contains pre-trained results from 888 single-cell sample,
+including gene-specific cyclic functions.
 
 ```{r}
-# phenotype information
-coldata <- colData(sce_top101genes)
-
-# gene information
-rowdata <- rowData(sce_top101genes)
-
-# select top 5 cyclic genes
-sce_top5 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
-                                  decreasing=TRUE)[1:5],]
-
-coldata <- colData(sce_top5)[order(colData(sce_top5)$theta_shifted),]
-
-# quantile-transform CPM to normal distribution
-sce_quant <- data_transform_quantile(sce_top5)
-expr_quant <- assay(sce_quant, "cpm_quant")
-counts_normed <- assay(sce_quant, "cpm")
+data("training_human")
+data("sce_top101genes")
+plot(y=assay(sce_top101genes,"cpm_quantNormed")[1,],
+    x=theta, main = "CDK1")
+points(y=training_human$cellcycle_function[[1]](seq(0,2*pi, length.out=100)),
+        x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
 ```
 
-We quantile-normalize CPM values for each gene to a normal
-distribution. The samples with zero molecule count are each assigned a
-different quantile value. By doing this, the transformed gene
-expression values centered at 0 with standard deviation of 1.
+Below shows an example of inputting `SingleCellExperiment` object to perform
+cell cycle phase prediction. For now, `peco` can be immediatley applied for
+expression data that stores Ensembl ID as default gene labels. In this example,
+`sce_top101genes` is the input data.
+
+
+```{r}
+model_101genes_predict <- cycle_npreg_outsample(
+    Y_test=sce_top101genes,
+    sigma_est=training_human$sigma[rownames(sce_top101genes),],
+    funs_est=training_human$cellcycle_function[rownames(sce_top101genes)],
+    method.trend="trendfilter",
+    ncores=1,
+    get_trend_estimates=FALSE)
+```
+
+`cycle_npreg_outsample` outputs a SingleCellExpression object that contains
+predicted cell cycle phase.
+
+```{r}
+colData(model_101genes_predict)$cellcycle_peco
+```
+
+Visualize results of prediction for one gene. Below we choose CDK1. Because
+CDK1 is a known cell cycle gene, this visualization serves as a sanity
+check for the results of fitting. 
+
+```{r}
+plot(y=assay(sce_top101genes,"cpm_quantNormed")[1,],
+     x=theta, main = "CDK1")
+points(y=training_human$cellcycle_function[[1]](seq(0,2*pi, length.out=100)),
+       x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
+```
+
+
+## Advanced example: making training data
+
+First we `scater` package to compute `cpm` (counts per million) of gene counts. 
+Then we transform cpm values of each gene to a normal distribution. In this
+example, we use the top 5 cyclic gnes to make training data, based on 
+`pve_fucci` - proportion of variance explained by cyclic trend in each gene.
+
+```{r}
+data(sce_top101genes)
+
+sce_top5 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
+                                    decreasing=TRUE)[1:5],]
+
+# quantile-normalize CPM value of each gene toa normal distribution
+sce_top5 <- data_transform_quantile(sce_top5)
+```
+
+Plots below compare per-gene CPM valus versus quantile-normalized CPM values.
 
 ```{r, fig.width=9, fig.height=7}
+# quantile-normalize CPM value of each gene toa normal distribution
+expr_quant <- assay(sce_top5, "cpm_quantNormed")
+counts_normed <- assay(sce_top5, "cpm")
+
 par(mfrow=c(2,2), mar=c(4,5,4,1))
 plot(counts_normed[1,], pch=16, cex=.7,
-     main="Before quantile-normalization",
-     xlab="FUCCI phase", ylab="CPM values")
+    main="Before quantile-normalization",
+    xlab="FUCCI phase", ylab="CPM values")
 plot(expr_quant[1,], pch=16, cex=.7,
-     main="After quantile-normalization",
-     xlab="FUCCI phase", ylab="Quantile-normalized \n expression values")
+    main="After quantile-normalization",
+    xlab="FUCCI phase", ylab="Quantile-normalized \n expression values")
 plot(x=counts_normed[1,], y=expr_quant[1,], pch=16, cex=.7,
-     main="Before vs after quantile-normalization",
-     xlab="CPM values", 
-     ylab="Quantile-normalized \n expression values")
+    main="Before vs after quantile-normalization",
+    xlab="CPM values", 
+    ylab="Quantile-normalized \n expression values")
 title(rownames(counts_normed)[1], outer=TRUE, line=-1)
 ```
 
-## Analysis
-
-### 1. Load pre-computed results
+Load pre-computed results
 
 ```{r}
 data("model_5genes_train")
 data("model_5genes_predict")
 ```
 
-### 2. Training
-
-Estimating cyclic functions of the desired genes using the traing
-data. In this example, we include single-cell samples from 5
-individuals.
+Next, we select data for training. The example below uses a training
+dataset of 785 single-cell samples from 5 induced Pluripoten Stem Cell (iPSC)
+cell lines.
 
 ```{r, eval=FALSE}
+coldata <- colData(sce_top5)
+
 # Select samples from NA18511 for our prediction example
 which_samples_train <- rownames(coldata)[coldata$chip_id != "NA18511"]
 which_samples_predict <- rownames(coldata)[coldata$chip_id == "NA18511"]
 
 # learning cyclic functions of the genes using our training data
+expr_quant <- assay(sce_top5, "cpm_quantNormed")
 Y_train <- expr_quant[, colnames(expr_quant) %in% which_samples_train]
-theta_train <- 
-    coldata$theta_shifted[rownames(coldata) %in% which_samples_train]
+theta_train <- coldata$theta_shifted[rownames(coldata) %in% which_samples_train]
 names(theta_train) <- 
     rownames(coldata)[rownames(coldata) %in% which_samples_train]
 
 model_5genes_train <- cycle_npreg_insample(Y = Y_train,
-                                  theta = theta_train,
-                                  polyorder=2,
-                                  ncores=1,
-                                  method.trend="trendfilter")
+                                    theta = theta_train,
+                                    polyorder=2,
+                                    ncores=2,
+                                    method.trend="trendfilter")
 ```
 
-Fitted cyclic trend in the training data.
+Let's inspect results of training. The plots below visualize cyclic gene 
+expression trend of the 5 genes in the training data. 
 
 ```{r, fig.width=9, fig.height=8}
 par(mfrow=c(2,3), mar=c(4,4,3,1))
 for (g in 1:5) {
-plot(model_5genes_train$Y[g,], 
-     x=model_5genes_train$theta, axes=FALSE,
-     ylab="quantile-normalized expressio values")
-points(y=model_5genes_train$funs_est[[g]](model_5genes_train$theta),
-       x=model_5genes_train$theta,
-       pch=16, col="royalblue")
+plot(model_5genes_train$Y[g, order(model_5genes_train$theta)], 
+    x=model_5genes_train$theta[order(model_5genes_train$theta)], axes=FALSE,
+    ylab="quantile-normalized expressio values")
+points(y=model_5genes_train$funs_est[[g]](
+        model_5genes_train$theta[order(model_5genes_train$theta)]),
+    x=model_5genes_train$theta[order(model_5genes_train$theta)],
+    pch=16, col="royalblue")
 axis(2); axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
-              labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
-                       expression(2*pi)))
+                labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
+                    expression(2*pi)))
 abline(h=0, lty=1, col="black", lwd=.7)
 title(rownames(model_5genes_train$Y)[g])
 }
 title("Cyclic trends in the training data", outer=TRUE, line=-1)
 ```
 
-### 3. Predicting
+Finally, using results from the training data, we predict cell cycle phase 
+for 103 single-cell samples obtained from one single iPSC cell line. The 
+function  `cycle_npreg_sample` outputs a `SingleCellExperiment` and adds 
+predicted cell cycle as a new variable `cellcycle_peco`.
 
-Predicting cell cycle phase for single-cell samples from one individual.
 
 ```{r, eval=F}
 # predicting cell cycle phase for single-cell samples from one individual
 # that is not included in the training 
 ##------ Predict cell cycle phase
-Y_predict <- expr_quant[, colnames(expr_quant) %in% which_samples_predict]
-model_5genes_predict <- cycle_npreg_outsample(Y_test=Y_predict,
-                                     sigma_est=model_5genes_train$sigma_est,
-                                     funs_est=model_5genes_train$funs_est,
-                                     method.trend="trendfilter",
-                                     ncores=1,
-                                     get_trend_estimates=TRUE)
+model_5genes_predict <- cycle_npreg_outsample(
+    Y_test=sce_top5[,colnames(sce_top5) %in% which_samples_predict],
+    sigma_est=model_5genes_train$sigma_est,
+    funs_est=model_5genes_train$funs_est,
+    method.trend="trendfilter",
+    ncores=1,
+    get_trend_estimates=FALSE)
 ```
 
-Results of prediction in the testing sample. 
+To visualize results of our predictions, we use `fit_cyclical_many` function
+to fit cyclic function for each gene and to plot cyclic expression trend
+for each gene. 
 
 ```{r, fig.width=9, fig.height=8}
+predict_cyclic <- fit_cyclical_many(
+                    Y=assay(model_5genes_predict,"cpm_quantNormed"),
+                    theta=colData(model_5genes_predict)$cellcycle_peco)
+all.equal(rownames(predict_cyclic[[2]]), rownames(predict_cyclic[[1]]))
+
 par(mfrow=c(2,3), mar=c(4,4,3,1))
-for (g in 1:5) {
-plot(model_5genes_predict$Y_reordered[g,], 
-     x=model_5genes_predict$cell_times_reordered, axes=FALSE,
-     xlab="FUCCI phase",
-     ylab="Predicted phase")
-points(
-  y=model_5genes_predict$funs_reordered[[g]](
-        model_5genes_predict$cell_times_reordered),
-  x=model_5genes_predict$cell_times_reordered,
-     pch=16, col="royalblue")
+for (g in seq_along(rownames(model_5genes_predict))) {
+plot(assay(model_5genes_predict,"cpm_quantNormed")[
+                rownames(model_5genes_predict)[g],], 
+        x=colData(model_5genes_predict)$cellcycle_peco, axes=FALSE,
+        xlab="FUCCI phase",
+        ylab="Predicted phase")
+points(y=predict_cyclic$cellcycle_function[[rownames(model_5genes_predict)[g]]](
+    seq(0, 2*pi, length.out = 100)),
+        x=seq(0, 2*pi, length.out = 100),
+        pch=16, col="royalblue")
 axis(2); axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
-              labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
-                       expression(2*pi)))
+            labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
+                        expression(2*pi)))
 abline(h=0, lty=1, col="black", lwd=.7)
 title(rownames(model_5genes_predict$Y_reordered)[g])
 }
 title("Predicting cell cycle phase for NA18511", outer=TRUE)
 ```
+
 
 ## Session information
 

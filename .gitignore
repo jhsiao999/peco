@@ -4,9 +4,7 @@ peco.Rcheck/
 peco*tar.gz
 vignettes/*.html
 vignettes/*.R
-NOTES.txt
 peco.Rproj
 doc
 Meta
-make_data.txt
 

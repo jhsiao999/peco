@@ -3,36 +3,20 @@
 \docType{data}
 \name{model_5genes_predict}
 \alias{model_5genes_predict}
-\title{Results of predicting cell cycle phase for samples from NA18511.}
+\title{A SingleCellExperiment object}
 \format{A list with the follwing elements
-\describe{
-  \item{Y}{a data.frame (gene by sample) of quantile-normailzed gene
-  expression values}
-  \item{cell_times_est}{a vector of estimated cell cycl phase values
-  (range between 0 to 2pi)}
-  \item{loglik_est}{a vector of estimated log-likelihoods for each cell}
-  \item{Y_reordered}{Y ordered along columns by \emph{cell_times-est}}
-  \item{cell_times_reordered}{cell_times_est ordered from 0 to 2pi}
-  \item{funs_reordered}{A lists of estimated cyclic functions for each gene
-        using re-ordered gene expression values (rows of Y_reordered) }
-  \item{mu_reordered}{A data.frame (gene by sample) of estimated expression
-  for each gene across cells in the test data using \emph{funs_reordered}}
-  \item{sigma_reordered}{A vector of estimated standard error for each gene
-  in the test data across cells using \emph{funs_reordered}}
-  \item{prob_per_cell_by_celltimes}{A data.frame (gene by sample) of
-  log-likelihoods of of gene expression values in the test data}
-}
 
 \describe{
-  \item{Y_reordered}{Quntile-normalized expression values}
-  \item{cell_times_reordered}{Estimated phase}
+  \item{cellcycle_peco}{Predict cell cycle,
+   the values ranged between 0 to 2pi}
  }}
 \usage{
 data(model_5genes_predict)
 }
 \description{
 Pre-computed results. Applied \emph{cycle_npreg_outsample} and
-  results stored in \emph{fit_train} to predict cell cycle phase for
-  single-cell samples of NA19098.
+  results stored in \emph{model_5genes_train} to predict cell cycle phase for
+  single-cell samples of NA19098. The predicted cell cycle is stored as
+  variable \emph{cellcycle_peco}.
 }
 \keyword{data}

@@ -22,15 +22,16 @@
 #' @export
 #'
 shift_origin <- function(phase, origin) {
-  phase2 <- phase
-  if (origin > 0) {
+    phase2 <- phase
+    if (origin > 0) {
     phase2[phase>=origin] <- phase[phase>=origin]-origin
     phase2[phase<origin] <- (phase[phase<origin]-origin+2*pi)
-  }
-  if (origin < 0) {
+    }
+    if (origin < 0) {
     a <- phase[phase >= 0 & phase< (2*pi-abs(origin))] + abs(origin)
-    b <- -1*(2*pi - (phase[phase <= 2*pi & phase >= (2*pi - abs(origin))])) + abs(origin)
+    b <- -1*(2*pi - (phase[phase <= 2*pi & phase >= (2*pi - abs(origin))])) +
+            abs(origin)
     phase2 <- c(a,b)
-  }
-  phase2
+    }
+    phase2
 }

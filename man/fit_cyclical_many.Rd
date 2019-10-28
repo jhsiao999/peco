@@ -23,7 +23,15 @@ degree polynomials.}
 parallel computing to reduce computational time.}
 }
 \value{
-A vector of proportion of variance explained for each gene.
+A list containing the following objects
+
+\item{predict.yy}{A matrix of predicted expression values at observed
+  cell cycle.}
+\item{cellcycle_peco_ordered}{A vector of predicted cell cycle. The values
+  range between 0 to 2pi}
+\item{cellcycle_function}{A list of predicted cell cycle functions.}
+\item{pve}{A vector of proportion of variance explained in each gene by
+  the predicted cell cycle.}
 }
 \description{
 We applied quadratic (second order) trend filtering
@@ -45,25 +53,27 @@ quadratic trend filtering was applied to the concatenated data
 series of each gene.
 }
 \examples{
-\dontrun{
+library(SingleCellExperiment)
 data(sce_top101genes)
-coldata <- colData(sce_top101genes)
+
+# select top 10 cyclic genes
+sce_top10 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
+                                  decreasing=TRUE)[1:10],]
+coldata <- colData(sce_top10)
 
 # cell cycle phase based on FUCCI scores
 theta <- coldata$theta
 names(theta) <- rownames(coldata)
 
-# normalize expression counts to counts per million
-counts_normed <-
- t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
-counts_quant <- data_transform_quantile(counts_normed, ncores=2)
+# normalize expression counts
+sce_top10 <- data_transform_quantile(sce_top10, ncores=2)
+exprs_quant <- assay(sce_top10, "cpm_quantNormed")
 
 # order FUCCI phase and expression
 theta_ordered <- theta[order(theta)]
-yy_ordered <- counts_quant[,names(theta_ordered)]
+yy_ordered <- exprs_quant[, names(theta_ordered)]
 
 fit <- fit_cyclical_many(Y=yy_ordered, theta=theta_ordered)
-}
 
 }
 \seealso{

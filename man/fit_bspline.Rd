@@ -23,20 +23,23 @@ Use bsplies to cyclic trend of gene expression levels
 \examples{
 library(SingleCellExperiment)
 data(sce_top101genes)
-coldata <- colData(sce_top101genes)
+
+# select top 10 cyclic genes
+sce_top10 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
+                                  decreasing=TRUE)[1:10],]
+coldata <- colData(sce_top10)
 
 # cell cycle phase based on FUCCI scores
 theta <- coldata$theta
 names(theta) <- rownames(coldata)
 
-# normalize expression counts to counts per million
-counts_normed <-
- t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
-counts_quant <- data_transform_quantile(counts_normed, ncores=2)
+# normalize expression counts
+sce_top10 <- data_transform_quantile(sce_top10, ncores=2)
+exprs_quant <- assay(sce_top10, "cpm_quantNormed")
 
 # order FUCCI phase and expression
 theta_ordered <- theta[order(theta)]
-yy_ordered <- counts_quant[1, names(theta_ordered)]
+yy_ordered <- exprs_quant[1, names(theta_ordered)]
 
 fit <- fit_bspline(yy_ordered, time=theta_ordered)
 

@@ -20,7 +20,8 @@
 #'
 #' # after rotation of angles, difference is 0 between the original
 #' # and the shifted angles
-#' theta_compare_rotated <- rotation(ref_var=theta_ref, shift_var=theta_compare)
+#' theta_compare_rotated <- rotation(ref_var=theta_ref,
+#'     shift_var=theta_compare)
 #' mean(circ_dist(theta_ref, theta_compare_rotated))
 #'
 #'
@@ -77,7 +78,7 @@ rotation <- function(ref_var,shift_var) {
     which_cutoff <- which.min(df$dis)
 
     shift_var_new <-
-      df$flip[which_cutoff]*((shift_var+df$shift[which_cutoff])%%(2*pi))
+        df$flip[which_cutoff]*((shift_var+df$shift[which_cutoff])%%(2*pi))
 
     return(shift_var_new)
 }
