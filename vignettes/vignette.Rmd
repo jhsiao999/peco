@@ -47,19 +47,10 @@ data("training_human")
 str("training_human")
 ```
 
-
-```{r}
-# plot(y=assay(sce_top101genes,"cpm_quantNormed")[1,],
-#     x=colData(sce_top101genes)$theta, main = "CDK1")
-# points(y=training_human$cellcycle_function[[1]](seq(0,2*pi, length.out=100)),
-#         x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
-```
-
 Below shows an example of inputting `SingleCellExperiment` object to perform
 cell cycle phase prediction. For now, `peco` can be immediatley applied for
 expression data that stores Ensembl ID as default gene labels. In this example,
 `sce_top101genes` is the input data.
-
 
 First transform the expression values to quantile-normalizesd CPM values.
 
@@ -93,7 +84,7 @@ check for the results of fitting.
 
 ```{r}
 plot(y=assay(sce_top101genes,"cpm_quantNormed")[1,],
-     x=theta, main = "CDK1")
+     x=colData(sce_top101genes)$theta_shifted, main = "CDK1")
 points(y=training_human$cellcycle_function[[1]](seq(0,2*pi, length.out=100)),
        x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
 ```
