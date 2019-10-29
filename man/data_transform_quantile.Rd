@@ -5,33 +5,33 @@
 \title{Transform counts by first computing counts-per-million (CPM), then
   quantile-normalize CPM for each gene}
 \usage{
-data_transform_quantile(Y_sce, ncores = 2)
+data_transform_quantile(sce, ncores = 2)
 }
 \arguments{
-\item{ncores}{We use doParallel package for parallel computing.}
+\item{sce}{SingleCellExperiment Object.}
 
-\item{Y}{SingleCellExperiment Object.}
+\item{ncores}{We use doParallel package for parallel computing.}
 }
 \value{
 SingleCellExperiment Object with an added slot of cpm_quant,
     cpm slot is added if it doesn't exist.
 }
 \description{
-For each gene, transform CPM to a normal distribution.
-This way the zero-count cells are assigned the lowest qunatiles.
+For each gene, transform counts to CPM and then to a normal distribution.
 }
 \examples{
 # use our data
 library(SingleCellExperiment)
 data(sce_top101genes)
 
-# normalize expression counts to counts per million
-sce_normed <- data_transform_quantile(sce_top101genes, ncores=2)
+# perform CPM normalization using scater, and
+# quantile-normalize the CPM values of each gene to normal distribution
+sce_top101genes <- data_transform_quantile(sce_top101genes, ncores=2)
 
-plot(y=assay(sce_normed, "cpm_quant")[1,],
-     x=assay(sce_normed, "umi_counts")[1,],
-    xlab = "Before quantile-normalization",
-    ylab = "After quantile-normalization")
+plot(y=assay(sce_top101genes, "cpm_quantNormed")[1,],
+     x=assay(sce_top101genes, "cpm")[1,],
+    xlab = "CPM bbefore quantile-normalization",
+    ylab = "CPM after quantile-normalization")
 
 }
 \author{

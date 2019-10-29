@@ -43,50 +43,41 @@
 #' @export
 #'
 intensity2circle <- function(mat, plot.it=FALSE,
-                             method=c("trig","algebraic")) {
+                            method=c("trig","algebraic")) {
 
-  if (!is.matrix(mat))
-    mat <- as.matrix(mat)
+    if (!is.matrix(mat)) mat <- as.matrix(mat)
 
-  if (method=="trig") {
-    pca <- prcomp(mat, scale. = TRUE)
-    pca_scores <- pca$x
-    theta <- as.numeric(coord2rad(pca_scores[,c(1,2)]))
-
-    if (plot.it) {
-      rng <- c(-1,1)*max(abs(range(pca_scores[,c(1,2)])))
-      plot(pca_scores[,c(1,2)], pch=16,col="gray80", cex=.7,
-           xlim=rng, ylim=rng)
-      points(x=cos(theta),y=sin(theta), pch=16,col="black", cex=.7)
-    }
-
-    # convert to angle
+    if (method=="trig") {
+        pca <- prcomp(mat, scale. = TRUE)
+        pca_scores <- pca$x
+        theta <- as.numeric(coord2rad(pca_scores[,c(1,2)]))
+        if (plot.it) {
+            rng <- c(-1,1)*max(abs(range(pca_scores[,c(1,2)])))
+            plot(pca_scores[,c(1,2)], pch=16,col="gray80", cex=.7,
+                xlim=rng, ylim=rng)
+            points(x=cos(theta),y=sin(theta), pch=16,col="black", cex=.7)
+        }
     theta <- theta%%(2*pi)
     return(theta)
-  }
-  else if (method=="algebraic") {
-    pca <- prcomp(mat, scale. = FALSE)
-    pca_scores <- pca$x
-    ellipDirect <- EllipseDirectFit(pca_scores[,c(1,2)])
-    ellipDirectG <- AtoG(ellipDirect)$ParG
-    xyDirect <- calculateEllipse(ellipDirectG[1], ellipDirectG[2],
-                                 ellipDirectG[3],
-                                 ellipDirectG[4], 180/pi*ellipDirectG[5])
-    ellipProj <- Residuals.ellipse(pca_scores[,c(1,2)], ellipDirectG)
+    } else if (method=="algebraic") {
+        pca <- prcomp(mat, scale. = FALSE)
+        pca_scores <- pca$x
+        ellipDirect <- EllipseDirectFit(pca_scores[,c(1,2)])
+        ellipDirectG <- AtoG(ellipDirect)$ParG
+        xyDirect <- calculateEllipse(ellipDirectG[1], ellipDirectG[2],
+                                    ellipDirectG[3],
+                                    ellipDirectG[4], 180/pi*ellipDirectG[5])
+        ellipProj <- Residuals.ellipse(pca_scores[,c(1,2)], ellipDirectG)
+        if (plot.it) {
+            rng <- c(-1,1)*max(abs(range(xyDirect)))
+            plot(pca_scores[,c(1,2)], pch=16,col="gray80", cex=.7,
+                xlim=rng, ylim=rng)
+            points(ellipProj$XYproj, pch=16,col="black", cex=.7)
+        }
+        ang <- atan2(ellipDirectG[3]/ellipDirectG[4]*ellipProj$XYproj[,2],
+                    ellipProj$XYproj[,1])
+        ang <- ang%%(2*pi)
 
-    if (plot.it) {
-      rng <- c(-1,1)*max(abs(range(xyDirect)))
-      plot(pca_scores[,c(1,2)], pch=16,col="gray80", cex=.7,
-           xlim=rng, ylim=rng)
-      points(ellipProj$XYproj, pch=16,col="black", cex=.7)
-  }
-
-    # convert to angle
-    ang <- atan2(ellipDirectG[3]/ellipDirectG[4]*ellipProj$XYproj[,2],
-                 ellipProj$XYproj[,1])
-    ang <- ang%%(2*pi)
-
-    return(ang)
-  } else
-    stop("Invalid value for argument \"method\"")
+        return(ang)
+    } else { stop("Invalid value for argument \"method\"") }
 }

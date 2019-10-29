@@ -4,10 +4,9 @@
 #'   quantile-normalize CPM for each gene
 #'
 #' @description
-#'   For each gene, transform CPM to a normal distribution.
-#' This way the zero-count cells are assigned the lowest qunatiles.
+#'   For each gene, transform counts to CPM and then to a normal distribution.
 #'
-#' @param Y SingleCellExperiment Object.
+#' @param sce SingleCellExperiment Object.
 #' @param ncores We use doParallel package for parallel computing.
 #'
 #' @return SingleCellExperiment Object with an added slot of cpm_quant,
@@ -18,55 +17,67 @@
 #' library(SingleCellExperiment)
 #' data(sce_top101genes)
 #'
-#' # normalize expression counts to counts per million
-#' sce_normed <- data_transform_quantile(sce_top101genes, ncores=2)
+#' # perform CPM normalization using scater, and
+#' # quantile-normalize the CPM values of each gene to normal distribution
+#' sce_top101genes <- data_transform_quantile(sce_top101genes, ncores=2)
 #'
-#' plot(y=assay(sce_normed, "cpm_quant")[1,],
-#'      x=assay(sce_normed, "umi_counts")[1,],
-#'     xlab = "Before quantile-normalization",
-#'     ylab = "After quantile-normalization")
+#' plot(y=assay(sce_top101genes, "cpm_quantNormed")[1,],
+#'      x=assay(sce_top101genes, "cpm")[1,],
+#'     xlab = "CPM bbefore quantile-normalization",
+#'     ylab = "CPM after quantile-normalization")
 #'
 #' @author Joyce Hsiao
 #'
-#' @import SingleCellExperiment
-#' @import methods
-#' @import doParallel
-#' @import parallel
+#' @importFrom SingleCellExperiment SingleCellExperiment cpm
+#' @importFrom SummarizedExperiment assay assays assayNames
+#' @importFrom SummarizedExperiment assays<- assayNames<-
+#' @importFrom doParallel registerDoParallel
+#' @importFrom parallel makeCluster stopCluster
+#' @importFrom scater calculateCPM
+#' @importFrom stats qqnorm
 #' @import foreach
+#' @import methods
+#'
 #' @export
-data_transform_quantile <- function(Y_sce, ncores=2) {
+data_transform_quantile <- function(sce, ncores=2) {
 
-  if (is.null(ncores)) {
-    cl <- parallel::makeCluster(2)
-    doParallel::registerDoParallel(cl)
-    message(paste("computing on",ncores,"cores"))
-  } else {
-    cl <- parallel::makeCluster(ncores)
-    doParallel::registerDoParallel(cl)
-    message(paste("computing on",ncores,"cores"))
-  }
+    if (is.null(ncores)) {
+        cl <- makeCluster(2)
+        registerDoParallel(cl)
+        message(paste("computing on",ncores,"cores"))
+    } else {
+        cl <- makeCluster(ncores)
+        registerDoParallel(cl)
+        message(paste("computing on",ncores,"cores"))
+    }
 
-  cpm <- t((10^6)*t(assay(Y_sce, "umi_counts"))/colData(Y_sce)$molecules)
+    # check if there's already cpm normalied data,
+    # if yes, then skip this step
+    if (has_name(assays(sce), "cpm")) {
+        sce <- sce
+    } else {
+        cpm(sce) <- calculateCPM(sce)
+    }
 
-  G <- nrow(cpm)
+    G <- nrow(sce)
+    cpm_sce <- cpm(sce)
 
-  df <- foreach::foreach(g=seq_len(G)) %dopar% {
-    y_g <- cpm[g,]
-    is.zero <- which(y_g == 0)
-    qq.map <- stats::qqnorm(y_g, plot.it=FALSE)
-    yy.qq <- qq.map$x
-    yy.qq[is.zero] <- sample(qq.map$x[is.zero])
-    return(y_g= yy.qq)
-  }
-  parallel::stopCluster(cl)
-  df <- do.call(rbind, df)
-  colnames(df) <- colnames(cpm)
-  rownames(df) <- rownames(cpm)
+    cpm_quantNormed <- foreach(g=seq_len(G)) %dopar% {
+        y_g <- cpm_sce[g,]
+        is.zero <- which(y_g == 0)
+        qq.map <- qqnorm(y_g, plot.it=FALSE)
+        yy.qq <- qq.map$x
+        yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+        return(y_g= yy.qq)
+    }
+    stopCluster(cl)
+    cpm_quantNormed <- do.call(rbind, cpm_quantNormed)
+    colnames(cpm_quantNormed) <- colnames(cpm_sce)
+    rownames(cpm_quantNormed) <- rownames(cpm_sce)
 
-  assays(Y_sce) = list(umi_counts = assay(Y_sce, "umi_counts"),
-                       cpm = cpm,
-                       cpm_quant = df)
+    assays(sce)[[3]] <- cpm_quantNormed
+    assayNames(sce)[3] <- "cpm_quantNormed"
 
-  return(Y_sce)
-  }
+    return(sce)
+}
 

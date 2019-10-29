@@ -8,6 +8,7 @@
 #   g
 #
 # Hack to make the NOTE go away:
-# https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-visible-binding-for-global-variable-notes-when
+# https://stackoverflow.com/questions/9439256/how-can-i-handle-r-cmd-check-no-
+# visible-binding-for-global-variable-notes-when
 #' @importFrom utils globalVariables
 if(getRversion() >= "2.15.1") utils::globalVariables("g")

@@ -38,20 +38,23 @@
 #' @examples
 #' library(SingleCellExperiment)
 #' data(sce_top101genes)
-#' coldata <- colData(sce_top101genes)
+#'
+#' # select top 10 cyclic genes
+#' sce_top10 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
+#'                                   decreasing=TRUE)[1:10],]
+#' coldata <- colData(sce_top10)
 #'
 #' # cell cycle phase based on FUCCI scores
 #' theta <- coldata$theta
 #' names(theta) <- rownames(coldata)
 #'
-#' # normalize expression counts to counts per million
-#' counts_normed <-
-#'     t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
-#' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
+#' # normalize expression counts
+#' sce_top10 <- data_transform_quantile(sce_top10, ncores=2)
+#' exprs_quant <- assay(sce_top10, "cpm_quantNormed")
 #'
 #' # order FUCCI phase and expression
 #' theta_ordered <- theta[order(theta)]
-#' yy_ordered <- counts_quant[1, names(theta_ordered)]
+#' yy_ordered <- exprs_quant[1, names(theta_ordered)]
 #'
 #' fit <- fit_trendfilter_generic(yy_ordered)
 #'
@@ -66,26 +69,25 @@
 #' abline(h=0, lty=1, col="black", lwd=.7)
 #'
 #' @author Joyce Hsiao
-#' @import SingleCellExperiment
 #' @importFrom genlasso trendfilter cv.trendfilter
 #' @importFrom stats var predict
 #' @export
 fit_trendfilter_generic <- function(yy, polyorder=2) {
 
-  yy.rep <- rep(yy,3)
-  include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
+    yy.rep <- rep(yy,3)
+    include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
 
-  fit.trend <- trendfilter(yy.rep,
-                           ord=polyorder, approx=FALSE, maxsteps = 1000)
-  cv.trend <- cv.trendfilter(fit.trend)
-  which.lambda <- cv.trend$i.1se
-  yy.trend.pred <- predict(fit.trend, lambda=cv.trend$lambda.1se,
-                           df=fit.trend$df[which.lambda])$fit
-  trend.yy <- yy.trend.pred
-  pve <- 1-var(yy-trend.yy)/var(yy)
+    fit.trend <- trendfilter(yy.rep,
+                            ord=polyorder, approx=FALSE, maxsteps = 1000)
+    cv.trend <- cv.trendfilter(fit.trend)
+    which.lambda <- cv.trend$i.1se
+    yy.trend.pred <- predict(fit.trend, lambda=cv.trend$lambda.1se,
+                            df=fit.trend$df[which.lambda])$fit
+    trend.yy <- yy.trend.pred
+    pve <- 1-var(yy-trend.yy)/var(yy)
 
-  return(list(trend.yy=trend.yy[include],
-              pve=pve))
+    return(list(trend.yy=trend.yy[include],
+                pve=pve))
 }
 
 #' @name fit_bspline
@@ -106,20 +108,23 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #' @examples
 #' library(SingleCellExperiment)
 #' data(sce_top101genes)
-#' coldata <- colData(sce_top101genes)
+#'
+#' # select top 10 cyclic genes
+#' sce_top10 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
+#'                                   decreasing=TRUE)[1:10],]
+#' coldata <- colData(sce_top10)
 #'
 #' # cell cycle phase based on FUCCI scores
 #' theta <- coldata$theta
 #' names(theta) <- rownames(coldata)
 #'
-#' # normalize expression counts to counts per million
-#' counts_normed <-
-#'  t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
-#' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
+#' # normalize expression counts
+#' sce_top10 <- data_transform_quantile(sce_top10, ncores=2)
+#' exprs_quant <- assay(sce_top10, "cpm_quantNormed")
 #'
 #' # order FUCCI phase and expression
 #' theta_ordered <- theta[order(theta)]
-#' yy_ordered <- counts_quant[1, names(theta_ordered)]
+#' yy_ordered <- exprs_quant[1, names(theta_ordered)]
 #'
 #' fit <- fit_bspline(yy_ordered, time=theta_ordered)
 #'
@@ -138,18 +143,17 @@ fit_trendfilter_generic <- function(yy, polyorder=2) {
 #' @export
 fit_bspline <- function(yy, time) {
 
-  yy.rep <- rep(yy,3)
-  time.rep <- c(time, time+(2*pi), time+(4*pi))
-  include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
+    yy.rep <- rep(yy,3)
+    time.rep <- c(time, time+(2*pi), time+(4*pi))
+    include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
 
-  # trendfilter
-  fit <- smooth.spline(x=time.rep, y=yy.rep)
-  pred.yy <- predict(fit, time.rep)$y[include]
+    fit <- smooth.spline(x=time.rep, y=yy.rep)
+    pred.yy <- predict(fit, time.rep)$y[include]
 
-  pve <- 1-var(yy-pred.yy)/var(yy)
+    pve <- 1-var(yy-pred.yy)/var(yy)
 
-  return(list(pred.yy=pred.yy,
-              pve=pve))
+    return(list(pred.yy=pred.yy,
+                pve=pve))
 }
 
 #' @name fit_loess
@@ -170,20 +174,23 @@ fit_bspline <- function(yy, time) {
 #' @examples
 #' library(SingleCellExperiment)
 #' data(sce_top101genes)
-#' coldata <- colData(sce_top101genes)
+#'
+#' # select top 10 cyclic genes
+#' sce_top10 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
+#'                                   decreasing=TRUE)[1:10],]
+#' coldata <- colData(sce_top10)
 #'
 #' # cell cycle phase based on FUCCI scores
 #' theta <- coldata$theta
 #' names(theta) <- rownames(coldata)
 #'
-#' # normalize expression counts to counts per million
-#' counts_normed <-
-#'  t((10^6)*t(assay(sce_top101genes)[1:5,])/colData(sce_top101genes)$molecules)
-#' counts_quant <- data_transform_quantile(counts_normed, ncores=2)
+#' # normalize expression counts
+#' sce_top10 <- data_transform_quantile(sce_top10, ncores=2)
+#' exprs_quant <- assay(sce_top10, "cpm_quantNormed")
 #'
 #' # order FUCCI phase and expression
 #' theta_ordered <- theta[order(theta)]
-#' yy_ordered <- counts_quant[1, names(theta_ordered)]
+#' yy_ordered <- exprs_quant[1, names(theta_ordered)]
 #'
 #' fit <- fit_loess(yy_ordered, time=theta_ordered)
 #'
@@ -202,16 +209,15 @@ fit_bspline <- function(yy, time) {
 #' @export
 fit_loess <- function(yy, time) {
 
-  yy.rep <- rep(yy,3)
-  time.rep <- c(time, time+(2*pi), time+(4*pi))
-  include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
+    yy.rep <- rep(yy,3)
+    time.rep <- c(time, time+(2*pi), time+(4*pi))
+    include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
 
-  # trendfilter
-  fit <- loess(yy.rep~time.rep)
-  pred.yy <- fit$fitted[include]
+    fit <- loess(yy.rep~time.rep)
+    pred.yy <- fit$fitted[include]
 
-  pve <- 1-var(yy-pred.yy)/var(yy)
+    pve <- 1-var(yy-pred.yy)/var(yy)
 
-  return(list(pred.yy=pred.yy,
-              pve=pve))
+    return(list(pred.yy=pred.yy,
+                pve=pve))
 }

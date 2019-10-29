@@ -1,4 +1,10 @@
 Changes in version 0.99.3 (2019-09-19)
++ cycle_npreg_outsample outputs SingleCellExperiment object
++ data_transform_quantile inputs and outputs SingleCellExperiment object
++ Fixed @import and @importFrom
++ Fix BiocCheck notes
+
+Changes in version 0.99.3 (2019-09-19)
 + Changed to store data in SingleCellExperiment objects
 
 Changes in version 0.99.1 (2019-09-16)
