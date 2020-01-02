@@ -41,8 +41,10 @@ training data to predict cell cycle on a continuum.
 Our work demonstrated that peco is able to predict continuous cell cylce
 phase using a small set of cylcic genes: *CDK1*, *UBE2C*, *TOP2A*,
 *HISTH1E*, and *HISTH1C* (identified as cell cycle marker genes in
-studies of yeast (\[Spellman et al., 1998\]\[spellman\]) and HeLa cells
-(\[Whitfield et al., 2002\]\[whitfield\])).
+studies of yeast ([Spellman et
+al., 1998](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC25624)) and HeLa
+cells ([Whitfield et
+al., 2002](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC117619))).
 
 Below we provide two use cases. Vignette 1 shows how to use the
 built-training dataset to predict continuous cell cycle. Vignette 2
@@ -51,9 +53,7 @@ data.
 
 Users can also view the vigenettes via `browseVignettes("peco")`.
 
-## Vignette
-
-### Training data
+## About the training dataset
 
 `training_human` stores built-in training data of 101 significant cyclic
 genes. Below are the slots contained in `training_human`:
@@ -73,6 +73,8 @@ genes. Below are the slots contained in `training_human`:
 ``` r
 data("training_human")
 ```
+
+## Predict cell cycle phase using gene expression data
 
 `peco` is integrated with `SingleCellExperiment` object in Bioconductor.
 Below shows an example of inputting `SingleCellExperiment` object to
@@ -106,12 +108,10 @@ assays(sce_top101genes)
     ## List of length 3
     ## names(3): counts cpm cpm_quantNormed
 
-### Predict cell cycle phase
-
 Apply the prediction model using function `cycle_npreg_outsample`.
 
 ``` r
-model_101genes_predict <- cycle_npreg_outsample(
+sce_top101genes <- cycle_npreg_outsample(
     Y_test=sce_top101genes,
     sigma_est=training_human$sigma[rownames(sce_top101genes),],
     funs_est=training_human$cellcycle_function[rownames(sce_top101genes)],
@@ -120,15 +120,15 @@ model_101genes_predict <- cycle_npreg_outsample(
     get_trend_estimates=FALSE)
 ```
 
-`peco` adds the predict cell cycle phase to the `colData` slot.
-sce\_top101genes
+`peco` adds the predict cell cycle phase to the `colData` slot of
+sce\_top101genes.
 
 ``` r
-head(colData(model_101genes_predict)$cellcycle_peco)
+head(colData(sce_top101genes)$cellcycle_peco)
 ```
 
     ## 20170905-A01 20170905-A02 20170905-A03 20170905-A06 20170905-A07 
-    ##     1.099557     4.680973     2.670354     4.303982     4.052655 
+    ##     1.099557     4.680973     2.607522     4.303982     4.052655 
     ## 20170905-A08 
     ##     1.413717
 
@@ -148,14 +148,14 @@ points(y=training_human$cellcycle_function[["ENSG00000170312"]](seq(0,2*pi, leng
 
 ![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-### Visualize cyclic expression trend
+## Visualize cyclic expression trend based on predicted phase
 
 Visualize results of prediction for the top 10 genesone genes. Use
 `fit_cyclical_many` to estimate cyclic function based on the input data.
 
 ``` r
 # predicted cell time in the input data
-theta_predict = colData(sce_top101genes)$theta_shifted
+theta_predict = colData(sce_top101genes)$cellcycle_peco
 names(theta_predict) = rownames(colData(sce_top101genes))
 
 # expression values of 10 genes in the input data
@@ -169,10 +169,13 @@ fit_cyclic <- fit_cyclical_many(Y=yy_input,
     ## computing on 2 cores
 
 ``` r
+gene_symbols = rowData(sce_top101genes)$hgnc[rownames(yy_input)]
+
 par(mfrow=c(2,3))
 for (i in 1:6) {
 plot(y=yy_input[i,],
-     x=fit_cyclic$cellcycle_peco_ordered, main = names(fit_cyclic)[i],
+     x=fit_cyclic$cellcycle_peco_ordered, 
+     main = gene_symbols[i],
      ylab = "quantile normalized expression")
 points(y=fit_cyclic$cellcycle_function[[i]](seq(0,2*pi, length.out=100)),
        x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
@@ -180,6 +183,73 @@ points(y=fit_cyclic$cellcycle_function[[i]](seq(0,2*pi, length.out=100)),
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+## Session information
+
+``` r
+sessionInfo()
+```
+
+    ## R version 3.6.1 (2019-07-05)
+    ## Platform: x86_64-pc-linux-gnu (64-bit)
+    ## Running under: Scientific Linux 7.4 (Nitrogen)
+    ## 
+    ## Matrix products: default
+    ## BLAS/LAPACK: /software/openblas-0.2.19-el7-x86_64/lib/libopenblas_haswellp-r0.2.19.so
+    ## 
+    ## locale:
+    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## 
+    ## attached base packages:
+    ## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+    ## [8] methods   base     
+    ## 
+    ## other attached packages:
+    ##  [1] doParallel_1.0.15           iterators_1.0.12           
+    ##  [3] foreach_1.4.7               SingleCellExperiment_1.6.0 
+    ##  [5] SummarizedExperiment_1.14.1 DelayedArray_0.10.0        
+    ##  [7] BiocParallel_1.18.1         matrixStats_0.55.0         
+    ##  [9] Biobase_2.44.0              GenomicRanges_1.36.1       
+    ## [11] GenomeInfoDb_1.20.0         IRanges_2.18.3             
+    ## [13] S4Vectors_0.22.1            BiocGenerics_0.30.0        
+    ## [15] peco_0.99.6                 rmarkdown_1.13             
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] Rcpp_1.0.3               rsvd_1.0.2              
+    ##  [3] mvtnorm_1.0-11           lattice_0.20-38         
+    ##  [5] assertthat_0.2.1         digest_0.6.22           
+    ##  [7] R6_2.4.0                 genlasso_1.4            
+    ##  [9] evaluate_0.14            pracma_2.2.9            
+    ## [11] ggplot2_3.2.1            pillar_1.4.2            
+    ## [13] zlibbioc_1.30.0          rlang_0.4.1             
+    ## [15] lazyeval_0.2.2           irlba_2.3.3             
+    ## [17] Matrix_1.2-18            BiocNeighbors_1.2.0     
+    ## [19] geigen_2.3               stringr_1.4.0           
+    ## [21] igraph_1.2.4.1           RCurl_1.95-4.12         
+    ## [23] munsell_0.5.0            vipor_0.4.5             
+    ## [25] compiler_3.6.1           BiocSingular_1.0.0      
+    ## [27] xfun_0.8                 pkgconfig_2.0.3         
+    ## [29] ggbeeswarm_0.6.0         htmltools_0.3.6         
+    ## [31] tidyselect_0.2.5         gridExtra_2.3           
+    ## [33] tibble_2.1.3             GenomeInfoDbData_1.2.1  
+    ## [35] codetools_0.2-16         viridisLite_0.3.0       
+    ## [37] crayon_1.3.4             dplyr_0.8.3             
+    ## [39] MASS_7.3-51.4            bitops_1.0-6            
+    ## [41] grid_3.6.1               gtable_0.3.0            
+    ## [43] lifecycle_0.1.0          magrittr_1.5            
+    ## [45] scales_1.1.0             stringi_1.4.3           
+    ## [47] XVector_0.24.0           viridis_0.5.1           
+    ## [49] scater_1.12.2            DelayedMatrixStats_1.6.1
+    ## [51] boot_1.3-23              tools_3.6.1             
+    ## [53] beeswarm_0.2.3           glue_1.3.1              
+    ## [55] purrr_0.3.3              yaml_2.2.0              
+    ## [57] colorspace_1.4-1         circular_0.4-93         
+    ## [59] conicfit_1.0.4           knitr_1.23
 
 -----
 
