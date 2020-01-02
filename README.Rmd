@@ -10,13 +10,13 @@ output:
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 
-## peco
+# peco
 
 **peco** is an R package for **P**r**E**dicting **C**ell cycle pr**O**gression in a
 continuum using scRNA-seq data.
 
 
-### Installation 
+## Installation 
 
 To install and load the package, run:
 
@@ -35,7 +35,7 @@ library(doParallel)
 library(foreach)
 ```
 
-### Overview
+## Overview
 
 `peco` is a supervised approach for PrEdicting cell cycle phase in a
 COntinuum using single-cell RNA sequencing data. The R package provides functions to build training dataset and also functions to use existing training data to predict cell cycle on a continuum.
@@ -47,7 +47,9 @@ Below we provide two use cases. Vignette 1 shows how to use the built-training d
 Users can also view the vigenettes via `browseVignettes("peco")`.
 
 
-### Vignette 1: Using built-in training data
+## Vignette
+
+### Training data
 
 `training_human` stores built-in training data of 101 significant cyclic genes. Below are the slots contained in `training_human`:
 
@@ -60,7 +62,6 @@ Users can also view the vigenettes via `browseVignettes("peco")`.
 
 ```{r}
 data("training_human")
-str(training_human)
 ```
 
 `peco` is integrated with `SingleCellExperiment` object in Bioconductor. Below shows an example of inputting `SingleCellExperiment` object to perform cell cycle phase prediction. 
@@ -79,6 +80,8 @@ sce_top101genes <- data_transform_quantile(sce_top101genes)
 assays(sce_top101genes)
 ```
 
+### Predict cell cycle phase
+
 Apply the prediction model using function `cycle_npreg_outsample`.
 
 ```{r}
@@ -94,24 +97,49 @@ model_101genes_predict <- cycle_npreg_outsample(
 `peco` adds the predict cell cycle phase to the `colData` slot. sce_top101genes
 
 ```{r}
-colData(model_101genes_predict)$cellcycle_peco
+head(colData(model_101genes_predict)$cellcycle_peco)
 ```
 
-Visualize results of prediction for one gene. Below we choose CDK1. Because
+Visualize results of prediction for one gene. Below we choose CDK1 ("ENSG00000170312"). Because
 CDK1 is a known cell cycle gene, this visualization serves as a sanity
-check for the results of fitting. 
+check for the results of fitting. The fitted function 
+`training_human$cellcycle_function[[1]]` was obtained from our training data. 
 
 ```{r}
-plot(y=assay(sce_top101genes,"cpm_quantNormed")[1,],
+plot(y=assay(sce_top101genes,"cpm_quantNormed")["ENSG00000170312",],
      x=colData(sce_top101genes)$theta_shifted, main = "CDK1",
      ylab = "quantile normalized expression")
-points(y=training_human$cellcycle_function[[1]](seq(0,2*pi, length.out=100)),
+points(y=training_human$cellcycle_function[["ENSG00000170312"]](seq(0,2*pi, length.out=100)),
        x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
 ```
 
+### Visualize cyclic expression trend
+
+Visualize results of prediction for the top 10 genesone genes. Use `fit_cyclical_many` to estimate cyclic function based on the input data.
 
 
-### Vignette 2: Making own training data
+```{r}
+# predicted cell time in the input data
+theta_predict = colData(sce_top101genes)$theta_shifted
+names(theta_predict) = rownames(colData(sce_top101genes))
+
+# expression values of 10 genes in the input data
+yy_input = assay(sce_top101genes,"cpm_quantNormed")[1:6,]
+
+# apply trendfilter to estimate cyclic gene expression trend
+fit_cyclic <- fit_cyclical_many(Y=yy_input, 
+                                theta=theta_predict)
+
+par(mfrow=c(2,3))
+for (i in 1:6) {
+plot(y=yy_input[i,],
+     x=fit_cyclic$cellcycle_peco_ordered, main = names(fit_cyclic)[i],
+     ylab = "quantile normalized expression")
+points(y=fit_cyclic$cellcycle_function[[i]](seq(0,2*pi, length.out=100)),
+       x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
+}
+```
+
 
 
 

@@ -87,3 +87,26 @@
 #'
 #' @keywords data
 "model_5genes_predict"
+
+
+
+#' @title list of cell cycle genes identified in Whitfield et al. 2002.
+#'
+#' @description List of cell cycle genes and their associated cell cycle state as
+#'   reported in Whitfield et al. 2002.
+#'
+#' @format A list with the follwing elements
+#'
+#' \describe{
+#'   \item{hgnc}{Gene symbol}
+#'   \item{ensembl}{ENSEMBL gene ID}
+#'   \item{phase}{Marker phase identified in Whitfield et al. 2002}
+#'  }
+#'
+#' @docType data
+#'
+#' @usage data(cellcyclegenes_whitfield2002)
+#'
+#' @keywords data
+"cellcyclegenes_whitfield2002"
+
