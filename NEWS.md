@@ -1,0 +1,26 @@
+# Version 0.99.6 (2020-01-02)
+## Major changes
+    - Inclue new vignette example
+## Bug fixes
+    - Debug `cycle_npreg_outsample` and `data_transform_quantile`
+
+# Version 0.99.3 (2019-09-19)
+## Major changes
+    - cycle_npreg_outsample outputs SingleCellExperiment object
+    - data_transform_quantile inputs and outputs SingleCellExperiment object
+## Bug fixes
+    - @import and @importFrom fields
+    - BiocCheck notes
+
+# Version 0.99.3 (2019-09-19)
+## Major changes
+    - Store data in SingleCellExperiment objects
+
+# Version 0.99.1 (2019-09-16)
+## Bug fixes
+    - R CMD Check warnings and errors
+    - R CMD BiocCheck warnings and errors
+
+# Version 0.99.0 (2019-09-11)
+## Submitted to Bioconductor
+
