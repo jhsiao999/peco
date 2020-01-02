@@ -66,8 +66,12 @@ data_transform_quantile <- function(sce, ncores=2) {
         y_g <- cpm_sce[g,]
         is.zero <- which(y_g == 0)
         qq.map <- qqnorm(y_g, plot.it=FALSE)
-        yy.qq <- qq.map$x
-        yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+        if (is.null(is.zero)) {
+          yy.qq <- qq.map$x
+        } else {
+          yy.qq <- qq.map$x
+          yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+        }
         return(y_g= yy.qq)
     }
     stopCluster(cl)
