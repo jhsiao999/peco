@@ -151,7 +151,7 @@ cycle_npreg_outsample <- function(Y_test,
                                     grids=100,
                                     get_trend_estimates=FALSE) {
 
-    if (is(Y_test) == "SingleCellExperiment") {
+    if (is(Y_test, "SingleCellExperiment")) {
         if (has_name(assays(Y_test), "cpm_quantNormed")) {
             exprs_test <- assay(Y_test, "cpm_quantNormed")
         } else {
