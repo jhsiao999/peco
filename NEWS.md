@@ -1,4 +1,8 @@
-# Version 0.99.6 (2020-01-02)
+# Version 0.99.7 (2020-01-01)
+## Major changes
+    - Backward compatibiltiy with R3.5.0
+
+# Version 0.99.6 (2020-01-01)
 ## Major changes
     - Inclue new vignette example
 ## Bug fixes
