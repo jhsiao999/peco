@@ -2,7 +2,6 @@
 #'
 #' @title Transform counts by first computing counts-per-million (CPM), then
 #'   quantile-normalize CPM for each gene
-#'
 #' @description
 #'   For each gene, transform counts to CPM and then to a normal distribution.
 #'
