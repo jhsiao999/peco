@@ -447,6 +447,7 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #'
 #' @importFrom stats approxfun
 #' @importFrom doParallel registerDoParallel
+#' @importFrom foreach foreach
 #' @importFrom parallel makeCluster stopCluster
 #' @import foreach
 #'

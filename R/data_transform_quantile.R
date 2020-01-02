@@ -31,6 +31,7 @@
 #' @importFrom SummarizedExperiment assay assays assayNames
 #' @importFrom SummarizedExperiment assays<- assayNames<-
 #' @importFrom doParallel registerDoParallel
+#' @importFrom foreach foreach
 #' @importFrom parallel makeCluster stopCluster
 #' @importFrom scater calculateCPM
 #' @importFrom stats qqnorm
