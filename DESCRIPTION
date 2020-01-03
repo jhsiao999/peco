@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Type: Package
 Package: peco
-Version: 0.99.9
+Version: 0.99.10
 Date: 2020-01-01
 Title: A Supervised Approach for **P**r**e**dicting **c**ell Cycle
     Pr**o**gression using scRNA-seq data
@@ -21,7 +21,7 @@ Description: Our approach provides a way to assign continuous cell cycle phase
 URL: https://github.com/jhsiao999/peco
 BugReports: https://github.com/jhsiao999/peco/issues
 License: GPL (>= 3)
-Depends: R (>= 3.5)
+Depends: R (>= 4.0)
 Imports:
     assertthat (>= 0.2.1),
     circular (>= 0.4-93),
