@@ -2,6 +2,7 @@
 output:
   md_document:
     variant: gfm
+    toc: true
 ---
 
 [![Travis-CI Build Status](https://travis-ci.com/jhsiao999/peco.svg?branch=master)](https://travis-ci.com/jhsiao999/peco)

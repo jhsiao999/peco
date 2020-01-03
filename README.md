@@ -27,7 +27,96 @@ install_github("jhsiao999/peco")
 ``` r
 library(peco)
 library(SingleCellExperiment)
+```
+
+    ## Loading required package: SummarizedExperiment
+
+    ## Loading required package: GenomicRanges
+
+    ## Loading required package: stats4
+
+    ## Loading required package: BiocGenerics
+
+    ## Loading required package: parallel
+
+    ## 
+    ## Attaching package: 'BiocGenerics'
+
+    ## The following objects are masked from 'package:parallel':
+    ## 
+    ##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    ##     clusterExport, clusterMap, parApply, parCapply, parLapply,
+    ##     parLapplyLB, parRapply, parSapply, parSapplyLB
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     IQR, mad, sd, var, xtabs
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     anyDuplicated, append, as.data.frame, basename, cbind,
+    ##     colMeans, colnames, colSums, dirname, do.call, duplicated,
+    ##     eval, evalq, Filter, Find, get, grep, grepl, intersect,
+    ##     is.unsorted, lapply, lengths, Map, mapply, match, mget, order,
+    ##     paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind,
+    ##     Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
+    ##     table, tapply, union, unique, unsplit, which, which.max,
+    ##     which.min
+
+    ## Loading required package: S4Vectors
+
+    ## 
+    ## Attaching package: 'S4Vectors'
+
+    ## The following object is masked from 'package:base':
+    ## 
+    ##     expand.grid
+
+    ## Loading required package: IRanges
+
+    ## Loading required package: GenomeInfoDb
+
+    ## Loading required package: Biobase
+
+    ## Welcome to Bioconductor
+    ## 
+    ##     Vignettes contain introductory material; view with
+    ##     'browseVignettes()'. To cite Bioconductor, see
+    ##     'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+    ## Loading required package: DelayedArray
+
+    ## Loading required package: matrixStats
+
+    ## 
+    ## Attaching package: 'matrixStats'
+
+    ## The following objects are masked from 'package:Biobase':
+    ## 
+    ##     anyMissing, rowMedians
+
+    ## Loading required package: BiocParallel
+
+    ## 
+    ## Attaching package: 'DelayedArray'
+
+    ## The following objects are masked from 'package:matrixStats':
+    ## 
+    ##     colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     aperm, apply
+
+``` r
 library(doParallel)
+```
+
+    ## Loading required package: foreach
+
+    ## Loading required package: iterators
+
+``` r
 library(foreach)
 ```
 
@@ -128,7 +217,7 @@ head(colData(sce_top101genes)$cellcycle_peco)
 ```
 
     ## 20170905-A01 20170905-A02 20170905-A03 20170905-A06 20170905-A07 
-    ##     1.099557     4.680973     2.607522     4.303982     4.052655 
+    ##     1.099557     4.555309     2.607522     4.303982     4.052655 
     ## 20170905-A08 
     ##     1.413717
 
@@ -190,7 +279,7 @@ points(y=fit_cyclic$cellcycle_function[[i]](seq(0,2*pi, length.out=100)),
 sessionInfo()
 ```
 
-    ## R version 3.6.1 (2019-07-05)
+    ## R version 3.5.1 (2018-07-02)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
     ## Running under: Scientific Linux 7.4 (Nitrogen)
     ## 
@@ -210,46 +299,47 @@ sessionInfo()
     ## [8] methods   base     
     ## 
     ## other attached packages:
-    ##  [1] doParallel_1.0.15           iterators_1.0.12           
-    ##  [3] foreach_1.4.7               SingleCellExperiment_1.6.0 
-    ##  [5] SummarizedExperiment_1.14.1 DelayedArray_0.10.0        
-    ##  [7] BiocParallel_1.18.1         matrixStats_0.55.0         
-    ##  [9] Biobase_2.44.0              GenomicRanges_1.36.1       
-    ## [11] GenomeInfoDb_1.20.0         IRanges_2.18.3             
-    ## [13] S4Vectors_0.22.1            BiocGenerics_0.30.0        
-    ## [15] peco_0.99.6                 rmarkdown_1.13             
+    ##  [1] doParallel_1.0.14           iterators_1.0.12           
+    ##  [3] foreach_1.4.4               SingleCellExperiment_1.4.1 
+    ##  [5] SummarizedExperiment_1.12.0 DelayedArray_0.8.0         
+    ##  [7] BiocParallel_1.16.0         matrixStats_0.55.0         
+    ##  [9] Biobase_2.42.0              GenomicRanges_1.34.0       
+    ## [11] GenomeInfoDb_1.18.1         IRanges_2.16.0             
+    ## [13] S4Vectors_0.20.1            BiocGenerics_0.28.0        
+    ## [15] peco_0.99.6                
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] Rcpp_1.0.3               rsvd_1.0.2              
-    ##  [3] mvtnorm_1.0-11           lattice_0.20-38         
-    ##  [5] assertthat_0.2.1         digest_0.6.22           
-    ##  [7] R6_2.4.0                 genlasso_1.4            
-    ##  [9] evaluate_0.14            pracma_2.2.9            
-    ## [11] ggplot2_3.2.1            pillar_1.4.2            
-    ## [13] zlibbioc_1.30.0          rlang_0.4.1             
-    ## [15] lazyeval_0.2.2           irlba_2.3.3             
-    ## [17] Matrix_1.2-18            BiocNeighbors_1.2.0     
-    ## [19] geigen_2.3               stringr_1.4.0           
-    ## [21] igraph_1.2.4.1           RCurl_1.95-4.12         
-    ## [23] munsell_0.5.0            vipor_0.4.5             
-    ## [25] compiler_3.6.1           BiocSingular_1.0.0      
-    ## [27] xfun_0.8                 pkgconfig_2.0.3         
+    ##  [1] Rcpp_1.0.3               mvtnorm_1.0-11          
+    ##  [3] lattice_0.20-38          assertthat_0.2.1        
+    ##  [5] rprojroot_1.3-2          digest_0.6.20           
+    ##  [7] plyr_1.8.4               R6_2.4.0                
+    ##  [9] backports_1.1.2          genlasso_1.4            
+    ## [11] evaluate_0.12            pracma_2.2.9            
+    ## [13] ggplot2_3.2.1            pillar_1.3.1            
+    ## [15] zlibbioc_1.28.0          rlang_0.4.0             
+    ## [17] lazyeval_0.2.1           Matrix_1.2-17           
+    ## [19] rmarkdown_1.10           geigen_2.3              
+    ## [21] stringr_1.3.1            igraph_1.2.2            
+    ## [23] RCurl_1.95-4.11          munsell_0.5.0           
+    ## [25] HDF5Array_1.10.1         vipor_0.4.5             
+    ## [27] compiler_3.5.1           pkgconfig_2.0.3         
     ## [29] ggbeeswarm_0.6.0         htmltools_0.3.6         
-    ## [31] tidyselect_0.2.5         gridExtra_2.3           
-    ## [33] tibble_2.1.3             GenomeInfoDbData_1.2.1  
-    ## [35] codetools_0.2-16         viridisLite_0.3.0       
-    ## [37] crayon_1.3.4             dplyr_0.8.3             
-    ## [39] MASS_7.3-51.4            bitops_1.0-6            
-    ## [41] grid_3.6.1               gtable_0.3.0            
-    ## [43] lifecycle_0.1.0          magrittr_1.5            
-    ## [45] scales_1.1.0             stringi_1.4.3           
-    ## [47] XVector_0.24.0           viridis_0.5.1           
-    ## [49] scater_1.12.2            DelayedMatrixStats_1.6.1
-    ## [51] boot_1.3-23              tools_3.6.1             
-    ## [53] beeswarm_0.2.3           glue_1.3.1              
-    ## [55] purrr_0.3.3              yaml_2.2.0              
-    ## [57] colorspace_1.4-1         circular_0.4-93         
-    ## [59] conicfit_1.0.4           knitr_1.23
+    ## [31] tidyselect_0.2.5         tibble_2.1.1            
+    ## [33] gridExtra_2.3            GenomeInfoDbData_1.2.0  
+    ## [35] codetools_0.2-15         viridisLite_0.3.0       
+    ## [37] crayon_1.3.4             dplyr_0.8.0.1           
+    ## [39] MASS_7.3-51.1            bitops_1.0-6            
+    ## [41] grid_3.5.1               gtable_0.2.0            
+    ## [43] magrittr_1.5             scales_1.0.0            
+    ## [45] stringi_1.2.4            reshape2_1.4.3          
+    ## [47] XVector_0.22.0           viridis_0.5.1           
+    ## [49] scater_1.10.1            DelayedMatrixStats_1.4.0
+    ## [51] boot_1.3-20              Rhdf5lib_1.4.3          
+    ## [53] tools_3.5.1              beeswarm_0.2.3          
+    ## [55] glue_1.3.0               purrr_0.3.2             
+    ## [57] yaml_2.2.0               colorspace_1.3-2        
+    ## [59] rhdf5_2.26.2             circular_0.4-93         
+    ## [61] conicfit_1.0.4           knitr_1.20
 
 -----
 
