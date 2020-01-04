@@ -13,11 +13,7 @@ warnings_are_errors: false
 matrix:
   include:
     - os: linux
-      r: bioc-release
-    - os: linux
       r: bioc-devel
-    - os: osx
-      r: bioc-release
     - os: osx
       r: bioc-devel
 
