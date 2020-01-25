@@ -24,7 +24,7 @@
 #'
 #' @param polyorder We estimate cyclic trends of gene expression levels using
 #'    nonparamtric trend filtering. The default fits second degree polynomials.
-#'
+#' @param normed Is the data already normalized? TRUE or FALSE.
 #' @param method.grid Method for defining bins along the circle.
 #' @param method.trend Varous methods that can be applied to estimate
 #' cyclic trend of gene expression levels.
@@ -145,20 +145,24 @@ cycle_npreg_outsample <- function(Y_test,
                                     funs_est,
                                     method.trend=c("trendfilter",
                                                     "loess", "bspline"),
+                                    normed = TRUE,
                                     polyorder=2,
                                     method.grid="uniform",
                                     ncores=2,
                                     grids=100,
                                     get_trend_estimates=FALSE) {
 
-    if (is(Y_test, "SingleCellExperiment")) {
-        if (has_name(assays(Y_test), "cpm_quantNormed")) {
-            exprs_test <- assay(Y_test, "cpm_quantNormed")
-        } else {
-        Y_test <- data_transform_quantile(Y_test)
-        exprs_test <- assay(Y_test, "cpm_quantNormed")
-        }
+    if (!normed & is(Y_test, "SingleCellExperiment")) {
+      Y_test <- data_transform_quantile(Y_test)
+      exprs_test <- assay(Y_test, "cpm_quantNormed")
+    } else if (normed & is(Y_test, "SingleCellExperiment")) {
+      exprs_test <- assay(Y_test, "cpm_quantNormed")
+    } else if (!normed & !is(Y_test, "SingleCellExperiment")) {
+      exprs_test <- data_transform_quantile(Y_test)
+    } else {
+      exprs_test <- Y_test
     }
+
     # compute expected cell time for the test samples
     # under mu and sigma estimated from the training samples
     initial_loglik <- cycle_npreg_loglik(Y = exprs_test,
@@ -167,9 +171,11 @@ cycle_npreg_outsample <- function(Y_test,
                                         funs_est = funs_est,
                                         grids = grids)
 
-    colData(Y_test)$cellcycle_peco <- initial_loglik$cell_times_est
-    colData(Y_test)@elementMetadata$labelDescription[ncol(colData(Y_test))] <-
+    if (is(Y_test, "SingleCellExperiment")) {
+      colData(Y_test)$cellcycle_peco <- initial_loglik$cell_times_est
+      colData(Y_test)@elementMetadata$labelDescription[ncol(colData(Y_test))] <-
         "peco predicted continuous cell cycle, between 0 to 2pi"
+    }
 
     if (get_trend_estimates) {
         updated_estimates <- cycle_npreg_mstep(Y = Y_test,
@@ -177,20 +183,19 @@ cycle_npreg_outsample <- function(Y_test,
                                         method.trend = method.trend,
                                         polyorder = polyorder,
                                         ncores = ncores)
-    out <- list(
-        Y=Y_test,
-        cell_times_est=initial_loglik$cell_times_est,
-        loglik_est=initial_loglik$loglik_est,
-        Y_reordered=updated_estimates$Y,
-        cell_times_reordered=updated_estimates$theta,
-        mu_reordered=updated_estimates$mu_est,
-        sigma_reordered=updated_estimates$sigma_est,
-        funs_reordered=updated_estimates$funs,
-        prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
-    } else {
-        out <- Y_test
-    }
-
+        out <- list(
+            Y=Y_test,
+            cell_times_est=initial_loglik$cell_times_est,
+            loglik_est=initial_loglik$loglik_est,
+            Y_reordered=updated_estimates$Y,
+            cell_times_reordered=updated_estimates$theta,
+            mu_reordered=updated_estimates$mu_est,
+            sigma_reordered=updated_estimates$sigma_est,
+            funs_reordered=updated_estimates$funs,
+            prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
+        } else {
+            out <- Y_test
+        }
     return(out)
 }
 

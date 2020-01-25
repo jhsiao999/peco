@@ -53,35 +53,39 @@ data_transform_quantile <- function(sce, ncores=2) {
 
     # check if there's already cpm normalied data,
     # if yes, then skip this step
-    if (has_name(assays(sce), "cpm")) {
-        sce <- sce
-    } else {
-        cpm(sce) <- calculateCPM(sce)
-    }
-
-    G <- nrow(sce)
-    cpm_sce <- cpm(sce)
-
-    cpm_quantNormed <- foreach(g=seq_len(G)) %dopar% {
-        y_g <- cpm_sce[g,]
-        is.zero <- which(y_g == 0)
-        qq.map <- qqnorm(y_g, plot.it=FALSE)
-        if (is.null(is.zero)) {
-          yy.qq <- qq.map$x
+    if(is(Y_test, "SingleCellExperiment")) {
+        if (has_name(assays(sce), "cpm")) {
+            sce <- sce
         } else {
-          yy.qq <- qq.map$x
-          yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+            cpm(sce) <- calculateCPM(sce)
         }
-        return(y_g= yy.qq)
+        G <- nrow(sce)
+        cpm_sce <- cpm(sce)
+
+        cpm_quantNormed <- foreach(g=seq_len(G)) %dopar% {
+            y_g <- cpm_sce[g,]
+            is.zero <- which(y_g == 0)
+            qq.map <- qqnorm(y_g, plot.it=FALSE)
+            if (is.null(is.zero)) {
+              yy.qq <- qq.map$x
+            } else {
+              yy.qq <- qq.map$x
+              yy.qq[is.zero] <- sample(qq.map$x[is.zero])
+            }
+            return(y_g= yy.qq)
+        }
+        stopCluster(cl)
+        cpm_quantNormed <- do.call(rbind, cpm_quantNormed)
+        colnames(cpm_quantNormed) <- colnames(cpm_sce)
+        rownames(cpm_quantNormed) <- rownames(cpm_sce)
+
+        assays(sce)[[3]] <- cpm_quantNormed
+        assayNames(sce)[3] <- "cpm_quantNormed"
+        return(sce)
+    } else {
+
+        cpm_quantNormed <- calculateCPM(sce)
+        return(cpm_quantNormed)
     }
-    stopCluster(cl)
-    cpm_quantNormed <- do.call(rbind, cpm_quantNormed)
-    colnames(cpm_quantNormed) <- colnames(cpm_sce)
-    rownames(cpm_quantNormed) <- rownames(cpm_sce)
-
-    assays(sce)[[3]] <- cpm_quantNormed
-    assayNames(sce)[3] <- "cpm_quantNormed"
-
-    return(sce)
 }
 
