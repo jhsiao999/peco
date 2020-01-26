@@ -194,7 +194,11 @@ cycle_npreg_outsample <- function(Y_test,
             funs_reordered=updated_estimates$funs,
             prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
         } else {
-            out <- Y_test
+          out <- list(
+            Y=Y_test,
+            cell_times_est=initial_loglik$cell_times_est,
+            loglik_est=initial_loglik$loglik_est,
+            prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
         }
     return(out)
 }
@@ -381,10 +385,11 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
     colnames(loglik_per_cell_by_celltimes) <- theta_choose
     for (n in seq_len(N)) {
         loglik_per_cell <- do.call(rbind, lapply(seq_len(G), function(g) {
-        dnorm(Y[g,n], funs_est[[g]](theta_choose), sigma_est[g], log = TRUE)
-    }))
+            dnorm(Y[g,n], funs_est[[g]](theta_choose), sigma_est[g], log = TRUE)
+        }))
     loglik_per_cell <- colSums(loglik_per_cell)
-    loglik_per_cell_by_celltimes[n,] <- loglik_per_cell }
+    loglik_per_cell_by_celltimes[n,] <- loglik_per_cell
+    }
 
     # use max likelihood to assign samples
     prob_per_cell_by_celltimes <- t(apply(loglik_per_cell_by_celltimes, 1,
@@ -468,6 +473,12 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                                                         "loess", "bspline"),
                                 polyorder=2, ncores=2) {
 
+    if (is(Y, "SingleCellExperiment")) {
+      exprs_test <- assay(Y, "cpm_quantNormed")
+    } else {
+      exprs_test <- Y
+    }
+
     if (is.null(ncores)) {
         cl <- makeCluster(2); registerDoParallel(cl)
         message(paste("computing on",ncores,"cores"))
@@ -475,31 +486,31 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
         cl <- makeCluster(ncores); registerDoParallel(cl)
         message(paste("computing on",ncores,"cores")) }
 
-    G <- nrow(Y); N <- ncol(Y)
+    G <- nrow(exprs_test); N <- ncol(exprs_test)
 
-    Y_ordered <- Y[,names(theta)]
+    exprs_test_ordered <- exprs_test[,names(theta)]
     ord <- order(theta)
     theta_ordered <- theta[ord]
-    Y_ordered <- Y_ordered[,ord]
+    exprs_test_ordered <- exprs_test_ordered[,ord]
 
     fit <- foreach(g=seq_len(G)) %dopar% {
-        y_g <- Y_ordered[g,]
+        y_g <- exprs_test_ordered[g,]
 
         if (method.trend=="trendfilter") {
-            fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
+            fit_g <- peco::fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
             fun_g <- approxfun(x=as.numeric(theta_ordered),
                             y=as.numeric(fit_g$trend.yy), rule=2)
             mu_g <- fit_g$trend.yy
         }
         if (method.trend=="bspline") {
-            fit_g <- fit_bspline(yy=y_g, time = theta_ordered)
+            fit_g <- peco::fit_bspline(yy=y_g, time = theta_ordered)
             fun_g <- approxfun(x=as.numeric(theta_ordered),
                             y=as.numeric(fit_g$pred.yy), rule=2)
             mu_g <- fit_g$pred.yy
         }
 
         if (method.trend=="loess") {
-            fit_g <- fit_loess(yy=y_g, time = theta_ordered)
+            fit_g <- peco::fit_loess(yy=y_g, time = theta_ordered)
             fun_g <- approxfun(x=as.numeric(theta_ordered),
                             y=as.numeric(fit_g$pred.yy), rule=2)
             mu_g <- fit_g$pred.yy
@@ -515,16 +526,16 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
     stopCluster(cl)
 
     sigma_est <- do.call(c, lapply(fit, "[[", "sigma_g"))
-    names(sigma_est) <- rownames(Y_ordered)
+    names(sigma_est) <- rownames(exprs_test_ordered)
 
     mu_est <- do.call(rbind, lapply(fit, "[[", "mu_g"))
-    colnames(mu_est) <- colnames(Y_ordered)
-    rownames(mu_est) <- rownames(Y_ordered)
+    colnames(mu_est) <- colnames(exprs_test_ordered)
+    rownames(mu_est) <- rownames(exprs_test_ordered)
 
     funs <- do.call(c, lapply(fit, "[[", "fun_g"))
-    names(funs) <- rownames(Y_ordered)
+    names(funs) <- rownames(exprs_test_ordered)
 
-    return(list(Y = Y_ordered,
+    return(list(Y = exprs_test_ordered,
                 theta = theta_ordered,
                 mu_est = mu_est,
                 sigma_est = sigma_est,
