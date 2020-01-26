@@ -53,14 +53,14 @@ data_transform_quantile <- function(sce, ncores=2) {
 
     # check if there's already cpm normalied data,
     # if yes, then skip this step
-    if(is(Y_test, "SingleCellExperiment")) {
+    if(is(sce, "SingleCellExperiment")) {
         if (has_name(assays(sce), "cpm")) {
             sce <- sce
         } else {
             cpm(sce) <- calculateCPM(sce)
         }
         G <- nrow(sce)
-        cpm_sce <- cpm(sce)
+        cpm_sce <- assay(sce, "cpm")
 
         cpm_quantNormed <- foreach(g=seq_len(G)) %dopar% {
             y_g <- cpm_sce[g,]
@@ -73,7 +73,7 @@ data_transform_quantile <- function(sce, ncores=2) {
               yy.qq[is.zero] <- sample(qq.map$x[is.zero])
             }
             return(y_g= yy.qq)
-        }
+          }
         stopCluster(cl)
         cpm_quantNormed <- do.call(rbind, cpm_quantNormed)
         colnames(cpm_quantNormed) <- colnames(cpm_sce)
@@ -83,7 +83,6 @@ data_transform_quantile <- function(sce, ncores=2) {
         assayNames(sce)[3] <- "cpm_quantNormed"
         return(sce)
     } else {
-
         cpm_quantNormed <- calculateCPM(sce)
         return(cpm_quantNormed)
     }
