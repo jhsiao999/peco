@@ -197,10 +197,12 @@ assays(sce_top101genes)
     ## List of length 3
     ## names(3): counts cpm cpm_quantNormed
 
-Apply the prediction model using function `cycle_npreg_outsample`.
+Apply the prediction model using function `cycle_npreg_outsample` and
+generate prediction results contained in a list object
+`pred_top101genes`.
 
 ``` r
-sce_top101genes <- cycle_npreg_outsample(
+pred_top101genes <- cycle_npreg_outsample(
     Y_test=sce_top101genes,
     sigma_est=training_human$sigma[rownames(sce_top101genes),],
     funs_est=training_human$cellcycle_function[rownames(sce_top101genes)],
@@ -209,15 +211,15 @@ sce_top101genes <- cycle_npreg_outsample(
     get_trend_estimates=FALSE)
 ```
 
-`peco` adds the predict cell cycle phase to the `colData` slot of
-sce\_top101genes.
+The `pred_top101genes$Y` contains a SingleCellExperiment object with the
+predict cell cycle phase in the `colData` slot.
 
 ``` r
-head(colData(sce_top101genes)$cellcycle_peco)
+head(colData(pred_top101genes$Y)$cellcycle_peco)
 ```
 
     ## 20170905-A01 20170905-A02 20170905-A03 20170905-A06 20170905-A07 
-    ##     1.099557     4.555309     2.607522     4.303982     4.052655 
+    ##     1.099557     4.555309     2.481858     4.303982     4.052655 
     ## 20170905-A08 
     ##     1.413717
 
@@ -228,8 +230,8 @@ fitted function `training_human$cellcycle_function[[1]]` was obtained
 from our training data.
 
 ``` r
-plot(y=assay(sce_top101genes,"cpm_quantNormed")["ENSG00000170312",],
-     x=colData(sce_top101genes)$theta_shifted, main = "CDK1",
+plot(y=assay(pred_top101genes$Y,"cpm_quantNormed")["ENSG00000170312",],
+     x=colData(pred_top101genes$Y)$theta_shifted, main = "CDK1",
      ylab = "quantile normalized expression")
 points(y=training_human$cellcycle_function[["ENSG00000170312"]](seq(0,2*pi, length.out=100)),
        x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
@@ -244,11 +246,11 @@ Visualize results of prediction for the top 10 genesone genes. Use
 
 ``` r
 # predicted cell time in the input data
-theta_predict = colData(sce_top101genes)$cellcycle_peco
-names(theta_predict) = rownames(colData(sce_top101genes))
+theta_predict = colData(pred_top101genes$Y)$cellcycle_peco
+names(theta_predict) = rownames(colData(pred_top101genes$Y))
 
 # expression values of 10 genes in the input data
-yy_input = assay(sce_top101genes,"cpm_quantNormed")[1:6,]
+yy_input = assay(pred_top101genes$Y,"cpm_quantNormed")[1:6,]
 
 # apply trendfilter to estimate cyclic gene expression trend
 fit_cyclic <- fit_cyclical_many(Y=yy_input, 
@@ -258,7 +260,7 @@ fit_cyclic <- fit_cyclical_many(Y=yy_input,
     ## computing on 2 cores
 
 ``` r
-gene_symbols = rowData(sce_top101genes)$hgnc[rownames(yy_input)]
+gene_symbols = rowData(pred_top101genes$Y)$hgnc[rownames(yy_input)]
 
 par(mfrow=c(2,3))
 for (i in 1:6) {
@@ -306,7 +308,7 @@ sessionInfo()
     ##  [9] Biobase_2.42.0              GenomicRanges_1.34.0       
     ## [11] GenomeInfoDb_1.18.1         IRanges_2.16.0             
     ## [13] S4Vectors_0.20.1            BiocGenerics_0.28.0        
-    ## [15] peco_0.99.6                
+    ## [15] peco_0.99.10               
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] Rcpp_1.0.3               mvtnorm_1.0-11          

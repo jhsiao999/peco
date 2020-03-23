@@ -1,3 +1,7 @@
+# Version 0.99.12 (2020-03-23)
+## Bug fixes 
+    - Debug vignettes.Rmd
+
 # Version 0.99.11 (2020-03-23)
 ## Major changes
     - Rename fit_trendfilter_generic to fit_trendfilter
