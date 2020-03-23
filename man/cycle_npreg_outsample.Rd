@@ -5,8 +5,8 @@
 \title{Predict test-sample ordering using training labels (no update)}
 \usage{
 cycle_npreg_outsample(Y_test, sigma_est, funs_est,
-  method.trend = c("trendfilter", "loess", "bspline"), polyorder = 2,
-  method.grid = "uniform", ncores = 2, grids = 100,
+  method.trend = c("trendfilter", "loess", "bspline"), normed = TRUE,
+  polyorder = 2, method.grid = "uniform", ncores = 2, grids = 100,
   get_trend_estimates = FALSE)
 }
 \arguments{
@@ -20,6 +20,8 @@ estimating cyclic trends.}
 
 \item{method.trend}{Varous methods that can be applied to estimate
 cyclic trend of gene expression levels.}
+
+\item{normed}{Is the data already normalized? TRUE or FALSE.}
 
 \item{polyorder}{We estimate cyclic trends of gene expression levels using
 nonparamtric trend filtering. The default fits second degree polynomials.}

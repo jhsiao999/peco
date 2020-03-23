@@ -1,4 +1,4 @@
-#' @name fit_trendfilter_generic
+#' @name fit_trendfilter
 #'
 #' @title Using trendfiltering to estimate cyclic trend of gene
 #' expression
@@ -56,7 +56,7 @@
 #' theta_ordered <- theta[order(theta)]
 #' yy_ordered <- exprs_quant[1, names(theta_ordered)]
 #'
-#' fit <- fit_trendfilter_generic(yy_ordered)
+#' fit <- fit_trendfilter(yy_ordered)
 #'
 #' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
 #'   ylab="quantile-normalized expression values", xlab="FUCCI phase",
@@ -72,7 +72,7 @@
 #' @importFrom genlasso trendfilter cv.trendfilter
 #' @importFrom stats var predict
 #' @export
-fit_trendfilter_generic <- function(yy, polyorder=2) {
+fit_trendfilter <- function(yy, polyorder=2) {
 
     yy.rep <- rep(yy,3)
     include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))

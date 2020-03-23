@@ -13,7 +13,7 @@ cycle_npreg_mstep(Y, theta, method.trend = c("trendfilter", "loess",
 \item{theta}{Observed cell times.}
 
 \item{method.trend}{How to estimate cyclic trend of gene expression values?
-We offer three options: 'trendfilter' (\code{fit_trendfilter_generic()}),
+We offer three options: 'trendfilter' (\code{fit_trendfilter()}),
 'loess' (\code{fit_loess()}) and 'bsplines' (\code{fit_bspline()}).
 'trendfilter' provided the best fit in our study. But 'trendfilter`
 uses cross-validation and takes some time. Therefore, we recommend

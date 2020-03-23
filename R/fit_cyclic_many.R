@@ -70,7 +70,7 @@
 #'
 #' @author Joyce Hsiao
 #' @seealso
-#'     \code{\link{fit_trendfilter_generic}} for fitting one gene
+#'     \code{\link{fit_trendfilter}} for fitting one gene
 #'     using trendfilter
 #' @importFrom doParallel registerDoParallel
 #' @importFrom parallel makeCluster stopCluster
@@ -103,10 +103,10 @@ fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=2) {
     # For each gene, estimate the cyclical pattern of gene expression
     # conditioned on the given cell times.
     fit <- foreach(g=seq_len(G),
-                        .export = c("trendfilter", "fit_trendfilter_generic"),
+                        .export = c("trendfilter", "fit_trendfilter"),
                         .packages = c("genlasso", "peco")) %dopar% {
         y_g <- Y_ordered[g,]
-        fit_g <- fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
+        fit_g <- fit_trendfilter(yy=y_g, polyorder = polyorder)
         fun_g <- approxfun(x=as.numeric(theta_ordered),
                         y=as.numeric(fit_g$trend.yy), rule=2)
         mu_g <- fit_g$trend.yy

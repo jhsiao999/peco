@@ -435,7 +435,7 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' @param Y Gene by sample expression matrix (log2CPM).
 #' @param theta Observed cell times.
 #' @param method.trend How to estimate cyclic trend of gene expression values?
-#'     We offer three options: 'trendfilter' (\code{fit_trendfilter_generic()}),
+#'     We offer three options: 'trendfilter' (\code{fit_trendfilter()}),
 #'     'loess' (\code{fit_loess()}) and 'bsplines' (\code{fit_bspline()}).
 #'     'trendfilter' provided the best fit in our study. But 'trendfilter`
 #'     uses cross-validation and takes some time. Therefore, we recommend
@@ -497,7 +497,7 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
         y_g <- exprs_test_ordered[g,]
 
         if (method.trend=="trendfilter") {
-            fit_g <- peco::fit_trendfilter_generic(yy=y_g, polyorder = polyorder)
+            fit_g <- peco::fit_trendfilter(yy=y_g, polyorder = polyorder)
             fun_g <- approxfun(x=as.numeric(theta_ordered),
                             y=as.numeric(fit_g$trend.yy), rule=2)
             mu_g <- fit_g$trend.yy

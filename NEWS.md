@@ -1,3 +1,7 @@
+# Version 0.99.11 (2020-03-23)
+## Major changes
+    - Rename fit_trendfilter_generic to fit_trendfilter
+
 # Version 0.99.7 (2020-01-01)
 ## Major changes
     - Backward compatibiltiy with R3.5.0
