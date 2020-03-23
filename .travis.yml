@@ -1,21 +1,18 @@
 # https://docs.travis-ci.com/user/languages/r
 
 language: r
-sudo: false
+r: bioc-devel
 cache: packages
+warnings_are_errors: false
 latex: false
+
+r_build_args: "--no-manual --no-resave-data"
+r_check_args: "--no-build-vignettes --no-manual --timings"
+before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
 
 bioc_packages:
   - Biobase
 
-warnings_are_errors: false
 
-matrix:
-  include:
-    - os: linux
-      r: release
-    - os: linux
-      r: devel
-    - os: osx
-      r: release
+
 

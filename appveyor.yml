@@ -30,11 +30,9 @@ environment:
     # https://github.com/r-lib/usethis/issues/640 / Builds 1.0.51 -> 1.0.56
     # R_REMOTES_STANDALONE: true
   # Set the build matrix to use R-devel, otherwise Bioconductor checks will fail
-  # because the image now expects BioC 3.9 on R 3.6.
-  # https://github.com/krlmlr/r-appveyor/issues/144
   matrix:
-    - configuration: 3.6
-      R_VERSION: 3.6.0
+    - configuration: 4.0
+      R_VERSION: 4.0.0
 
 build_script:
   - travis-tool.sh install_bioc scater SingleCellExperiment SummarizedExperiment

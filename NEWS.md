@@ -1,3 +1,7 @@
+# Version 0.99.14 (2020-03-23)
+## Bug fixes 
+    - Tavis-CI and AppVeyor 
+
 # Version 0.99.13 (2020-03-23)
 ## Bug fixes 
     - Debug cycle_npreg_outsample example
