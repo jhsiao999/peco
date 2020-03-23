@@ -1,4 +1,7 @@
-# Version 0.99.12 (2020-03-23)
+# Version 0.99.13 (2020-03-23)
+## Bug fixes 
+    - Debug cycle_npreg_outsample example
+
 ## Bug fixes 
     - Debug vignettes.Rmd
 

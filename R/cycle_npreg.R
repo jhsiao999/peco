@@ -100,19 +100,19 @@
 #'
 #' # estimate cyclic gene expression levels given cell cycle for each gene
 #' predict_cyclic <-
-#'     fit_cyclical_many(Y=assay(model_5genes_predict,"cpm_quantNormed"),
-#'                       theta=colData(model_5genes_predict)$cellcycle_peco)
-#' all.equal(rownames(predict_cyclic[[2]]), rownames(predict_cyclic[[1]]))
+#'     fit_cyclical_many(Y=assay(model_5genes_predict$Y,"cpm_quantNormed"),
+#'                       theta=colData(model_5genes_predict$Y)$cellcycle_peco)
+#' all.equal(names(predict_cyclic[[2]]), colnames(predict_cyclic[[1]]))
 #'
 #' par(mfrow=c(2,3), mar=c(4,4,3,1))
-#' for (g in seq_along(rownames(model_5genes_predict))) {
-#'   plot(assay(model_5genes_predict,"cpm_quantNormed")[
-#'       rownames(model_5genes_predict)[g],],
-#'        x=colData(model_5genes_predict)$cellcycle_peco, axes=FALSE,
+#' for (g in seq_along(rownames(model_5genes_predict$Y))) {
+#'   plot(assay(model_5genes_predict$Y,"cpm_quantNormed")[
+#'       rownames(model_5genes_predict$Y)[g],],
+#'        x=colData(model_5genes_predict$Y)$cellcycle_peco, axes=FALSE,
 #'        xlab="FUCCI phase",
 #'        ylab="Predicted phase")
 #'   points(y=predict_cyclic$cellcycle_function[[
-#'            rownames(model_5genes_predict)[g]]](
+#'            rownames(model_5genes_predict$Y)[g]]](
 #'     seq(0, 2*pi, length.out = 100)),
 #'     x=seq(0, 2*pi, length.out = 100),
 #'     pch=16, col="royalblue")
