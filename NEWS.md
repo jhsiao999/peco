@@ -1,3 +1,7 @@
+# Version 0.99.15 (2020-04-08)
+## Minor changes
+    - Relaxed minimum versions for dependencies
+
 # Version 0.99.14 (2020-03-23)
 ## Bug fixes 
     - Tavis-CI and AppVeyor 

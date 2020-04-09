@@ -1,8 +1,7 @@
 Encoding: UTF-8
 Type: Package
 Package: peco
-Version: 0.99.14
-Date: 2020-01-01
+Version: 0.99.15
 Title: A Supervised Approach for **P**r**e**dicting **c**ell Cycle
     Pr**o**gression using scRNA-seq data
 Authors@R: c(
@@ -21,20 +20,19 @@ Description: Our approach provides a way to assign continuous cell cycle phase
 URL: https://github.com/jhsiao999/peco
 BugReports: https://github.com/jhsiao999/peco/issues
 License: GPL (>= 3)
-Depends: R (>= 4.0)
 Imports:
-    assertthat (>= 0.2.1),
-    circular (>= 0.4-93),
-    conicfit (>= 1.0.4),
-    doParallel (>= 1.0.14),
-    foreach (>= 1.4.4),
+    assertthat,
+    circular,
+    conicfit,
+    doParallel,
+    foreach,
     genlasso (>= 1.4),
     graphics,
-    methods (>= 1.7.1),
-    parallel (>= 3.5.1),
-    scater (>= 1.10.1),
-    SingleCellExperiment (>= 1.4.1),
-    SummarizedExperiment (>= 1.12.0),
+    methods,
+    parallel,
+    scater,
+    SingleCellExperiment,
+    SummarizedExperiment,
     stats,
     utils
 Suggests: 
