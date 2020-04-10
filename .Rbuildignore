@@ -13,3 +13,5 @@
 ^_pkgdown\.yml$
 ^doc$
 ^Meta$
+^README\.Rmd$
+^README_files$

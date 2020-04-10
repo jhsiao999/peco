@@ -1,7 +1,7 @@
 # https://docs.travis-ci.com/user/languages/r
 
 language: r
-r: bioc-devel
+r: release
 cache: packages
 warnings_are_errors: false
 latex: false
@@ -12,7 +12,3 @@ before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
 
 bioc_packages:
   - Biobase
-
-
-
-

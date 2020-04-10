@@ -10,34 +10,21 @@ init:
 install:
   ps: Bootstrap
 
+cache:
+  - C:\RLibrary -> DESCRIPTION
 
-# Adapt as necessary starting from here
-# check suggested packges
 environment:
   global:
-    # r-appveyor will fail to install some packages (e.g. XML) unless we
-    # specifically request binary packages.
-    # https://github.com/krlmlr/r-appveyor/issues/133
-    # https://github.com/krlmlr/r-appveyor/issues/138
-    # Note that enabling this can cause R-devel builds to fail.
-    # PKGTYPE: win.binary
-    BIOC_USE_DEVEL: "FALSE"
-    GCC_PATH: mingw_64
-    # The more powerful `x64` image is now default over `i386`.
-    R_ARCH: x64
-    # Need to enable when installing GitHub dependency packages.
+    PKGTYPE: both
     USE_RTOOLS: true
-    # https://github.com/r-lib/usethis/issues/640 / Builds 1.0.51 -> 1.0.56
-    # R_REMOTES_STANDALONE: true
-  # Set the build matrix to use R-devel, otherwise Bioconductor checks will fail
-  matrix:
-    - configuration: 4.0
-      R_VERSION: 4.0.0
+    GCC_PATH: mingw_64
+    BIOC_USE_DEVEL: FALSE
+    R_REMOTES_STANDALONE: true
+    _R_CHECK_FORCE_SUGGESTS_: false
 
 build_script:
-  - travis-tool.sh install_bioc scater SingleCellExperiment SummarizedExperiment
+  - travis-tool.sh install_bioc Biobase GenomeInfoDbData GenomeInfoDb
   - travis-tool.sh install_bioc_deps
-  - travis-tool.sh install_deps
 
 test_script:
   - travis-tool.sh run_tests
