@@ -20,6 +20,7 @@ Description: Our approach provides a way to assign continuous cell cycle phase
 URL: https://github.com/jhsiao999/peco
 BugReports: https://github.com/jhsiao999/peco/issues
 License: GPL (>= 3)
+Depends: R (>= 2.10)
 Imports:
     assertthat,
     circular,
