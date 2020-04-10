@@ -1,3 +1,10 @@
+# Version 0.99.16 (2020-04-10)
+## Bug fixes
+    - Fix AppVeyor build (use R release)
+    - Fix Travis build (use R release)
+    - Require R >= 2.10
+    - Ignore Rmd-related files when building package
+
 # Version 0.99.15 (2020-04-08)
 ## Minor changes
     - Relaxed minimum versions for dependencies

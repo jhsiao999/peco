@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Type: Package
 Package: peco
-Version: 0.99.15
+Version: 0.99.16
 Title: A Supervised Approach for **P**r**e**dicting **c**ell Cycle
     Pr**o**gression using scRNA-seq data
 Authors@R: c(
