@@ -173,8 +173,10 @@ cycle_npreg_outsample <- function(Y_test,
 
     if (is(Y_test, "SingleCellExperiment")) {
       colData(Y_test)$cellcycle_peco <- initial_loglik$cell_times_est
-      colData(Y_test)@elementMetadata$labelDescription[ncol(colData(Y_test))] <-
-        "peco predicted continuous cell cycle, between 0 to 2pi"
+      if (!is.null(colData(Y_test)@elementMetadata$labelDescription)) {
+        colData(Y_test)@elementMetadata$labelDescription[ncol(colData(Y_test))] <-
+          "peco predicted continuous cell cycle, between 0 to 2pi"
+      }
     }
 
     if (get_trend_estimates) {

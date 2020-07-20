@@ -1,3 +1,7 @@
+# Version 1.1.1 (2020-07-20)
+## Bug fixes
+   - Fix cycle_npreg_outsample. Allow input object to have empty colData slot.
+   
 # Version 0.99.16 (2020-04-10)
 ## Bug fixes
     - Fix AppVeyor build (use R release)
