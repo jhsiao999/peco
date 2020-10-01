@@ -1,22 +1,24 @@
 Encoding: UTF-8
 Type: Package
 Package: peco
-Version: 1.1.1
-Title: A Supervised Approach for **P**r**e**dicting **c**ell Cycle
-    Pr**o**gression using scRNA-seq data
-Authors@R: c(
-        person("Chiaowen Joyce","Hsiao", email="joyce.hsiao1@gmail.com", 
+Version: 1.1.2
+Date: 2020-10-01
+Title: A Supervised Approach for Predicting Cell Cycle Progression Using
+    Single-Cell RNA-seq Data
+Authors@R: c(person("Chiaowen Joyce","Hsiao",email="joyce.hsiao1@gmail.com", 
                     role=c("aut","cre")),
-        person("Matthew", "Stephens", email="stephens999@gmail.com", role="aut"),
-        person("John", "Blischak", email = "jdblischak@gmail.com", role="ctb"),
-        person("Peter", "Carbonetto", email = "peter.carbonetto@gmail.com",
-                role="ctb"))
-Description: Our approach provides a way to assign continuous cell cycle phase 
-    using scRNA-seq data, and consequently, allows to identify cyclic trend 
-    of gene expression levels along the cell cycle. This package provides method
-    and training data, which includes scRNA-seq data collected from 6 individual 
-    cell lines of induced pluripotent stem cells (iPSCs), and also continuous cell 
-    cycle phase derived from FUCCI fluorescence imaging data. 
+             person("Matthew","Stephens",email="stephens999@gmail.com",
+	            role="aut"),
+             person("John","Blischak",email="jdblischak@gmail.com",role="ctb"),
+             person("Peter", "Carbonetto",email="peter.carbonetto@gmail.com",
+                    role="ctb"))
+Description: Our methods provide a way to assign continuous cell cycle
+    phase using single-cell RNA-seq data, and consequently, allow for
+    identication cyclic trend of gene expression levels along the cell
+    cycle. This package provides method and training data, including
+    single-cell RNA-seq data collected from 6 individual cell lines of
+    induced pluripotent stem cells (iPSCs), and also continuous cell
+    cycle phase derived from FUCCI fluorescence imaging data.
 URL: https://github.com/jhsiao999/peco
 BugReports: https://github.com/jhsiao999/peco/issues
 License: GPL (>= 3)
@@ -42,5 +44,7 @@ Suggests:
 biocViews:
     Sequencing, RNASeq, GeneExpression, Transcriptomics, SingleCell,
     Software, StatisticalMethod, Classification, Visualization
+LazyData: true
+NeedsCompilation: no
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1

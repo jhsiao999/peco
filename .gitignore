@@ -1,7 +1,5 @@
 .Rhistory
 .Rproj.user
-peco.Rcheck/
-peco*tar.gz
 vignettes/*.html
 vignettes/*.R
 peco.Rproj
