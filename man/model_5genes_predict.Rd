@@ -4,12 +4,14 @@
 \name{model_5genes_predict}
 \alias{model_5genes_predict}
 \title{A SingleCellExperiment object}
-\format{A list with the follwing elements
+\format{
+A list with the follwing elements
 
 \describe{
   \item{cellcycle_peco}{Predict cell cycle,
    the values ranged between 0 to 2pi}
- }}
+ }
+}
 \usage{
 data(model_5genes_predict)
 }

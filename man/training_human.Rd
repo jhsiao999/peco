@@ -4,7 +4,8 @@
 \name{training_human}
 \alias{training_human}
 \title{Training data from 888 single-cell samples and 101 top cyclic genes}
-\format{A list with the follwing elements
+\format{
+A list with the follwing elements
 
 \describe{
   \item{predict.yy}{Estimated cyclic expression values in the training data}
@@ -13,7 +14,8 @@
   trend obtained by trendfilter function in genlasso}
   \item{pve}{Proportion of variance explained in each gene by the
   cell cycl phase label}
- }}
+ }
+}
 \usage{
 data(training_human)
 }

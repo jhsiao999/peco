@@ -4,8 +4,13 @@
 \alias{cycle_npreg_insample}
 \title{Obtain cyclic trend estimates from the training data}
 \usage{
-cycle_npreg_insample(Y, theta, ncores = 2, polyorder = 2,
-  method.trend = c("trendfilter", "loess", "bspline"))
+cycle_npreg_insample(
+  Y,
+  theta,
+  ncores = 2,
+  polyorder = 2,
+  method.trend = c("trendfilter", "loess", "bspline")
+)
 }
 \arguments{
 \item{Y}{A matrix of normalized and transformed gene expression
@@ -40,7 +45,7 @@ Estimates cyclic trends of gene expression levels
 using training data.
 }
 \examples{
-# see \\code{\\link{cycle_npreg_insample}}
+# see \code{\link{cycle_npreg_insample}}
 
 }
 \seealso{
@@ -49,10 +54,11 @@ using training data.
        \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
        using parameters learned from \code{\link{cycle_npreg_insample}}
 
-Other peco classifier functions: \code{\link{cycle_npreg_loglik}},
-  \code{\link{cycle_npreg_mstep}},
-  \code{\link{cycle_npreg_outsample}},
-  \code{\link{initialize_grids}}
+Other peco classifier functions: 
+\code{\link{cycle_npreg_loglik}()},
+\code{\link{cycle_npreg_mstep}()},
+\code{\link{cycle_npreg_outsample}()},
+\code{\link{initialize_grids}()}
 }
 \author{
 Joyce Hsiao

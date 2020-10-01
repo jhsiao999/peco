@@ -5,12 +5,14 @@
 \alias{sce_top101genes}
 \title{Molecule counts of the 101 significant cyclical genes in the 888 samples
 analyzed in the study.}
-\format{A SingleCellExperiment object with 888 samples and the 101
+\format{
+A SingleCellExperiment object with 888 samples and the 101
     significant cyclic genes,
 \describe{
     \item{theta}{Inferred angles of each cell along
         a circle, also known as FUCCI phase.}
-}}
+}
+}
 \usage{
 data(sce_top101genes)
 }

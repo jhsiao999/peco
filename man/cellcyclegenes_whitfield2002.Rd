@@ -4,13 +4,15 @@
 \name{cellcyclegenes_whitfield2002}
 \alias{cellcyclegenes_whitfield2002}
 \title{list of cell cycle genes identified in Whitfield et al. 2002.}
-\format{A list with the follwing elements
+\format{
+A list with the follwing elements
 
 \describe{
   \item{hgnc}{Gene symbol}
   \item{ensembl}{ENSEMBL gene ID}
   \item{phase}{Marker phase identified in Whitfield et al. 2002}
- }}
+ }
+}
 \usage{
 data(cellcyclegenes_whitfield2002)
 }

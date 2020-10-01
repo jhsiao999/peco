@@ -9,10 +9,3 @@ navbar:
   right:
     - text: "Source"
       href: https://github.com/jhsiao999/peco
-articles:
-  - title: "Vignettes"
-    desc: >
-      The following vignette provides  a brief demonstration
-      of the peco package.
-    contents:
-      - peco-intro

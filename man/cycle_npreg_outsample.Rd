@@ -4,10 +4,18 @@
 \alias{cycle_npreg_outsample}
 \title{Predict test-sample ordering using training labels (no update)}
 \usage{
-cycle_npreg_outsample(Y_test, sigma_est, funs_est,
-  method.trend = c("trendfilter", "loess", "bspline"), normed = TRUE,
-  polyorder = 2, method.grid = "uniform", ncores = 2, grids = 100,
-  get_trend_estimates = FALSE)
+cycle_npreg_outsample(
+  Y_test,
+  sigma_est,
+  funs_est,
+  method.trend = c("trendfilter", "loess", "bspline"),
+  normed = TRUE,
+  polyorder = 2,
+  method.grid = "uniform",
+  ncores = 2,
+  grids = 100,
+  get_trend_estimates = FALSE
+)
 }
 \arguments{
 \item{Y_test}{A SingleCellExperiment object.}
@@ -139,9 +147,10 @@ title("Predicting cell cycle phase for NA18511", outer=TRUE)
     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
     inferred phases from  \code{\link{cycle_npreg_loglik}}
 
-Other peco classifier functions: \code{\link{cycle_npreg_insample}},
-  \code{\link{cycle_npreg_loglik}},
-  \code{\link{cycle_npreg_mstep}},
-  \code{\link{initialize_grids}}
+Other peco classifier functions: 
+\code{\link{cycle_npreg_insample}()},
+\code{\link{cycle_npreg_loglik}()},
+\code{\link{cycle_npreg_mstep}()},
+\code{\link{initialize_grids}()}
 }
 \concept{peco classifier functions}

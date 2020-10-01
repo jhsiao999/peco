@@ -4,8 +4,13 @@
 \alias{cycle_npreg_loglik}
 \title{Infer angles or cell cycle phase based on gene expression data}
 \usage{
-cycle_npreg_loglik(Y, sigma_est, funs_est, grids = 100,
-  method.grid = c("pca", "uniform"))
+cycle_npreg_loglik(
+  Y,
+  sigma_est,
+  funs_est,
+  grids = 100,
+  method.grid = c("pca", "uniform")
+)
 }
 \arguments{
 \item{Y}{Gene by sample expression matrix.}
@@ -44,10 +49,11 @@ Infer angles or cell cycle phase based on gene expression data
     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
      using parameters learned from \code{\link{cycle_npreg_insample}}
 
-Other peco classifier functions: \code{\link{cycle_npreg_insample}},
-  \code{\link{cycle_npreg_mstep}},
-  \code{\link{cycle_npreg_outsample}},
-  \code{\link{initialize_grids}}
+Other peco classifier functions: 
+\code{\link{cycle_npreg_insample}()},
+\code{\link{cycle_npreg_mstep}()},
+\code{\link{cycle_npreg_outsample}()},
+\code{\link{initialize_grids}()}
 }
 \author{
 Joyce Hsiao

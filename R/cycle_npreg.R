@@ -5,7 +5,6 @@
 # to another gene expression dataset to infer an angle or cell cycle
 # phase for each cell.
 
-
 #' @name cycle_npreg_outsample
 #'
 #' @title Predict test-sample ordering using training labels (no update)
@@ -422,7 +421,6 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
                 prob_per_cell_by_celltimes=prob_per_cell_by_celltimes))
 }
 
-
 #' @name cycle_npreg_mstep
 #'
 #' @title Estimate parameters of the cyclic trends
@@ -435,15 +433,18 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' function.
 #'
 #' @param Y Gene by sample expression matrix (log2CPM).
+#' 
 #' @param theta Observed cell times.
-#' @param method.trend How to estimate cyclic trend of gene expression values?
-#'     We offer three options: 'trendfilter' (\code{fit_trendfilter()}),
-#'     'loess' (\code{fit_loess()}) and 'bsplines' (\code{fit_bspline()}).
-#'     'trendfilter' provided the best fit in our study. But 'trendfilter`
-#'     uses cross-validation and takes some time. Therefore, we recommend
-#'     using bspline for quick results.
-#' @param ncores How many computing cores to use? We use doParallel package for
-#'     parallel computing.
+#' 
+#' @param method.trend How to estimate cyclic trend of gene expression
+#' values?  We offer three options: 'trendfilter'
+#' (\code{fit_trendfilter()}), 'loess' (\code{fit_loess()}) and
+#' 'bsplines' (\code{fit_bspline()}).  'trendfilter' provided the best
+#' fit in our study. But 'trendfilter` uses cross-validation and takes
+#' some time. Therefore, we recommend using bspline for quick results.
+#' 
+#' @param ncores How many computing cores to use? We use doParallel
+#' package for parallel computing.
 #'
 #' @inheritParams cycle_npreg_insample
 #'

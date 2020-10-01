@@ -4,27 +4,32 @@
 \alias{cycle_npreg_mstep}
 \title{Estimate parameters of the cyclic trends}
 \usage{
-cycle_npreg_mstep(Y, theta, method.trend = c("trendfilter", "loess",
-  "bspline"), polyorder = 2, ncores = 2)
+cycle_npreg_mstep(
+  Y,
+  theta,
+  method.trend = c("trendfilter", "loess", "bspline"),
+  polyorder = 2,
+  ncores = 2
+)
 }
 \arguments{
 \item{Y}{Gene by sample expression matrix (log2CPM).}
 
 \item{theta}{Observed cell times.}
 
-\item{method.trend}{How to estimate cyclic trend of gene expression values?
-We offer three options: 'trendfilter' (\code{fit_trendfilter()}),
-'loess' (\code{fit_loess()}) and 'bsplines' (\code{fit_bspline()}).
-'trendfilter' provided the best fit in our study. But 'trendfilter`
-uses cross-validation and takes some time. Therefore, we recommend
-using bspline for quick results.}
+\item{method.trend}{How to estimate cyclic trend of gene expression
+values?  We offer three options: 'trendfilter'
+(\code{fit_trendfilter()}), 'loess' (\code{fit_loess()}) and
+'bsplines' (\code{fit_bspline()}).  'trendfilter' provided the best
+fit in our study. But 'trendfilter` uses cross-validation and takes
+some time. Therefore, we recommend using bspline for quick results.}
 
 \item{polyorder}{We estimate cyclic trends of gene expression
 levels using nonparamtric trend filtering. The default fits second
 degree polynomials.}
 
-\item{ncores}{How many computing cores to use? We use doParallel package for
-parallel computing.}
+\item{ncores}{How many computing cores to use? We use doParallel
+package for parallel computing.}
 }
 \value{
 A list with the following elements:
@@ -51,10 +56,11 @@ function.
     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
      using parameters learned from \code{\link{cycle_npreg_insample}}
 
-Other peco classifier functions: \code{\link{cycle_npreg_insample}},
-  \code{\link{cycle_npreg_loglik}},
-  \code{\link{cycle_npreg_outsample}},
-  \code{\link{initialize_grids}}
+Other peco classifier functions: 
+\code{\link{cycle_npreg_insample}()},
+\code{\link{cycle_npreg_loglik}()},
+\code{\link{cycle_npreg_outsample}()},
+\code{\link{initialize_grids}()}
 }
 \author{
 Joyce Hsiao
