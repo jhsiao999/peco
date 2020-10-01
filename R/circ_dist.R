@@ -1,35 +1,36 @@
 #' @name circ_dist
 #'
-#' @title Pairwise distance between two circular variables
+#' @title Pairwise Distance Between Two Circular Variables
 #'
-#' @description We define distance between two angles: the minimum of
-#' the differences in both clockwise and counterclockwise directions.
+#' @description We define distance between two angles as the minimum of
+#'   the differences in both clockwise and counterclockwise directions.
 #'
 #' @param y1 A vector of angles.
+#' 
 #' @param y2 A vector of angles.
 #'
-#' @return A vector of distances between angles.
+#' @return A vector of distances between the angles.
 #'
 #' @examples
-#' # a vector of angles
+#' # Vector of angles.
 #' theta_ref <- seq(0,2*pi, length.out=100)
 #'
-#' # shift the origin of theta_ref to pi
+#' # Shift the origin of theta_ref to pi.
 #' theta_compare <- shift_origin(theta_ref, origin = pi)
 #' mean(circ_dist(theta_ref, theta_compare))
 #'
-#' # after rotation of angles, difference is 0 between the original
-#' # and the shifted angles
+#' # After rotation of angles, difference is zero between the original
+#' # and the shifted angles.
 #' theta_compare_rotated <- rotation(ref_var=theta_ref,
 #'     shift_var=theta_compare)
 #' mean(circ_dist(theta_ref, theta_compare_rotated))
 #'
-#'
 #' @author Joyce Hsiao, Matthew Stephens
+#' 
 #' @export
-circ_dist <- function(y1,y2) {
+#' 
+circ_dist <- function(y1,y2)
     pmin(abs(y2-y1), abs(2*pi-(abs(y2-y1))))
-}
 
 #' @name rotation
 #'
@@ -45,7 +46,7 @@ circ_dist <- function(y1,y2) {
 #' @param ref_var A vector of reference angles.
 #' @param shift_var A vector of angles to be compared to ref_var.
 #'
-#' @return The transformed values of shift_var after rotation and
+#' @return The transformed values of \code{shift_var} after rotation and
 #' shifting.
 #'
 #' @examples
@@ -67,9 +68,8 @@ circ_dist <- function(y1,y2) {
 #' @export
 #'
 rotation <- function(ref_var,shift_var) {
-
     df <- data.frame(flip=rep(c(1,-1), each=length(shift_var)),
-                        shift = rep(shift_var, 2))
+                     shift = rep(shift_var, 2))
 
     for (i in seq_len(nrow(df))) {
         shift_var_tmp <- df$flip[i]*((shift_var+df$shift[i])%%(2*pi))
