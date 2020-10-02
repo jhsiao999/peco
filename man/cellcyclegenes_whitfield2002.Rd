@@ -3,9 +3,9 @@
 \docType{data}
 \name{cellcyclegenes_whitfield2002}
 \alias{cellcyclegenes_whitfield2002}
-\title{list of cell cycle genes identified in Whitfield et al. 2002.}
+\title{List of Cell Cycle Genes Identified in Whitfield et al 2002.}
 \format{
-A list with the follwing elements
+A list with the follwing elements:
 
 \describe{
   \item{hgnc}{Gene symbol}
@@ -17,7 +17,7 @@ A list with the follwing elements
 data(cellcyclegenes_whitfield2002)
 }
 \description{
-List of cell cycle genes and their associated cell cycle state as
-  reported in Whitfield et al. 2002.
+List of cell cycle genes and their associated cell
+  cycle state as reported in Whitfield et al. 2002.
 }
 \keyword{data}

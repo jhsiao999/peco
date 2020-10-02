@@ -3,15 +3,21 @@
 \docType{data}
 \name{training_human}
 \alias{training_human}
-\title{Training data from 888 single-cell samples and 101 top cyclic genes}
+\title{Training Data from 888 Single-cell Samples and 101 Top
+  Cyclic Genes}
 \format{
-A list with the follwing elements
+A list with the follwing elements:
 
 \describe{
-  \item{predict.yy}{Estimated cyclic expression values in the training data}
-  \item{cellcycle_peco_ordered}{Training labels ordered from 0 to 2pi}
-  \item{cell_cycle function}{Nonparametric function of cyclic gene expression
-  trend obtained by trendfilter function in genlasso}
+  \item{predict.yy}{Estimated cyclic expression values in the
+training data}
+
+  \item{cellcycle_peco_ordered}{Training labels ordered from 0 to
+    2*pi}
+
+  \item{cell_cycle function}{Nonparametric function of cyclic gene
+expression trend obtained by trendfilter function in genlasso}
+
   \item{pve}{Proportion of variance explained in each gene by the
   cell cycl phase label}
  }
@@ -20,9 +26,10 @@ A list with the follwing elements
 data(training_human)
 }
 \description{
-Pre-computed results. Applied \emph{fit_cyclic_many} to 888
-  single-cell samples that have both normalized gene expression values and
-  cell cycle labels to obtain training results that can be used as input
-  for predicting cell cycle phase in other data.
+Pre-computed results. Applied \code{fit_cyclic_many}
+to 888 single-cell samples that have both normalized gene
+expression values and cell cycle labels to obtain training results
+that can be used as input for predicting cell cycle phase in other
+data.
 }
 \keyword{data}

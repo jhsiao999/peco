@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Type: Package
 Package: peco
-Version: 1.1.6
+Version: 1.1.7
 Date: 2020-10-02
 Title: A Supervised Approach for Predicting Cell Cycle Progression Using
     Single-Cell RNA-seq Data

@@ -69,9 +69,11 @@
 #' fit <- fit_cyclical_many(Y=yy_ordered, theta=theta_ordered)
 #'
 #' @author Joyce Hsiao
+#' 
 #' @seealso
 #'     \code{\link{fit_trendfilter}} for fitting one gene
 #'     using trendfilter
+#' 
 #' @importFrom doParallel registerDoParallel
 #' @importFrom parallel makeCluster stopCluster
 #' @importFrom genlasso trendfilter cv.trendfilter
@@ -80,7 +82,6 @@
 #' @export
 #' 
 fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=2) {
-
     if (is.null(ncores)) {
         cl <- makeCluster(2)
         registerDoParallel(cl)
@@ -102,8 +103,8 @@ fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=2) {
     # For each gene, estimate the cyclical pattern of gene expression
     # conditioned on the given cell times.
     fit <- foreach(g=seq_len(G),
-                        .export = c("trendfilter", "fit_trendfilter"),
-                        .packages = c("genlasso", "peco")) %dopar% {
+                   .export = c("trendfilter", "fit_trendfilter"),
+                   .packages = c("genlasso", "peco")) %dopar% {
         y_g <- Y_ordered[g,]
         fit_g <- fit_trendfilter(yy=y_g, polyorder = polyorder)
         fun_g <- approxfun(x=as.numeric(theta_ordered),

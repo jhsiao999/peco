@@ -155,18 +155,16 @@ fit_bspline <- function(yy, time) {
                 pve=pve))
 }
 
-#' @name fit_loess
-#'
-#' @title Use loess to estimate cyclic trends of expression values
+#' @title Use Loess to Estimate Cyclic Trends of Expression Values
 #'
 #' @param yy A vector of gene expression values for one gene. The
-#' expression values are assumed to have been normalized and
-#' transformed to standard normal distribution.
+#'   expression values are assumed to have been normalized and
+#'   transformed to standard normal distribution.
 #'
 #' @param time A vector of angles (cell cycle phase).
 #'
 #' @return A list with one element, \code{pred.yy}, giving the
-#' estimated cyclic trend.
+#'   estimated cyclic trend.
 #'
 #' @author Joyce Hsiao
 #'
@@ -219,6 +217,5 @@ fit_loess <- function(yy, time) {
 
     pve <- 1 - var(yy - pred.yy)/var(yy)
 
-    return(list(pred.yy=pred.yy,
-                pve=pve))
+    return(list(pred.yy=pred.yy,pve=pve))
 }

@@ -1,17 +1,24 @@
-citHeader("To cite the mixsqp package in publications, please use:")
+citHeader("To cite the peco package in publications, please use:")
 
-citEntry(entry   = "Unpublished",
-         title   =
-	   paste("Characterizing and inferring quantitative cell cycle phase",
-                 "in single-cell RNA-seq data analysis"),
-         author  = c("Chiaowen Joyce Hsiao and Matthew Stephens"),
-         journal = "bioRxiv",
-         note    = "10.1101/526848",
-         year    = "2019",
+citEntry(entry  = "Article",
+         title  = paste("Characterizing and inferring quantitative cell",
+                        "cycle phase in single-cell RNA-seq data analysis"),
+         author = personList(as.person("Chiaowen Joyce Hsiao"),
+                             as.person("PoYuan Tung"),
+                             as.person("John D. Blischak"),
+                             as.person("Jonathan E. Burnett"),
+                             as.person("Kenneth A. Barr"),
+                             as.person("Kushal K. Dey"),
+                             as.person("Matthew Stephens"),
+                             as.person("Yoav Gilad")),
+         volume  = "forthcoming",
+         journal = "Genome Biology",
+         url     = "http://www.genome.org/cgi/doi/10.1101/gr.247759.118",
+         year    = "2020",
          textVersion =
-           paste("Chiaowen Joyce Hsiao, PoYuan Tung, John D. Blischak",
-                 "Jonathan Burnett, Kenneth Barr, Kushal D. Dey",
-            		 "Matthew Stephens, and Yoav Gilad. Characterizing and",
-		             "inferring quantitative cell cycle phase in single-cell",
-            		 "RNA-seq data analysis. bioRxiv. (* denotes equal",
-                 "contribution) doi:10.1101/526848"))
+           paste("Chiaowen Joyce Hsiao, PoYuan Tung, John D. Blischak,",
+                 "Jonathan E. Burnett, Kenneth A. Barr, Kushal K. Dey,",
+                 "Matthew Stephens and Yoav Gilad (2020). Characterizing",
+                 "and inferring quantitative cell cycle phase in",
+                 "single-cell RNA-seq data analysis. Genome Biology,",
+                 "forthcoming, doi:10.1101/gr.247759.11"))

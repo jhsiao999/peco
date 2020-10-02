@@ -18,8 +18,8 @@ A list with the follwing elements
 data(model_5genes_train)
 }
 \description{
-Pre-computed results. Applied \emph{cycle_npreg_insample} to
-  obtain gene-specific cyclic trend parameters using samples from 5
-  individuals
+Pre-computed results. Applied
+  \code{cycle_npreg_insample} to obtain gene-specific cyclic trend
+  parameters using samples from 5 individuals
 }
 \keyword{data}

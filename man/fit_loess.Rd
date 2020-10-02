@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_cyclic_one.R
 \name{fit_loess}
 \alias{fit_loess}
-\title{Use loess to estimate cyclic trends of expression values}
+\title{Use Loess to Estimate Cyclic Trends of Expression Values}
 \usage{
 fit_loess(yy, time)
 }
@@ -15,10 +15,10 @@ transformed to standard normal distribution.}
 }
 \value{
 A list with one element, \code{pred.yy}, giving the
-estimated cyclic trend.
+  estimated cyclic trend.
 }
 \description{
-Use loess to estimate cyclic trends of expression values
+Use Loess to Estimate Cyclic Trends of Expression Values
 }
 \examples{
 library(SingleCellExperiment)
