@@ -2,7 +2,7 @@
 % Please edit documentation in R/shift_origin.R
 \name{shift_origin}
 \alias{shift_origin}
-\title{Shift origin of the angles}
+\title{Shift Origin of Angles}
 \usage{
 shift_origin(phase, origin)
 }
@@ -15,13 +15,13 @@ shift_origin(phase, origin)
 A vector of angles shifted to the new origin.
 }
 \description{
-Shift origin of the angles for visualization
+Shift the origin of the angles for visualization.
 }
 \examples{
-# make a vector of angles
+# Make a vector of angles.
 theta <- seq(0,2*pi, length.out=100)
 
-# shift the origin of theta to pi
+# Shift the origin of theta to pi.
 theta_shifted <- shift_origin(theta, origin = pi)
 
 plot(x=theta, y = theta_shifted)

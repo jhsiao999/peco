@@ -151,8 +151,6 @@ sessionInfo()
 [spellman]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC25624
 [whitfield]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC117619
 
-
-
 ---
 
 #### Contact

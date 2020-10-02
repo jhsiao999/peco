@@ -2,41 +2,42 @@
 % Please edit documentation in R/intensity2circle.R
 \name{intensity2circle}
 \alias{intensity2circle}
-\title{Infer angles for each single-cell samples using fluorescence
-intensities}
+\title{Infer Angles for Single-cell Samples Using Fluorescence
+  Intensities}
 \usage{
 intensity2circle(mat, plot.it = FALSE, method = c("trig", "algebraic"))
 }
 \arguments{
-\item{mat}{A matrix of two columns of summarized fluorescence
-intensity. Rows correspond to samples.}
+\item{mat}{A matrix with two columns giving summarized fluorescence
+intensities. Rows correspond to samples.}
 
-\item{plot.it}{TRUE or FALSE. Plot the fitted results.}
+\item{plot.it}{\code{TRUE} or \code{FALSE}. If \code{plot.it =
+TRUE}, plot the fitted results.}
 
-\item{method}{The method used to fit the circle. \code{trig} uses
-trignometry to transform intensity measurements from cartesian
-coordinates to polar coordinates. \code{algebraic} uses an
-algebraic approach for circle fitting, using the conicfit package.}
+\item{method}{The method used to fit the circle. \code{method =
+"trig"} uses trignometry to transform intensity measurements from
+cartesian coordinates to polar coordinates; \code{method =
+"algebraic"} uses an algebraic approach for circle fitting,
+implemented in the \code{conicfit} package.}
 }
 \value{
-The inferred angles on unit circle based on the input
-intensity measurements.
+The inferred angles on a unit circle based on the input
+  intensity measurements.
 }
 \description{
 We use FUCCI intensities to infer the position of the
-cells in cell cycle progression. The result is a vector of angles
-on a unit circle corresponding to the positions of the cells in
-cell cycle progression.
+  cells in cell cycle progression. The result is a vector of angles
+  on a unit circle corresponding to the positions of the cells in
+  cell cycle progression.
 }
 \examples{
-# use our data
 library(SingleCellExperiment)
 data(sce_top101genes)
 
-# FUCCI scores - log10 transformed sum of intensities that were
-# corrected for background noise
+# Compute FUCCI scores---the log10-transformed sum of intensities
+# corrected for background noise.
 ints <- colData(sce_top101genes)[,c("rfp.median.log10sum.adjust",
-                          "gfp.median.log10sum.adjust")]
+                                    "gfp.median.log10sum.adjust")]
 intensity2circle(ints, plot.it=TRUE, method = "trig")
 
 }

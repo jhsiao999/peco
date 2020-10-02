@@ -1,79 +1,82 @@
-#' @name data_transform_quantile
+#' @title Quantile-normalize CPM for Each Gene
+#' 
+#' @title Transform counts by first computing counts-per-million
+#'   (CPM), then quantile-normalize CPM for each gene.
 #'
-#' @title Transform counts by first computing counts-per-million (CPM), then
-#'   quantile-normalize CPM for each gene
-#' @description
-#'   For each gene, transform counts to CPM and then to a normal distribution.
+#' @param sce \code{\link[SingleCellExperiment]{SingleCellExperiment}}
+#'   object.
+#' 
+#' @param ncores Argument passed to
+#'   \code{\link[parallel]{makeCluster}} specifying the number of
+#'   threads.
 #'
-#' @param sce SingleCellExperiment Object.
-#' @param ncores We use doParallel package for parallel computing.
-#'
-#' @return SingleCellExperiment Object with an added slot of cpm_quant,
-#'     cpm slot is added if it doesn't exist.
+#' @return SingleCellExperiment object with an additional
+#'   \dQuote{cpm_quant} slot; this is added if it doesn't already exist.
 #'
 #' @examples
-#' # use our data
 #' library(SingleCellExperiment)
 #' data(sce_top101genes)
 #'
-#' # perform CPM normalization using scater, and
-#' # quantile-normalize the CPM values of each gene to normal distribution
+#' # Perform CPM normalization using scater and quantile-normalize
+#' # the CPM values of each gene to normal distribution.
 #' sce_top101genes <- data_transform_quantile(sce_top101genes, ncores=2)
 #'
 #' plot(y=assay(sce_top101genes, "cpm_quantNormed")[1,],
 #'      x=assay(sce_top101genes, "cpm")[1,],
-#'     xlab = "CPM bbefore quantile-normalization",
-#'     ylab = "CPM after quantile-normalization")
+#'      xlab = "CPM before quantile-normalization",
+#'      ylab = "CPM after quantile-normalization")
 #'
 #' @author Joyce Hsiao
 #'
-#' @importFrom SingleCellExperiment SingleCellExperiment cpm
-#' @importFrom SummarizedExperiment assay assays assayNames
-#' @importFrom SummarizedExperiment assays<- assayNames<-
+#' @importFrom SingleCellExperiment cpm
+#' @importFrom SummarizedExperiment assay
+#' @importFrom SummarizedExperiment assays
+#' @importFrom SummarizedExperiment assayNames
+#' @importFrom SummarizedExperiment assays<-
+#' @importFrom SummarizedExperiment assayNames<-
+#' @importFrom assertthat has_name
 #' @importFrom doParallel registerDoParallel
 #' @importFrom foreach foreach
-#' @importFrom parallel makeCluster stopCluster
+#' @importFrom foreach %dopar%
+#' @importFrom parallel makeCluster
+#' @importFrom parallel stopCluster
 #' @importFrom scater calculateCPM
 #' @importFrom stats qqnorm
-#' @import foreach
-#' @import methods
 #'
 #' @export
+#' 
 data_transform_quantile <- function(sce, ncores=2) {
 
     if (is.null(ncores)) {
         cl <- makeCluster(2)
         registerDoParallel(cl)
-        message(paste("computing on",ncores,"cores"))
+        message(paste("computing with",ncores,"threads"))
     } else {
         cl <- makeCluster(ncores)
         registerDoParallel(cl)
-        message(paste("computing on",ncores,"cores"))
+        message(paste("computing with",ncores,"threads"))
     }
 
-    # check if there's already cpm normalied data,
-    # if yes, then skip this step
-    if(is(sce, "SingleCellExperiment")) {
-        if (has_name(assays(sce), "cpm")) {
-            sce <- sce
-        } else {
+    # Check if there's already cpm normalied data, if yes, skip
+    # this step.
+    if(inherits(sce, "SingleCellExperiment")) {
+        if (!has_name(assays(sce), "cpm"))
             cpm(sce) <- calculateCPM(sce)
-        }
         G <- nrow(sce)
         cpm_sce <- assay(sce, "cpm")
 
-        cpm_quantNormed <- foreach(g=seq_len(G)) %dopar% {
+        cpm_quantNormed <- foreach(g = seq_len(G)) %dopar% {
             y_g <- cpm_sce[g,]
             is.zero <- which(y_g == 0)
             qq.map <- qqnorm(y_g, plot.it=FALSE)
-            if (is.null(is.zero)) {
+            if (is.null(is.zero))
               yy.qq <- qq.map$x
-            } else {
+            else {
               yy.qq <- qq.map$x
               yy.qq[is.zero] <- sample(qq.map$x[is.zero])
             }
-            return(y_g= yy.qq)
-          }
+            return(yy.qq)
+        }
         stopCluster(cl)
         cpm_quantNormed <- do.call(rbind, cpm_quantNormed)
         colnames(cpm_quantNormed) <- colnames(cpm_sce)
@@ -87,4 +90,3 @@ data_transform_quantile <- function(sce, ncores=2) {
         return(cpm_quantNormed)
     }
 }
-

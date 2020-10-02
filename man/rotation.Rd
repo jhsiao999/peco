@@ -2,8 +2,8 @@
 % Please edit documentation in R/circ_dist.R
 \name{rotation}
 \alias{rotation}
-\title{Rotate circular variable shift_var to minimize distance
-between ref_var and shift_var}
+\title{Rotate Circular Variable to Minimize Distance Between
+  Variables.}
 \usage{
 rotation(ref_var, shift_var)
 }
@@ -13,28 +13,31 @@ rotation(ref_var, shift_var)
 \item{shift_var}{A vector of angles to be compared to ref_var.}
 }
 \value{
-The transformed values of shift_var after rotation and
-shifting.
+The transformed value of \code{shift_var} after rotation and
+  shifting.
 }
 \description{
-Because the origin of the cell cycle phases is
-arbitrary, we transform the angles prior to computing the distance
-(rotation and shifting) to minimize the distance between two
-vectors. After this, one can apply circ_dist to compute the
-distance between the output value and ref_var.
+Rotate circular variable \code{shift_var} to minimize
+  the distance between \code{ref_var} and \code{shift_var}. Because
+  the origin of the cell cycle phases is arbitrary, we transform the
+  angles prior to computing the distance (rotation and
+  shifting). After this, one can apply \code{circ_dist} to compute
+  the distance between the output value and \code{ref_var}.
 }
 \examples{
-# a vector of angles
+
+# Create a vector of angles.
 theta_ref <- seq(0,2*pi, length.out=100)
 
-# shift the origin of theta_ref to pi
+# Shift the origin of theta_ref to pi.
 theta_compare <- shift_origin(theta_ref, origin = pi)
 
-# rotate theta_compare in a such a way that the distance
-# between theta_ref and thet_compare is minimized
-theta_compare_rotated <- rotation(ref_var=theta_ref, shift_var=theta_compare)
+# Rotate theta_compare in a such a way that the distance between
+# theta_ref and theta_compare is minimized.
+theta_compare_rotated <-
+  rotation(ref_var=theta_ref, shift_var=theta_compare)
 
-par(mofrow=c(1,2))
+par(mfrow = c(1,2))
 plot(x=theta_ref, y = theta_compare)
 plot(x=theta_ref, y = theta_compare_rotated)
 

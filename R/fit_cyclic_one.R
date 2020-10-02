@@ -138,7 +138,6 @@ fit_trendfilter <- function(yy, polyorder=2) {
 #'   expression(2*pi)))
 #' abline(h=0, lty=1, col="black", lwd=.7)
 #'
-#' @import SingleCellExperiment
 #' @importFrom stats smooth.spline var predict
 #' @export
 fit_bspline <- function(yy, time) {
@@ -194,29 +193,31 @@ fit_bspline <- function(yy, time) {
 #'
 #' fit <- fit_loess(yy_ordered, time=theta_ordered)
 #'
-#' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
+#' plot(x=theta_ordered, y=yy_ordered, pch=16, cex=0.7, axes=FALSE,
 #'   ylab="quantile-normalized expression values", xlab="FUCCI phase",
 #'   main = "loess fit")
-#' points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)
+#' points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=0.7)
 #' axis(2)
 #' axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
 #'   labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
 #'   expression(2*pi)))
-#' abline(h=0, lty=1, col="black", lwd=.7)
+#' abline(h=0, lty=1, col="black", lwd=0.7)
 #'
-#' @import SingleCellExperiment
-#' @importFrom stats loess var predict
+#' @importFrom stats loess
+#' @importFrom stats var
+#' @importFrom stats predict
+#' 
 #' @export
+#' 
 fit_loess <- function(yy, time) {
-
     yy.rep <- rep(yy,3)
-    time.rep <- c(time, time+(2*pi), time+(4*pi))
+    time.rep <- c(time, time + (2*pi), time + (4*pi))
     include <- rep(c(FALSE, TRUE, FALSE), each = length(yy))
 
-    fit <- loess(yy.rep~time.rep)
+    fit <- loess(yy.rep ~ time.rep)
     pred.yy <- fit$fitted[include]
 
-    pve <- 1-var(yy-pred.yy)/var(yy)
+    pve <- 1 - var(yy - pred.yy)/var(yy)
 
     return(list(pred.yy=pred.yy,
                 pve=pve))

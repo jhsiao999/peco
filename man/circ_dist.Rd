@@ -2,7 +2,7 @@
 % Please edit documentation in R/circ_dist.R
 \name{circ_dist}
 \alias{circ_dist}
-\title{Pairwise distance between two circular variables}
+\title{Pairwise Distance Between Two Circular Variables}
 \usage{
 circ_dist(y1, y2)
 }
@@ -12,26 +12,25 @@ circ_dist(y1, y2)
 \item{y2}{A vector of angles.}
 }
 \value{
-A vector of distances between angles.
+A vector of distances between the angles.
 }
 \description{
-We define distance between two angles: the minimum of
-the differences in both clockwise and counterclockwise directions.
+We define distance between two angles as the minimum of
+  the differences in both clockwise and counterclockwise directions.
 }
 \examples{
-# a vector of angles
+# Vector of angles.
 theta_ref <- seq(0,2*pi, length.out=100)
 
-# shift the origin of theta_ref to pi
+# Shift the origin of theta_ref to pi.
 theta_compare <- shift_origin(theta_ref, origin = pi)
 mean(circ_dist(theta_ref, theta_compare))
 
-# after rotation of angles, difference is 0 between the original
-# and the shifted angles
+# After rotation of angles, difference is zero between the original
+# and the shifted angles.
 theta_compare_rotated <- rotation(ref_var=theta_ref,
     shift_var=theta_compare)
 mean(circ_dist(theta_ref, theta_compare_rotated))
-
 
 }
 \author{

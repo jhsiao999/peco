@@ -43,15 +43,15 @@ yy_ordered <- exprs_quant[1, names(theta_ordered)]
 
 fit <- fit_loess(yy_ordered, time=theta_ordered)
 
-plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
+plot(x=theta_ordered, y=yy_ordered, pch=16, cex=0.7, axes=FALSE,
   ylab="quantile-normalized expression values", xlab="FUCCI phase",
   main = "loess fit")
-points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)
+points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=0.7)
 axis(2)
 axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
   labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
   expression(2*pi)))
-abline(h=0, lty=1, col="black", lwd=.7)
+abline(h=0, lty=1, col="black", lwd=0.7)
 
 }
 \author{

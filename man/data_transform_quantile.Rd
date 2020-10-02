@@ -2,36 +2,39 @@
 % Please edit documentation in R/data_transform_quantile.R
 \name{data_transform_quantile}
 \alias{data_transform_quantile}
-\title{Transform counts by first computing counts-per-million (CPM), then
-  quantile-normalize CPM for each gene}
+\title{Quantile-normalize CPM for Each Gene}
 \usage{
 data_transform_quantile(sce, ncores = 2)
 }
 \arguments{
-\item{sce}{SingleCellExperiment Object.}
+\item{sce}{\code{\link[SingleCellExperiment]{SingleCellExperiment}}
+object.}
 
-\item{ncores}{We use doParallel package for parallel computing.}
+\item{ncores}{Argument passed to
+\code{\link[parallel]{makeCluster}} specifying the number of
+threads.}
 }
 \value{
-SingleCellExperiment Object with an added slot of cpm_quant,
-    cpm slot is added if it doesn't exist.
+SingleCellExperiment object with an additional
+  \dQuote{cpm_quant} slot; this is added if it doesn't already exist.
 }
 \description{
-For each gene, transform counts to CPM and then to a normal distribution.
+Quantile-normalize CPM for Each Gene
+
+Transform counts by first computing counts-per-million
+  (CPM), then quantile-normalize CPM for each gene.
 }
 \examples{
-# use our data
-library(SingleCellExperiment)
 data(sce_top101genes)
 
-# perform CPM normalization using scater, and
-# quantile-normalize the CPM values of each gene to normal distribution
+# Perform CPM normalization using scater and quantile-normalize
+the CPM values of each gene to normal distribution.
 sce_top101genes <- data_transform_quantile(sce_top101genes, ncores=2)
 
 plot(y=assay(sce_top101genes, "cpm_quantNormed")[1,],
      x=assay(sce_top101genes, "cpm")[1,],
-    xlab = "CPM bbefore quantile-normalization",
-    ylab = "CPM after quantile-normalization")
+     xlab = "CPM before quantile-normalization",
+     ylab = "CPM after quantile-normalization")
 
 }
 \author{

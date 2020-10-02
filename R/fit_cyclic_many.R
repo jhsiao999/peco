@@ -76,10 +76,9 @@
 #' @importFrom parallel makeCluster stopCluster
 #' @importFrom genlasso trendfilter cv.trendfilter
 #' @importFrom stats var predict
-#' @import foreach
 #'
-#' @import parallel
 #' @export
+#' 
 fit_cyclical_many <- function(Y, theta, polyorder=2, ncores=2) {
 
     if (is.null(ncores)) {

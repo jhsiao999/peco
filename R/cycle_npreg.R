@@ -59,7 +59,6 @@
 #' to each bin.}
 #'
 #' @examples
-#' # import data
 #' library(SingleCellExperiment)
 #' data(sce_top101genes)
 #'
@@ -127,7 +126,6 @@
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment assay assays assayNames colData colData<-
 #' @importFrom assertthat has_name
-#' @import methods
 #'
 #' @family peco classifier functions
 #' @seealso \code{\link{cycle_npreg_insample}} for obtaining parameteres for
@@ -362,7 +360,6 @@ initialize_grids <- function(Y, grids=100,
 #' to each bin.}
 #'
 #' @importFrom stats dnorm
-#' @import methods
 #'
 #' @family peco classifier functions
 #' @seealso \code{\link{initialize_grids}} for selecting
@@ -373,6 +370,7 @@ initialize_grids <- function(Y, grids=100,
 #'      using parameters learned from \code{\link{cycle_npreg_insample}}
 #'
 #' @author Joyce Hsiao
+#' 
 cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
                                 grids=100,
                                 method.grid=c("pca", "uniform")) {
@@ -462,7 +460,6 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' @importFrom doParallel registerDoParallel
 #' @importFrom foreach foreach
 #' @importFrom parallel makeCluster stopCluster
-#' @import foreach
 #'
 #' @family peco classifier functions
 #' @seealso

@@ -71,7 +71,6 @@ gene expression dataset to infer an angle or cell cycle phase for
 each cell.
 }
 \examples{
-# import data
 library(SingleCellExperiment)
 data(sce_top101genes)
 
