@@ -25,10 +25,11 @@ Transform counts by first computing counts-per-million
   (CPM), then quantile-normalize CPM for each gene.
 }
 \examples{
+library(SingleCellExperiment)
 data(sce_top101genes)
 
 # Perform CPM normalization using scater and quantile-normalize
-the CPM values of each gene to normal distribution.
+# the CPM values of each gene to normal distribution.
 sce_top101genes <- data_transform_quantile(sce_top101genes, ncores=2)
 
 plot(y=assay(sce_top101genes, "cpm_quantNormed")[1,],

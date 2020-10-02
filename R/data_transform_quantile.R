@@ -29,6 +29,7 @@
 #' @author Joyce Hsiao
 #'
 #' @importFrom SingleCellExperiment cpm
+#' @importFrom SingleCellExperiment cpm<-
 #' @importFrom SummarizedExperiment assay
 #' @importFrom SummarizedExperiment assays
 #' @importFrom SummarizedExperiment assayNames

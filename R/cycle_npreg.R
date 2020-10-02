@@ -149,12 +149,12 @@ cycle_npreg_outsample <- function(Y_test,
                                     grids=100,
                                     get_trend_estimates=FALSE) {
 
-    if (!normed & is(Y_test, "SingleCellExperiment")) {
+    if (!normed & inherits(Y_test, "SingleCellExperiment")) {
       Y_test <- data_transform_quantile(Y_test)
       exprs_test <- assay(Y_test, "cpm_quantNormed")
-    } else if (normed & is(Y_test, "SingleCellExperiment")) {
+    } else if (normed & inherits(Y_test, "SingleCellExperiment")) {
       exprs_test <- assay(Y_test, "cpm_quantNormed")
-    } else if (!normed & !is(Y_test, "SingleCellExperiment")) {
+    } else if (!normed & !inherits(Y_test, "SingleCellExperiment")) {
       exprs_test <- data_transform_quantile(Y_test)
     } else {
       exprs_test <- Y_test
@@ -168,7 +168,7 @@ cycle_npreg_outsample <- function(Y_test,
                                         funs_est = funs_est,
                                         grids = grids)
 
-    if (is(Y_test, "SingleCellExperiment")) {
+    if (inherits(Y_test, "SingleCellExperiment")) {
       colData(Y_test)$cellcycle_peco <- initial_loglik$cell_times_est
       if (!is.null(colData(Y_test)@elementMetadata$labelDescription)) {
         colData(Y_test)@elementMetadata$labelDescription[ncol(colData(Y_test))] <-
@@ -473,7 +473,7 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                                                         "loess", "bspline"),
                                 polyorder=2, ncores=2) {
 
-    if (is(Y, "SingleCellExperiment")) {
+    if (inherits(Y, "SingleCellExperiment")) {
       exprs_test <- assay(Y, "cpm_quantNormed")
     } else {
       exprs_test <- Y
