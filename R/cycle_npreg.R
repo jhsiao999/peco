@@ -253,10 +253,10 @@ cycle_npreg_outsample <- function(Y_test,
 cycle_npreg_insample <- function(Y, theta,
                                 ncores=2,
                                 polyorder=2,
-                                method.trend=c("trendfilter",
-                                                "loess", "bspline")) {
+                                method.trend=c("trendfilter", "loess",
+                                               "bspline")) {
 
-    # order data by initial cell times
+    # Order data by initial cell times.
     G <- nrow(Y)
     N <- ncol(Y)
     theta_ordered_initial <- theta[order(theta)]

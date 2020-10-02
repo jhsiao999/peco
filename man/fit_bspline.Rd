@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_cyclic_one.R
 \name{fit_bspline}
 \alias{fit_bspline}
-\title{Use bsplies to cyclic trend of gene expression levels}
+\title{Use Bsplies to Estimate Cyclic Trends of Gene Expression Levels}
 \usage{
 fit_bspline(yy, time)
 }
@@ -11,47 +11,46 @@ fit_bspline(yy, time)
 expression values are assumed to have been normalized and
 transformed to standard normal distribution.}
 
-\item{time}{A vector of angels (cell cycle phase).}
+\item{time}{A vector of angles (cell cycle phase).}
 }
 \value{
 A list with one element, \code{pred.yy}, giving the
-estimated cyclic trend.
+  estimated cyclic trend.
 }
 \description{
-Use bsplies to cyclic trend of gene expression levels
+Use Bsplies to Estimate Cyclic Trends of Gene Expression Levels
 }
 \examples{
 library(SingleCellExperiment)
 data(sce_top101genes)
 
-# select top 10 cyclic genes
+# Select top 10 cyclic genes.
 sce_top10 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
-                                  decreasing=TRUE)[1:10],]
+                                   decreasing=TRUE)[1:10],]
 coldata <- colData(sce_top10)
 
-# cell cycle phase based on FUCCI scores
+# Get ccell cycle phase based on FUCCI scores.
 theta <- coldata$theta
 names(theta) <- rownames(coldata)
 
-# normalize expression counts
+# Normalize expression counts.
 sce_top10 <- data_transform_quantile(sce_top10, ncores=2)
 exprs_quant <- assay(sce_top10, "cpm_quantNormed")
 
-# order FUCCI phase and expression
+# Order FUCCI phase and expression.
 theta_ordered <- theta[order(theta)]
 yy_ordered <- exprs_quant[1, names(theta_ordered)]
 
-fit <- fit_bspline(yy_ordered, time=theta_ordered)
+fit <- fit_trendfilter(yy_ordered)
 
-plot(x=theta_ordered, y=yy_ordered, pch=16, cex=.7, axes=FALSE,
+plot(x=theta_ordered, y=yy_ordered, pch=16, cex=0.7, axes=FALSE,
   ylab="quantile-normalized expression values", xlab="FUCCI phase",
-  main = "bspline fit")
-points(x=theta_ordered, y=fit$pred.yy, col="blue", pch=16, cex=.7)
+  main = "trendfilter fit")
+points(x=theta_ordered, y=fit$trend.yy, col="orangered", pch=16, cex=0.7)
 axis(2)
-axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
-  labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
-  expression(2*pi)))
-abline(h=0, lty=1, col="black", lwd=.7)
+axis(1,at=seq(0,2*pi,pi/2),
+     labels=c(0,expression(pi/2), expression(pi), expression(3*pi/2),
+              expression(2*pi)))
 
 }
 \author{

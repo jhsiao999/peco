@@ -2,20 +2,18 @@
 % Please edit documentation in R/fit_cyclic_one.R
 \name{fit_trendfilter}
 \alias{fit_trendfilter}
-\title{Using trendfiltering to estimate cyclic trend of gene
-expression}
+\title{Using Trendfiltering to Estimate Cyclic Trend of Gene Eexpression}
 \usage{
 fit_trendfilter(yy, polyorder = 2)
 }
 \arguments{
-\item{yy}{A vector of gene expression values for one gene
-that are ordered by cell cycle phase. Also, the
-expression values are normalized and
-transformed to standard normal distribution.}
+\item{yy}{A vector of gene expression values for a single
+gene. They must be ordered by cell cycle phase. Also, the
+expression values should be normalized and transformed to standard
+normal distribution.}
 
-\item{polyorder}{We estimate cyclic trends of gene expression
-levels using nonparamtric trend filtering. The default fits second
-degree polynomials.}
+\item{polyorder}{Degree of polynomials used in nonparamtric trend
+filtering.}
 }
 \value{
 A list with two elements:
@@ -24,16 +22,19 @@ A list with two elements:
     trend in the gene expression levels.}
 }
 \description{
-We applied quadratic (second order) trend filtering
-using the trendfilter function in the genlasso package (Tibshirani,
-2014).  The trendfilter function implements a nonparametric
+Using Trendfiltering to Estimate Cyclic Trend of Gene Eexpression
+}
+\details{
+We applied quadratic (second-order) trend filtering using
+the trendfilter function in the genlasso package (Tibshirani,
+2014). The trendfilter function implements a nonparametric
 smoothing method which chooses the smoothing parameter by
 cross-validation and fits a piecewise polynomial regression. In
 more specifics: The trendfilter method determines the folds in
-cross-validation in a nonrandom manner.  Every k-th data point in
+cross-validation in a non-random manner: every k-th data point in
 the ordered sample is placed in the k-th fold, so the folds contain
 ordered subsamples. We applied five-fold cross-validation and chose
-the smoothing penalty using the option lambda.1se: among all
+the smoothing penalty using the option lambda.1se; among all
 possible values of the penalty term, the largest value such that
 the cross-validation standard error is within one standard error of
 the minimum. Furthermore, we desired that the estimated expression
