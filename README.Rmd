@@ -29,7 +29,7 @@ install_github("jhsiao999/peco")
 
 `peco` uses `SingleCellExperiment` class objects.
 
-```{r}
+```{r message=FALSE}
 library(peco)
 library(SingleCellExperiment)
 library(doParallel)
