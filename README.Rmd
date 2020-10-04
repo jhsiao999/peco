@@ -29,7 +29,7 @@ install_github("jhsiao999/peco")
 
 `peco` uses `SingleCellExperiment` class objects.
 
-```{r}
+```{r message=FALSE}
 library(peco)
 library(SingleCellExperiment)
 library(doParallel)
@@ -161,10 +161,10 @@ for questions on the package or the methods.
 
 #### How to cite
 
-> Hsiao, C. J., Tung, P., Blischak, J. D., Burnett, J., Dey, K. K.,
-> Barr, A. K., Stephens, M., and Gilad, Y. (2018). [Characterizing and
-> inferring quantitative cell-cycle phase in single-cell RNA-seq data
-> analysis.](https://doi.org/10.1101/526848) bioRxiv doi:10.1101/526848
+> Chiaowen Joyce Hsiao, PoYuan Tung, John D. Blischak, Jonathan E. Burnett,
+> Kenneth A. Barr, Kushal K. Dey, Matthew Stephens and Yoav Gilad (2020).
+> Characterizing and inferring quantitative cell cycle phase in single-cell
+> RNA-seq data analysis. Genome Biology, 30(4): 611-621, doi:10.1101/gr.247759.11
 
 #### License
 
