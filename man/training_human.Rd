@@ -6,7 +6,7 @@
 \title{Training Data from 888 Single-cell Samples and 101 Top
   Cyclic Genes}
 \format{
-A list with the follwing elements:
+A list with the following elements:
 
 \describe{
   \item{predict.yy}{Estimated cyclic expression values in the
@@ -19,17 +19,18 @@ training data}
 expression trend obtained by trendfilter function in genlasso}
 
   \item{pve}{Proportion of variance explained in each gene by the
-  cell cycl phase label}
+  cell cycle phase label}
  }
 }
-\usage{
-data(training_human)
-}
 \description{
-Pre-computed results. Applied \code{fit_cyclic_many}
+Pre-computed peco results: applied \code{fit_cyclic_many}
 to 888 single-cell samples that have both normalized gene
 expression values and cell cycle labels to obtain training results
 that can be used as input for predicting cell cycle phase in other
 data.
+}
+\examples{
+data(training_human)
+
 }
 \keyword{data}

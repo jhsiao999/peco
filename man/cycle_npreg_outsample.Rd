@@ -149,7 +149,6 @@ title("Predicting cell cycle phase for NA18511", outer=TRUE)
 Other peco classifier functions: 
 \code{\link{cycle_npreg_insample}()},
 \code{\link{cycle_npreg_loglik}()},
-\code{\link{cycle_npreg_mstep}()},
-\code{\link{initialize_grids}()}
+\code{\link{cycle_npreg_mstep}()}
 }
 \concept{peco classifier functions}

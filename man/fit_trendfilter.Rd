@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_cyclic_one.R
 \name{fit_trendfilter}
 \alias{fit_trendfilter}
-\title{Using Trendfiltering to Estimate Cyclic Trend of Gene Eexpression}
+\title{Estimate Cyclic Trend of Gene Expression Using Trendfiltering}
 \usage{
 fit_trendfilter(yy, polyorder = 2)
 }
@@ -16,21 +16,21 @@ normal distribution.}
 filtering.}
 }
 \value{
-A list with two elements:
-    \item{trend.yy}{The estimated cyclic trend.}
-    \item{pve}{Proportion of variance explained by the cyclic
-    trend in the gene expression levels.}
+A list with two elements: \code{trend.yy}, the estimated
+  cyclic trend; \code{pve}, proportion of variance in gene expression
+  levels explained by the cyclic trend.
 }
 \description{
-Using Trendfiltering to Estimate Cyclic Trend of Gene Eexpression
+Estimate Cyclic Trend of Gene Expression Using Trendfiltering
 }
 \details{
 We applied quadratic (second-order) trend filtering using
-the trendfilter function in the genlasso package (Tibshirani,
-2014). The trendfilter function implements a nonparametric
-smoothing method which chooses the smoothing parameter by
-cross-validation and fits a piecewise polynomial regression. In
-more specifics: The trendfilter method determines the folds in
+  the trendfilter function in the \code{genlasso} package. The
+  trendfilter function implements a nonparametric smoothing method
+  which chooses the smoothing parameter by cross-validation and fits
+  a piecewise polynomial regression.
+
+The trendfilter method determines the folds in
 cross-validation in a non-random manner: every k-th data point in
 the ordered sample is placed in the k-th fold, so the folds contain
 ordered subsamples. We applied five-fold cross-validation and chose

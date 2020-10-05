@@ -3,13 +3,13 @@
 #' @title Training Data from 888 Single-cell Samples and 101 Top
 #'   Cyclic Genes
 #'
-#' @description Pre-computed results. Applied \code{fit_cyclic_many}
+#' @description Pre-computed peco results: applied \code{fit_cyclic_many}
 #' to 888 single-cell samples that have both normalized gene
 #' expression values and cell cycle labels to obtain training results
 #' that can be used as input for predicting cell cycle phase in other
 #' data.
 #'
-#' @format A list with the follwing elements:
+#' @format A list with the following elements:
 #'
 #' \describe{
 #'   \item{predict.yy}{Estimated cyclic expression values in the
@@ -22,12 +22,13 @@
 #' expression trend obtained by trendfilter function in genlasso}
 #' 
 #'   \item{pve}{Proportion of variance explained in each gene by the
-#'   cell cycl phase label}
+#'   cell cycle phase label}
 #'  }
 #'
 #' @docType data
 #'
-#' @usage data(training_human)
+#' @examples
+#' data(training_human)
 #'
 #' @keywords data
 #' 
@@ -38,11 +39,9 @@ NULL
 #' @title Molecule counts of the 101 significant cyclical genes in the
 #' 888 samples analyzed in the study.
 #'
-#' @description A SingleCellExperiment object (require
-#' SingleCellExperiment package) including molecule count data after
-#' gene and smaple filtering.  The `colData()` slot contains sample
-#' phenotype information and the `rowData()` slot contains gene
-#' feature information.
+#' @description A SingleCellExperiment object, including molecule count
+#' data after gene and smaple filtering. The \code{colData} slot
+#' contains sample phenotype information.
 #'
 #' @format A SingleCellExperiment object with 888 samples and the 101
 #'     significant cyclic genes,
@@ -54,7 +53,11 @@ NULL
 #'
 #' @docType data
 #'
-#' @usage data(sce_top101genes)
+#' @examples
+#' library(SingleCellExperiment)
+#' data(sce_top101genes)
+#' dim(sce_top101genes@colData)
+#' dim(sce_top101genes@rowData)
 #'
 #' @keywords data
 #' 
@@ -79,7 +82,8 @@ NULL
 #'
 #' @docType data
 #'
-#' @usage data(model_5genes_train)
+#' @examples
+#' data(model_5genes_train)
 #'
 #' @keywords data
 #' 
@@ -95,7 +99,7 @@ NULL
 #' single-cell samples of NA19098. The predicted cell cycle is stored
 #' as variable \emph{cellcycle_peco}.
 #'
-#' @format A list with the follwing elements
+#' @format A list with the following elements
 #'
 #' \describe{
 #'   \item{cellcycle_peco}{Predict cell cycle,
@@ -104,7 +108,8 @@ NULL
 #'
 #' @docType data
 #'
-#' @usage data(model_5genes_predict)
+#' @examples
+#' data(model_5genes_predict)
 #'
 #' @keywords data
 #'
@@ -117,7 +122,7 @@ NULL
 #' @description List of cell cycle genes and their associated cell
 #'   cycle state as reported in Whitfield et al. 2002.
 #'
-#' @format A list with the follwing elements:
+#' @format A list with the following elements:
 #'
 #' \describe{
 #'   \item{hgnc}{Gene symbol}
@@ -127,7 +132,8 @@ NULL
 #'
 #' @docType data
 #'
-#' @usage data(cellcyclegenes_whitfield2002)
+#' @examples
+#' data(cellcyclegenes_whitfield2002)
 #'
 #' @keywords data
 #'

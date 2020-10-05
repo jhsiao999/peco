@@ -5,15 +5,12 @@
 \alias{model_5genes_predict}
 \title{A SingleCellExperiment object}
 \format{
-A list with the follwing elements
+A list with the following elements
 
 \describe{
   \item{cellcycle_peco}{Predict cell cycle,
    the values ranged between 0 to 2pi}
  }
-}
-\usage{
-data(model_5genes_predict)
 }
 \description{
 Pre-computed results. Applied
@@ -21,5 +18,9 @@ Pre-computed results. Applied
 \emph{model_5genes_train} to predict cell cycle phase for
 single-cell samples of NA19098. The predicted cell cycle is stored
 as variable \emph{cellcycle_peco}.
+}
+\examples{
+data(model_5genes_predict)
+
 }
 \keyword{data}

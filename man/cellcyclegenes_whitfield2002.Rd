@@ -5,7 +5,7 @@
 \alias{cellcyclegenes_whitfield2002}
 \title{List of Cell Cycle Genes Identified in Whitfield et al 2002.}
 \format{
-A list with the follwing elements:
+A list with the following elements:
 
 \describe{
   \item{hgnc}{Gene symbol}
@@ -13,11 +13,12 @@ A list with the follwing elements:
   \item{phase}{Marker phase identified in Whitfield et al. 2002}
  }
 }
-\usage{
-data(cellcyclegenes_whitfield2002)
-}
 \description{
 List of cell cycle genes and their associated cell
   cycle state as reported in Whitfield et al. 2002.
+}
+\examples{
+data(cellcyclegenes_whitfield2002)
+
 }
 \keyword{data}

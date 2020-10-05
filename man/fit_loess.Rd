@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_cyclic_one.R
 \name{fit_loess}
 \alias{fit_loess}
-\title{Use Loess to Estimate Cyclic Trends of Expression Values}
+\title{Estimate Cyclic Trends of Expression Values Using Loess}
 \usage{
 fit_loess(yy, time)
 }
@@ -14,11 +14,12 @@ transformed to standard normal distribution.}
 \item{time}{A vector of angles (cell cycle phase).}
 }
 \value{
-A list with one element, \code{pred.yy}, giving the
-  estimated cyclic trend.
+A list with two elements: \code{pred.yy}, the estimated
+  cyclic trend; \code{pve}, proportion of variance in gene expression
+  levels explained by the cyclic trend.
 }
 \description{
-Use Loess to Estimate Cyclic Trends of Expression Values
+Estimate Cyclic Trends of Expression Values Using Loess
 }
 \examples{
 library(SingleCellExperiment)

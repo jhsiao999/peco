@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_cyclic_one.R
 \name{fit_bspline}
 \alias{fit_bspline}
-\title{Use Bsplies to Estimate Cyclic Trends of Gene Expression Levels}
+\title{Estimate Cyclic Trends in Gene Expression Levels Using B-splines}
 \usage{
 fit_bspline(yy, time)
 }
@@ -14,11 +14,12 @@ transformed to standard normal distribution.}
 \item{time}{A vector of angles (cell cycle phase).}
 }
 \value{
-A list with one element, \code{pred.yy}, giving the
-  estimated cyclic trend.
+A list with two elements: \code{pred.yy}, the estimated
+  cyclic trend; \code{pve}, proportion of variance in gene expression
+  levels explained by the cyclic trend.
 }
 \description{
-Use Bsplies to Estimate Cyclic Trends of Gene Expression Levels
+Estimate Cyclic Trends in Gene Expression Levels Using B-splines
 }
 \examples{
 library(SingleCellExperiment)

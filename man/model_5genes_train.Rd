@@ -14,12 +14,13 @@ A list with the follwing elements
   \item{funs_est}{a list of estimated cyclic functions}
 }
 }
-\usage{
-data(model_5genes_train)
-}
 \description{
 Pre-computed results. Applied
   \code{cycle_npreg_insample} to obtain gene-specific cyclic trend
   parameters using samples from 5 individuals
+}
+\examples{
+data(model_5genes_train)
+
 }
 \keyword{data}

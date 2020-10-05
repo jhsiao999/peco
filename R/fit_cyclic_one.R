@@ -1,13 +1,12 @@
-#' @name fit_trendfilter
-#'
-#' @title Using Trendfiltering to Estimate Cyclic Trend of Gene Eexpression
+#' @title Estimate Cyclic Trend of Gene Expression Using Trendfiltering
 #'
 #' @details We applied quadratic (second-order) trend filtering using
-#' the trendfilter function in the genlasso package (Tibshirani,
-#' 2014). The trendfilter function implements a nonparametric
-#' smoothing method which chooses the smoothing parameter by
-#' cross-validation and fits a piecewise polynomial regression. In
-#' more specifics: The trendfilter method determines the folds in
+#'   the trendfilter function in the \code{genlasso} package. The
+#'   trendfilter function implements a nonparametric smoothing method
+#'   which chooses the smoothing parameter by cross-validation and fits
+#'   a piecewise polynomial regression.
+#'
+#' @details The trendfilter method determines the folds in
 #' cross-validation in a non-random manner: every k-th data point in
 #' the ordered sample is placed in the k-th fold, so the folds contain
 #' ordered subsamples. We applied five-fold cross-validation and chose
@@ -28,10 +27,9 @@
 #' @param polyorder Degree of polynomials used in nonparamtric trend
 #'    filtering.
 #'
-#' @return A list with two elements:
-#'     \item{trend.yy}{The estimated cyclic trend.}
-#'     \item{pve}{Proportion of variance explained by the cyclic
-#'     trend in the gene expression levels.}
+#' @return A list with two elements: \code{trend.yy}, the estimated
+#'   cyclic trend; \code{pve}, proportion of variance in gene expression
+#'   levels explained by the cyclic trend.
 #'
 #' @examples
 #' library(SingleCellExperiment)
@@ -93,7 +91,7 @@ fit_trendfilter <- function(yy, polyorder=2) {
                 pve=pve))
 }
 
-#' @title Use Bsplies to Estimate Cyclic Trends of Gene Expression Levels
+#' @title Estimate Cyclic Trends in Gene Expression Levels Using B-splines
 #'
 #' @param yy A vector of gene expression values for one gene. The
 #'   expression values are assumed to have been normalized and
@@ -101,9 +99,10 @@ fit_trendfilter <- function(yy, polyorder=2) {
 #'
 #' @param time A vector of angles (cell cycle phase).
 #'
-#' @return A list with one element, \code{pred.yy}, giving the
-#'   estimated cyclic trend.
-#'
+#' @return A list with two elements: \code{pred.yy}, the estimated
+#'   cyclic trend; \code{pve}, proportion of variance in gene expression
+#'   levels explained by the cyclic trend.
+#' 
 #' @author Joyce Hsiao
 #'
 #' @examples
@@ -159,7 +158,7 @@ fit_bspline <- function(yy, time) {
                 pve=pve))
 }
 
-#' @title Use Loess to Estimate Cyclic Trends of Expression Values
+#' @title Estimate Cyclic Trends of Expression Values Using Loess
 #'
 #' @param yy A vector of gene expression values for a single gene. The
 #'   expression values are assumed to have been normalized and
@@ -167,9 +166,10 @@ fit_bspline <- function(yy, time) {
 #'
 #' @param time A vector of angles (cell cycle phase).
 #'
-#' @return A list with one element, \code{pred.yy}, giving the
-#'   estimated cyclic trend.
-#'
+#' @return A list with two elements: \code{pred.yy}, the estimated
+#'   cyclic trend; \code{pve}, proportion of variance in gene expression
+#'   levels explained by the cyclic trend.
+#' 
 #' @author Joyce Hsiao
 #'
 #' @examples

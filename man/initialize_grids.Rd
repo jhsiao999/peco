@@ -33,14 +33,7 @@ on a circle.
     inferred phases from  \code{\link{cycle_npreg_loglik}},
     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
      using parameters learned from \code{\link{cycle_npreg_insample}}
-
-Other peco classifier functions: 
-\code{\link{cycle_npreg_insample}()},
-\code{\link{cycle_npreg_loglik}()},
-\code{\link{cycle_npreg_mstep}()},
-\code{\link{cycle_npreg_outsample}()}
 }
 \author{
 Joyce Hsiao
 }
-\concept{peco classifier functions}

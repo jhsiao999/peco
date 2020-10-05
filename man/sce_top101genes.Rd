@@ -14,14 +14,16 @@ A SingleCellExperiment object with 888 samples and the 101
         a circle, also known as FUCCI phase.}
 }
 }
-\usage{
-data(sce_top101genes)
-}
 \description{
-A SingleCellExperiment object (require
-SingleCellExperiment package) including molecule count data after
-gene and smaple filtering.  The `colData()` slot contains sample
-phenotype information and the `rowData()` slot contains gene
-feature information.
+A SingleCellExperiment object, including molecule count
+data after gene and smaple filtering. The \code{colData} slot
+contains sample phenotype information.
+}
+\examples{
+library(SingleCellExperiment)
+data(sce_top101genes)
+dim(sce_top101genes@colData)
+dim(sce_top101genes@rowData)
+
 }
 \keyword{data}

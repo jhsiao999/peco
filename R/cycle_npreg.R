@@ -5,8 +5,6 @@
 # to another gene expression dataset to infer an angle or cell cycle
 # phase for each cell.
 
-#' @name cycle_npreg_outsample
-#'
 #' @title Predict test-sample ordering using training labels (no update)
 #'
 #' @description Apply the estimates of cycle_npreg_insample to another
@@ -202,8 +200,6 @@ cycle_npreg_outsample <- function(Y_test,
     return(out)
 }
 
-#' @name cycle_npreg_insample
-#'
 #' @title Obtain cyclic trend estimates from the training data
 #'
 #' @description Estimates cyclic trends of gene expression levels
@@ -275,12 +271,6 @@ cycle_npreg_insample <- function(Y, theta,
                 funs_est=initial_mstep$funs))
 }
 
-
-
-#------ Supporting functions
-
-#' @name initialize_grids
-#'
 #' @title For prediction, initialize grid points for cell cycle phase
 #' on a circle.
 #'
@@ -297,7 +287,6 @@ cycle_npreg_insample <- function(Y, theta,
 #' @return A vector of initialized angles to be used in
 #' \code{cycle_npreg_loglik} to infer angles.
 #'
-#' @family peco classifier functions
 #' @seealso
 #'     \code{\link{cycle_npreg_loglik}} for log-likehood at
 #'     angles between 0 to 2pi,
@@ -305,6 +294,7 @@ cycle_npreg_insample <- function(Y, theta,
 #'     inferred phases from  \code{\link{cycle_npreg_loglik}},
 #'     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
 #'      using parameters learned from \code{\link{cycle_npreg_insample}}
+#' 
 #' @author Joyce Hsiao
 #'
 initialize_grids <- function(Y, grids=100,
@@ -339,8 +329,6 @@ initialize_grids <- function(Y, grids=100,
     return(theta_initial)
 }
 
-#' @name cycle_npreg_loglik
-#'
 #' @title Infer angles or cell cycle phase based on gene expression data
 #'
 #' @param Y Gene by sample expression matrix.
@@ -419,8 +407,6 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
                 prob_per_cell_by_celltimes=prob_per_cell_by_celltimes))
 }
 
-#' @name cycle_npreg_mstep
-#'
 #' @title Estimate parameters of the cyclic trends
 #'
 #' @description This is used in both cycle_npreg_insample (training
@@ -469,6 +455,7 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #'      using parameters learned from \code{\link{cycle_npreg_insample}}
 #'
 #' @author Joyce Hsiao
+#' 
 cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
                                                         "loess", "bspline"),
                                 polyorder=2, ncores=2) {
