@@ -23,7 +23,6 @@ contains sample phenotype information.
 library(SingleCellExperiment)
 data(sce_top101genes)
 dim(sce_top101genes@colData)
-dim(sce_top101genes@rowData)
 
 }
 \keyword{data}

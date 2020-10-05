@@ -13,7 +13,7 @@ A list with the following elements
  }
 }
 \description{
-Pre-computed results. Applied
+Pre-computed peco results. Applied
 \emph{cycle_npreg_outsample} and results stored in
 \emph{model_5genes_train} to predict cell cycle phase for
 single-cell samples of NA19098. The predicted cell cycle is stored
