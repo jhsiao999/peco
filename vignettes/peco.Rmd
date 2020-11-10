@@ -35,7 +35,7 @@ knitr::opts_chunk$set(results = "hold",collapse = TRUE,comment = "#>",
 
 `peco` uses `SingleCellExperiment` class objects:
 
-```{r load-pkgs, message=FALSE}
+```{r load-pkgs, message=FALSE, warning=FALSE}
 library(SingleCellExperiment)
 library(doParallel)
 library(foreach)
@@ -48,19 +48,19 @@ About the training data
 `training_human` provides training data for 101 significant
 cyclic genes. The data include:
 
-+ `predict.yy`: A gene-by-sample matrix (101 x 888) that storing
++ `predict.yy`, a gene-by-sample matrix (101 x 888) that storing
   predicted cyclic expression values.
 
-+ `cellcycle_peco_ordered`: cell cycle phase in a unit circle
++ `cellcycle_peco_ordered`, cell cycle phase in a unit circle
   (angle), ordered from 0 to 2$\pi$.
 
-+ `cellcycle_function`: Functions corresponding to the top
-  101 cyclic genes identified.
++ `cellcycle_function`, functions used for prediction corresponding to
+  the top 101 cyclic genes identified.
 
-+ `sigma`: Standard error associated with cyclic trends of gene
++ `sigma`, standard error associated with cyclic trends of gene
   expression.
 
-+ `pve`: Proportion of variance explained by the cyclic trend.
++ `pve`, proportion of variance explained by the cyclic trend.
 
 ```{r loading-training-data}
 data(training_human)
@@ -85,7 +85,7 @@ Transform expression to quantile-normalizesd counts-per-million (CPM)
 values; `peco` uses the `cpm_quantNormed` slot as the input data for
 predictions.
 
-```{r transform-expression}
+```{r transform-expression, message=FALSE}
 sce_top101genes <- data_transform_quantile(sce_top101genes)
 assays(sce_top101genes)
 ```
@@ -97,8 +97,7 @@ pred_top101genes <-
   cycle_npreg_outsample(Y_test = sce_top101genes,
     sigma_est = training_human$sigma[rownames(sce_top101genes),],
     funs_est = training_human$cellcycle_function[rownames(sce_top101genes)],
-    method.trend = "trendfilter",ncores = 1,
-    get_trend_estimates = FALSE)
+    method.trend = "trendfilter",get_trend_estimates = FALSE)
 ```
 
 `pred_top101genes$Y` contains a `SingleCellExperiment` object with
@@ -108,46 +107,41 @@ the predicted cell cycle phase in the `colData` slot:
 head(colData(pred_top101genes$Y)$cellcycle_peco)
 ```
 
-Visualize results of prediction for one gene. Below we choose CDK1
-("ENSG00000170312"). Because CDK1 is a known cell cycle gene, this
-visualization serves as a sanity check for the results of fitting. The
-fitted function `training_human$cellcycle_function[[1]]` was obtained
-from our training data.
+View the predictions for the *CDK1* gene (Ensembl id
+ENSG00000170312). Because *CDK1* is a known cell cycle gene, this
+visualization serves as a "sanity check" for the predictions.
 
-```{r plot-predictions-single-gene, fig.height=4, fig.width=4}
-plot(y=assay(pred_top101genes$Y,"cpm_quantNormed")["ENSG00000170312",],
-     x=colData(pred_top101genes$Y)$theta_shifted, main = "CDK1",
-     ylab = "quantile normalized expression")
-points(y=training_human$cellcycle_function[["ENSG00000170312"]](seq(0,2*pi, length.out=100)),
-       x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
+```{r plot-predictions-single-gene, fig.height=4, fig.width=5}
+x <- seq(0,2*pi,length.out = 100)
+plot(x = colData(pred_top101genes$Y)$theta_shifted,
+     y = assay(pred_top101genes$Y,"cpm_quantNormed")["ENSG00000170312",],
+     pch = 21,col = "white",bg = "darkblue",
+     main = "CDK1",xlab = "FUCCI phase",
+	 ylab = "quantile-normalized expression")
+lines(x = x,y = training_human$cellcycle_function[["ENSG00000170312"]](x),
+      col = "tomato",lwd = 2)
 ```
 
 Visualize cyclic expression trend based on predicted phase
 ----------------------------------------------------------
 
-Visualize results of prediction for the top 10 genesone genes. Use
-`fit_cyclical_many` to estimate cyclic function based on the input
-data.
+Next, we view the predictions for the top six genes. Here we use
+`fit_cyclical_many` to estimate cell cycle.
 
-
-```{r plot-predictions-top-genes, fig.height=6, fig.width=4}
-# predicted cell time in the input data
-theta_predict = colData(pred_top101genes$Y)$cellcycle_peco
-names(theta_predict) = rownames(colData(pred_top101genes$Y))
-# expression values of 10 genes in the input data
-yy_input = assay(pred_top101genes$Y,"cpm_quantNormed")[1:6,]
-# apply trendfilter to estimate cyclic gene expression trend
-fit_cyclic <- fit_cyclical_many(Y=yy_input, 
-                                theta=theta_predict)
-gene_symbols = rowData(pred_top101genes$Y)$hgnc[rownames(yy_input)]
+```{r plot-predictions-top-genes, fig.height=8, fig.width=7, message=FALSE}
+theta_predict <- colData(pred_top101genes$Y)$cellcycle_peco
+names(theta_predict) <- rownames(colData(pred_top101genes$Y))
+yy_input <- assay(pred_top101genes$Y,"cpm_quantNormed")[1:6,]
+fit_cyclic <- fit_cyclical_many(Y = yy_input,theta = theta_predict)
+gene_symbols <- rowData(pred_top101genes$Y)[rownames(yy_input),"hgnc"]
+x <- seq(0,2*pi,length.out = 100)
 par(mfrow = c(3,2))
 for (i in 1:6) {
-plot(y=yy_input[i,],
-     x=fit_cyclic$cellcycle_peco_ordered, 
-     main = gene_symbols[i],
-     ylab = "quantile normalized expression")
-points(y=fit_cyclic$cellcycle_function[[i]](seq(0,2*pi, length.out=100)),
-       x=seq(0,2*pi, length.out=100), col = "blue", pch =16)
+  plot(x = fit_cyclic$cellcycle_peco_ordered,y = yy_input[i,],
+       pch = 1,col = "darkblue",main = gene_symbols[i],
+       xlab = "FUCCI phase",ylab = "normalized expression")
+  lines(x = x,y = fit_cyclic$cellcycle_function[[i]](x),
+        col = "tomato",lwd = 2)
 }
 ```
 
