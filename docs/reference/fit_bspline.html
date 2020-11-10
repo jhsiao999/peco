@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Use bsplies to cyclic trend of gene expression levels — fit_bspline • peco</title>
+<title>Estimate Cyclic Trends in Gene Expression Levels Using B-splines — fit_bspline • peco</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Use bsplies to cyclic trend of gene expression levels — fit_bspline" />
-<meta property="og:description" content="Use bsplies to cyclic trend of gene expression levels" />
+<meta property="og:title" content="Estimate Cyclic Trends in Gene Expression Levels Using B-splines — fit_bspline" />
+<meta property="og:description" content="Estimate Cyclic Trends in Gene Expression Levels Using B-splines" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.12</span>
       </span>
     </div>
 
@@ -105,13 +105,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Use bsplies to cyclic trend of gene expression levels</h1>
+    <h1>Estimate Cyclic Trends in Gene Expression Levels Using B-splines</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/fit_cyclic_one.R'><code>R/fit_cyclic_one.R</code></a></small>
     <div class="hidden name"><code>fit_bspline.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Use bsplies to cyclic trend of gene expression levels</p>
+    <p>Estimate Cyclic Trends in Gene Expression Levels Using B-splines</p>
     </div>
 
     <pre class="usage"><span class='fu'>fit_bspline</span>(<span class='no'>yy</span>, <span class='no'>time</span>)</pre>
@@ -127,42 +127,42 @@ transformed to standard normal distribution.</p></td>
     </tr>
     <tr>
       <th>time</th>
-      <td><p>A vector of angels (cell cycle phase).</p></td>
+      <td><p>A vector of angles (cell cycle phase).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with one element, <code>pred.yy</code>, giving the
-estimated cyclic trend.</p>
+    <p>A list with two elements: <code>pred.yy</code>, the estimated
+  cyclic trend; <code>pve</code>, proportion of variance in gene expression
+  levels explained by the cyclic trend.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>SingleCellExperiment</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sce_top101genes</span>)
 
-<span class='co'># select top 10 cyclic genes</span>
+<span class='co'># Select top 10 cyclic genes.</span>
 <span class='no'>sce_top10</span> <span class='kw'>&lt;-</span> <span class='no'>sce_top101genes</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='fu'>rowData</span>(<span class='no'>sce_top101genes</span>)$<span class='no'>pve_fucci</span>,
-                                  <span class='kw'>decreasing</span><span class='kw'>=</span><span class='fl'>TRUE</span>)[<span class='fl'>1</span>:<span class='fl'>10</span>],]
+                                   <span class='kw'>decreasing</span><span class='kw'>=</span><span class='fl'>TRUE</span>)[<span class='fl'>1</span>:<span class='fl'>10</span>],]
 <span class='no'>coldata</span> <span class='kw'>&lt;-</span> <span class='fu'>colData</span>(<span class='no'>sce_top10</span>)
 
-<span class='co'># cell cycle phase based on FUCCI scores</span>
+<span class='co'># Get ccell cycle phase based on FUCCI scores.</span>
 <span class='no'>theta</span> <span class='kw'>&lt;-</span> <span class='no'>coldata</span>$<span class='no'>theta</span>
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>theta</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>coldata</span>)
 
-<span class='co'># normalize expression counts</span>
-<span class='no'>sce_top10</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='data_transform_quantile.html'>data_transform_quantile</a></span>(<span class='no'>sce_top10</span>, <span class='kw'>ncores</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>computing on 2 cores</span></div><div class='input'><span class='no'>exprs_quant</span> <span class='kw'>&lt;-</span> <span class='fu'>assay</span>(<span class='no'>sce_top10</span>, <span class='st'>"cpm_quantNormed"</span>)
+<span class='co'># Normalize expression counts.</span>
+<span class='no'>sce_top10</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='data_transform_quantile.html'>data_transform_quantile</a></span>(<span class='no'>sce_top10</span>, <span class='kw'>ncores</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>computing with 2 threads</span></div><div class='input'><span class='no'>exprs_quant</span> <span class='kw'>&lt;-</span> <span class='fu'>assay</span>(<span class='no'>sce_top10</span>, <span class='st'>"cpm_quantNormed"</span>)
 
-<span class='co'># order FUCCI phase and expression</span>
+<span class='co'># Order FUCCI phase and expression.</span>
 <span class='no'>theta_ordered</span> <span class='kw'>&lt;-</span> <span class='no'>theta</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='no'>theta</span>)]
 <span class='no'>yy_ordered</span> <span class='kw'>&lt;-</span> <span class='no'>exprs_quant</span>[<span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>theta_ordered</span>)]
 
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>fit_bspline</span>(<span class='no'>yy_ordered</span>, <span class='kw'>time</span><span class='kw'>=</span><span class='no'>theta_ordered</span>)
-
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ordered</span>, <span class='kw'>y</span><span class='kw'>=</span><span class='no'>yy_ordered</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>.7</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>FALSE</span>,
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fit_trendfilter.html'>fit_trendfilter</a></span>(<span class='no'>yy_ordered</span>)</div><div class='output co'>#&gt; Fold 1 ... Fold 2 ... Fold 3 ... Fold 4 ... Fold 5 ... </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ordered</span>, <span class='kw'>y</span><span class='kw'>=</span><span class='no'>yy_ordered</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.7</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>FALSE</span>,
   <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>"quantile-normalized expression values"</span>, <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>"FUCCI phase"</span>,
-  <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"bspline fit"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ordered</span>, <span class='kw'>y</span><span class='kw'>=</span><span class='no'>fit</span>$<span class='no'>pred.yy</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"blue"</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>.7</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>1</span>,<span class='kw'>at</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='no'>pi</span>/<span class='fl'>2</span>, <span class='no'>pi</span>, <span class='fl'>3</span>*<span class='no'>pi</span>/<span class='fl'>2</span>, <span class='fl'>2</span>*<span class='no'>pi</span>),
-  <span class='kw'>labels</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>pi</span>/<span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>pi</span>), <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fl'>3</span>*<span class='no'>pi</span>/<span class='fl'>2</span>),
-  <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fl'>2</span>*<span class='no'>pi</span>)))</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>h</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"black"</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>.7</span>)</div><div class='img'><img src='fit_bspline-1.png' alt='' width='700' height='433' /></div><div class='input'>
+  <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"trendfilter fit"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ordered</span>, <span class='kw'>y</span><span class='kw'>=</span><span class='no'>fit</span>$<span class='no'>trend.yy</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"orangered"</span>, <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>, <span class='kw'>cex</span><span class='kw'>=</span><span class='fl'>0.7</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>1</span>,<span class='kw'>at</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>,<span class='fl'>2</span>*<span class='no'>pi</span>,<span class='no'>pi</span>/<span class='fl'>2</span>),
+     <span class='kw'>labels</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>pi</span>/<span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>pi</span>), <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fl'>3</span>*<span class='no'>pi</span>/<span class='fl'>2</span>),
+              <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fl'>2</span>*<span class='no'>pi</span>)))</div><div class='img'><img src='fit_bspline-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

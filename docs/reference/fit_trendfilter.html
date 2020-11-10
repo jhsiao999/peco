@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Using trendfiltering to estimate cyclic trend of gene
-expression — fit_trendfilter • peco</title>
+<title>Estimate Cyclic Trend of Gene Expression Using Trendfiltering — fit_trendfilter • peco</title>
 
 
 <!-- jquery -->
@@ -40,25 +39,8 @@ expression — fit_trendfilter • peco</title>
 
 
 
-<meta property="og:title" content="Using trendfiltering to estimate cyclic trend of gene
-expression — fit_trendfilter" />
-<meta property="og:description" content="We applied quadratic (second order) trend filtering
-using the trendfilter function in the genlasso package (Tibshirani,
-2014).  The trendfilter function implements a nonparametric
-smoothing method which chooses the smoothing parameter by
-cross-validation and fits a piecewise polynomial regression. In
-more specifics: The trendfilter method determines the folds in
-cross-validation in a nonrandom manner.  Every k-th data point in
-the ordered sample is placed in the k-th fold, so the folds contain
-ordered subsamples. We applied five-fold cross-validation and chose
-the smoothing penalty using the option lambda.1se: among all
-possible values of the penalty term, the largest value such that
-the cross-validation standard error is within one standard error of
-the minimum. Furthermore, we desired that the estimated expression
-trend be cyclical. To encourage this, we concatenated the ordered
-gene expression data three times, with one added after another. The
-quadratic trend filtering was applied to the concatenated data
-series of each gene." />
+<meta property="og:title" content="Estimate Cyclic Trend of Gene Expression Using Trendfiltering — fit_trendfilter" />
+<meta property="og:description" content="Estimate Cyclic Trend of Gene Expression Using Trendfiltering" />
 
 
 
@@ -90,7 +72,7 @@ series of each gene." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.12</span>
       </span>
     </div>
 
@@ -123,30 +105,13 @@ series of each gene." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Using trendfiltering to estimate cyclic trend of gene
-expression</h1>
+    <h1>Estimate Cyclic Trend of Gene Expression Using Trendfiltering</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/fit_cyclic_one.R'><code>R/fit_cyclic_one.R</code></a></small>
     <div class="hidden name"><code>fit_trendfilter.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>We applied quadratic (second order) trend filtering
-using the trendfilter function in the genlasso package (Tibshirani,
-2014).  The trendfilter function implements a nonparametric
-smoothing method which chooses the smoothing parameter by
-cross-validation and fits a piecewise polynomial regression. In
-more specifics: The trendfilter method determines the folds in
-cross-validation in a nonrandom manner.  Every k-th data point in
-the ordered sample is placed in the k-th fold, so the folds contain
-ordered subsamples. We applied five-fold cross-validation and chose
-the smoothing penalty using the option lambda.1se: among all
-possible values of the penalty term, the largest value such that
-the cross-validation standard error is within one standard error of
-the minimum. Furthermore, we desired that the estimated expression
-trend be cyclical. To encourage this, we concatenated the ordered
-gene expression data three times, with one added after another. The
-quadratic trend filtering was applied to the concatenated data
-series of each gene.</p>
+    <p>Estimate Cyclic Trend of Gene Expression Using Trendfiltering</p>
     </div>
 
     <pre class="usage"><span class='fu'>fit_trendfilter</span>(<span class='no'>yy</span>, <span class='kw'>polyorder</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
@@ -156,26 +121,42 @@ series of each gene.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>yy</th>
-      <td><p>A vector of gene expression values for one gene
-that are ordered by cell cycle phase. Also, the
-expression values are normalized and
-transformed to standard normal distribution.</p></td>
+      <td><p>A vector of gene expression values for a single
+gene. They must be ordered by cell cycle phase. Also, the
+expression values should be normalized and transformed to standard
+normal distribution.</p></td>
     </tr>
     <tr>
       <th>polyorder</th>
-      <td><p>We estimate cyclic trends of gene expression
-levels using nonparamtric trend filtering. The default fits second
-degree polynomials.</p></td>
+      <td><p>Degree of polynomials used in nonparamtric trend
+filtering.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with two elements:</p>
-<dt>trend.yy</dt><dd><p>The estimated cyclic trend.</p></dd>
-    <dt>pve</dt><dd><p>Proportion of variance explained by the cyclic
-    trend in the gene expression levels.</p></dd>
+    <p>A list with two elements: <code>trend.yy</code>, the estimated
+  cyclic trend; <code>pve</code>, proportion of variance in gene expression
+  levels explained by the cyclic trend.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>We applied quadratic (second-order) trend filtering using
+  the trendfilter function in the <code>genlasso</code> package. The
+  trendfilter function implements a nonparametric smoothing method
+  which chooses the smoothing parameter by cross-validation and fits
+  a piecewise polynomial regression.</p>
+<p>The trendfilter method determines the folds in
+cross-validation in a non-random manner: every k-th data point in
+the ordered sample is placed in the k-th fold, so the folds contain
+ordered subsamples. We applied five-fold cross-validation and chose
+the smoothing penalty using the option lambda.1se; among all
+possible values of the penalty term, the largest value such that
+the cross-validation standard error is within one standard error of
+the minimum. Furthermore, we desired that the estimated expression
+trend be cyclical. To encourage this, we concatenated the ordered
+gene expression data three times, with one added after another. The
+quadratic trend filtering was applied to the concatenated data
+series of each gene.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>SingleCellExperiment</span>)
@@ -191,7 +172,7 @@ degree polynomials.</p></td>
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>theta</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>coldata</span>)
 
 <span class='co'># normalize expression counts</span>
-<span class='no'>sce_top10</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='data_transform_quantile.html'>data_transform_quantile</a></span>(<span class='no'>sce_top10</span>, <span class='kw'>ncores</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>computing on 2 cores</span></div><div class='input'><span class='no'>exprs_quant</span> <span class='kw'>&lt;-</span> <span class='fu'>assay</span>(<span class='no'>sce_top10</span>, <span class='st'>"cpm_quantNormed"</span>)
+<span class='no'>sce_top10</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='data_transform_quantile.html'>data_transform_quantile</a></span>(<span class='no'>sce_top10</span>, <span class='kw'>ncores</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>computing with 2 threads</span></div><div class='input'><span class='no'>exprs_quant</span> <span class='kw'>&lt;-</span> <span class='fu'>assay</span>(<span class='no'>sce_top10</span>, <span class='st'>"cpm_quantNormed"</span>)
 
 <span class='co'># order FUCCI phase and expression</span>
 <span class='no'>theta_ordered</span> <span class='kw'>&lt;-</span> <span class='no'>theta</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='no'>theta</span>)]

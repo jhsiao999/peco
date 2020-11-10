@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rotate circular variable shift_var to minimize distance
-between ref_var and shift_var — rotation • peco</title>
+<title>Rotate Circular Variable to Minimize Distance Between
+  Variables. — rotation • peco</title>
 
 
 <!-- jquery -->
@@ -40,13 +40,14 @@ between ref_var and shift_var — rotation • peco</title>
 
 
 
-<meta property="og:title" content="Rotate circular variable shift_var to minimize distance
-between ref_var and shift_var — rotation" />
-<meta property="og:description" content="Because the origin of the cell cycle phases is
-arbitrary, we transform the angles prior to computing the distance
-(rotation and shifting) to minimize the distance between two
-vectors. After this, one can apply circ_dist to compute the
-distance between the output value and ref_var." />
+<meta property="og:title" content="Rotate Circular Variable to Minimize Distance Between
+  Variables. — rotation" />
+<meta property="og:description" content="Rotate circular variable shift_var to minimize
+  the distance between ref_var and shift_var. Because
+  the origin of the cell cycle phases is arbitrary, we transform the
+  angles prior to computing the distance (rotation and
+  shifting). After this, one can apply circ_dist to compute
+  the distance between the output value and ref_var." />
 
 
 
@@ -78,7 +79,7 @@ distance between the output value and ref_var." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.12</span>
       </span>
     </div>
 
@@ -111,18 +112,19 @@ distance between the output value and ref_var." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Rotate circular variable shift_var to minimize distance
-between ref_var and shift_var</h1>
+    <h1>Rotate Circular Variable to Minimize Distance Between
+  Variables.</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/circ_dist.R'><code>R/circ_dist.R</code></a></small>
     <div class="hidden name"><code>rotation.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Because the origin of the cell cycle phases is
-arbitrary, we transform the angles prior to computing the distance
-(rotation and shifting) to minimize the distance between two
-vectors. After this, one can apply circ_dist to compute the
-distance between the output value and ref_var.</p>
+    <p>Rotate circular variable <code>shift_var</code> to minimize
+  the distance between <code>ref_var</code> and <code>shift_var</code>. Because
+  the origin of the cell cycle phases is arbitrary, we transform the
+  angles prior to computing the distance (rotation and
+  shifting). After this, one can apply <code>circ_dist</code> to compute
+  the distance between the output value and <code>ref_var</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>rotation</span>(<span class='no'>ref_var</span>, <span class='no'>shift_var</span>)</pre>
@@ -142,21 +144,25 @@ distance between the output value and ref_var.</p>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The transformed values of shift_var after rotation and
-shifting.</p>
+    <p>The transformed value of <code>shift_var</code> after rotation and
+  shifting.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># a vector of angles</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># Create a vector of angles.</span>
 <span class='no'>theta_ref</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>,<span class='fl'>2</span>*<span class='no'>pi</span>, <span class='kw'>length.out</span><span class='kw'>=</span><span class='fl'>100</span>)
 
-<span class='co'># shift the origin of theta_ref to pi</span>
+<span class='co'># Shift the origin of theta_ref to pi.</span>
 <span class='no'>theta_compare</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='shift_origin.html'>shift_origin</a></span>(<span class='no'>theta_ref</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='no'>pi</span>)
 
-<span class='co'># rotate theta_compare in a such a way that the distance</span>
-<span class='co'># between theta_ref and thet_compare is minimized</span>
-<span class='no'>theta_compare_rotated</span> <span class='kw'>&lt;-</span> <span class='fu'>rotation</span>(<span class='kw'>ref_var</span><span class='kw'>=</span><span class='no'>theta_ref</span>, <span class='kw'>shift_var</span><span class='kw'>=</span><span class='no'>theta_compare</span>)
+<span class='co'># Rotate theta_compare in a such a way that the distance between</span>
+<span class='co'># theta_ref and theta_compare is minimized.</span>
+<span class='no'>theta_compare_rotated</span> <span class='kw'>&lt;-</span>
+  <span class='fu'>rotation</span>(<span class='kw'>ref_var</span><span class='kw'>=</span><span class='no'>theta_ref</span>, <span class='kw'>shift_var</span><span class='kw'>=</span><span class='no'>theta_compare</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mofrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: "mofrow" is not a graphical parameter</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ref</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>theta_compare</span>)</div><div class='img'><img src='rotation-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ref</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>theta_compare_rotated</span>)</div><div class='img'><img src='rotation-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ref</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>theta_compare</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>theta_ref</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>theta_compare_rotated</span>)</div><div class='img'><img src='rotation-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

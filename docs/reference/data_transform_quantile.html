@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Transform counts by first computing counts-per-million (CPM), then
-  quantile-normalize CPM for each gene — data_transform_quantile • peco</title>
+<title>Quantile-normalize CPM for Each Gene — data_transform_quantile • peco</title>
 
 
 <!-- jquery -->
@@ -40,9 +39,10 @@
 
 
 
-<meta property="og:title" content="Transform counts by first computing counts-per-million (CPM), then
-  quantile-normalize CPM for each gene — data_transform_quantile" />
-<meta property="og:description" content="For each gene, transform counts to CPM and then to a normal distribution." />
+<meta property="og:title" content="Quantile-normalize CPM for Each Gene — data_transform_quantile" />
+<meta property="og:description" content="Quantile-normalize CPM for Each Gene
+Transform counts by first computing counts-per-million
+  (CPM), then quantile-normalize CPM for each gene." />
 
 
 
@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.12</span>
       </span>
     </div>
 
@@ -107,14 +107,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Transform counts by first computing counts-per-million (CPM), then
-  quantile-normalize CPM for each gene</h1>
+    <h1>Quantile-normalize CPM for Each Gene</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/data_transform_quantile.R'><code>R/data_transform_quantile.R</code></a></small>
     <div class="hidden name"><code>data_transform_quantile.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>For each gene, transform counts to CPM and then to a normal distribution.</p>
+    <p>Quantile-normalize CPM for Each Gene</p>
+<p>Transform counts by first computing counts-per-million
+  (CPM), then quantile-normalize CPM for each gene.</p>
     </div>
 
     <pre class="usage"><span class='fu'>data_transform_quantile</span>(<span class='no'>sce</span>, <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
@@ -124,31 +125,33 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>sce</th>
-      <td><p>SingleCellExperiment Object.</p></td>
+      <td><p><code><a href='https://rdrr.io/pkg/SingleCellExperiment/man/SingleCellExperiment.html'>SingleCellExperiment</a></code>
+object.</p></td>
     </tr>
     <tr>
       <th>ncores</th>
-      <td><p>We use doParallel package for parallel computing.</p></td>
+      <td><p>Argument passed to
+<code><a href='https://rdrr.io/r/parallel/makeCluster.html'>makeCluster</a></code> specifying the number of
+threads.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>SingleCellExperiment Object with an added slot of cpm_quant,
-    cpm slot is added if it doesn't exist.</p>
+    <p>SingleCellExperiment object with an additional
+  &#8220;cpm_quant&#8221; slot; this is added if it doesn't already exist.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># use our data</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>SingleCellExperiment</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>SingleCellExperiment</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sce_top101genes</span>)
 
-<span class='co'># perform CPM normalization using scater, and</span>
-<span class='co'># quantile-normalize the CPM values of each gene to normal distribution</span>
-<span class='no'>sce_top101genes</span> <span class='kw'>&lt;-</span> <span class='fu'>data_transform_quantile</span>(<span class='no'>sce_top101genes</span>, <span class='kw'>ncores</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>computing on 2 cores</span></div><div class='input'>
+<span class='co'># Perform CPM normalization using scater and quantile-normalize</span>
+<span class='co'># the CPM values of each gene to normal distribution.</span>
+<span class='no'>sce_top101genes</span> <span class='kw'>&lt;-</span> <span class='fu'>data_transform_quantile</span>(<span class='no'>sce_top101genes</span>, <span class='kw'>ncores</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>computing with 2 threads</span></div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='kw'>y</span><span class='kw'>=</span><span class='fu'>assay</span>(<span class='no'>sce_top101genes</span>, <span class='st'>"cpm_quantNormed"</span>)[<span class='fl'>1</span>,],
      <span class='kw'>x</span><span class='kw'>=</span><span class='fu'>assay</span>(<span class='no'>sce_top101genes</span>, <span class='st'>"cpm"</span>)[<span class='fl'>1</span>,],
-    <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"CPM bbefore quantile-normalization"</span>,
-    <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"CPM after quantile-normalization"</span>)</div><div class='img'><img src='data_transform_quantile-1.png' alt='' width='700' height='433' /></div><div class='input'>
+     <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"CPM before quantile-normalization"</span>,
+     <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"CPM after quantile-normalization"</span>)</div><div class='img'><img src='data_transform_quantile-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
