@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.15</span>
       </span>
     </div>
 
@@ -76,168 +76,88 @@
 
     
     
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>To install and load the package, run:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">devtools</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"jhsiao999/peco"</span>)</pre></body></html></div>
-<p><code>peco</code> uses <code>SingleCellExperiment</code> class objects.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">SingleCellExperiment</span>)
-<span class="co">#&gt; Loading required package: SummarizedExperiment</span>
-<span class="co">#&gt; Loading required package: GenomicRanges</span>
-<span class="co">#&gt; Loading required package: stats4</span>
-<span class="co">#&gt; Loading required package: BiocGenerics</span>
-<span class="co">#&gt; Loading required package: parallel</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'BiocGenerics'</span>
-<span class="co">#&gt; The following objects are masked from 'package:parallel':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,</span>
-<span class="co">#&gt;     clusterExport, clusterMap, parApply, parCapply, parLapply,</span>
-<span class="co">#&gt;     parLapplyLB, parRapply, parSapply, parSapplyLB</span>
-<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     IQR, mad, sd, var, xtabs</span>
-<span class="co">#&gt; The following objects are masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     anyDuplicated, append, as.data.frame, basename, cbind, colnames,</span>
-<span class="co">#&gt;     dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,</span>
-<span class="co">#&gt;     grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,</span>
-<span class="co">#&gt;     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,</span>
-<span class="co">#&gt;     rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,</span>
-<span class="co">#&gt;     union, unique, unsplit, which, which.max, which.min</span>
-<span class="co">#&gt; Loading required package: S4Vectors</span>
-<span class="co">#&gt; Warning: package 'S4Vectors' was built under R version 3.6.3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'S4Vectors'</span>
-<span class="co">#&gt; The following object is masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     expand.grid</span>
-<span class="co">#&gt; Loading required package: IRanges</span>
-<span class="co">#&gt; Loading required package: GenomeInfoDb</span>
-<span class="co">#&gt; Warning: package 'GenomeInfoDb' was built under R version 3.6.3</span>
-<span class="co">#&gt; Loading required package: Biobase</span>
-<span class="co">#&gt; Welcome to Bioconductor</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     Vignettes contain introductory material; view with</span>
-<span class="co">#&gt;     'browseVignettes()'. To cite Bioconductor, see</span>
-<span class="co">#&gt;     'citation("Biobase")', and for packages 'citation("pkgname")'.</span>
-<span class="co">#&gt; Loading required package: DelayedArray</span>
-<span class="co">#&gt; Warning: package 'DelayedArray' was built under R version 3.6.3</span>
-<span class="co">#&gt; Loading required package: matrixStats</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'matrixStats'</span>
-<span class="co">#&gt; The following objects are masked from 'package:Biobase':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     anyMissing, rowMedians</span>
-<span class="co">#&gt; Loading required package: BiocParallel</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'DelayedArray'</span>
-<span class="co">#&gt; The following objects are masked from 'package:matrixStats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges</span>
-<span class="co">#&gt; The following objects are masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     aperm, apply, rowsum</span>
+<p><code>peco</code> is a supervised approach for predicting cell cycle phase in a continuum using single-cell RNA sequencing data. The R package provides functions to build a training data set and predict cell cycle on a continuum.</p>
+<p>Our work shows that peco is able to predict continuous cell cylce phase using a small set of cyclic genes, <em>CDK1</em>, <em>UBE2C</em>, <em>TOP2A</em>, <em>HISTH1E</em>, and <em>HISTH1C</em> (These were dentified as cell cycle marker genes in studies of yeast (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC25624">Spellman et al, 1998</a>) and HeLa cells (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC117619">Whitfield et al, 2002</a>).</p>
+<p>Below, we present two use cases.</p>
+<p>In the first use case, we show how to use the built-in training dataset to predict continuous cell cycle.</p>
+<p>In the second use case, we show how to create a training data set, then build a predictor using the training data.</p>
+<p><code>peco</code> uses <code>SingleCellExperiment</code> class objects:</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">SingleCellExperiment</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">doParallel</span>)
-<span class="co">#&gt; Loading required package: foreach</span>
-<span class="co">#&gt; Loading required package: iterators</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">foreach</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">peco</span>)</pre></body></html></div>
-</div>
-<div id="overview" class="section level2">
+<div id="about-the-training-data" class="section level2">
 <h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
-<p><code>peco</code> is a supervised approach for PrEdicting cell cycle phase in a COntinuum using single-cell RNA sequencing data. The R package provides functions to build training dataset and also functions to use existing training data to predict cell cycle on a continuum.</p>
-<p>Our work demonstrated that peco is able to predict continuous cell cylce phase using a small set of cylcic genes: <em>CDK1</em>, <em>UBE2C</em>, <em>TOP2A</em>, <em>HISTH1E</em>, and <em>HISTH1C</em> (identified as cell cycle marker genes in studies of yeast (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC25624">Spellman et al., 1998</a>) and HeLa cells (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC117619">Whitfield et al., 2002</a>)).</p>
-<p>Below we provide two use cases. Vignette 1 shows how to use the built-training dataset to predict continuous cell cycle. Vignette 2 shows how to make a training datast and build a predictor using training data.</p>
-<p>Users can also view the vigenettes via <code><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes("peco")</a></code>.</p>
-</div>
-<div id="about-the-training-dataset" class="section level2">
-<h2 class="hasAnchor">
-<a href="#about-the-training-dataset" class="anchor"></a>About the training dataset</h2>
-<p><code>training_human</code> stores built-in training data of 101 significant cyclic genes. Below are the slots contained in <code>training_human</code>:</p>
+<a href="#about-the-training-data" class="anchor"></a>About the training data</h2>
+<p><code>training_human</code> provides training data for 101 significant cyclic genes. The data include:</p>
 <ul>
-<li>
-<code>predict.yy</code>: a gene by sample matrix (101 by 888) that stores predict cyclic expression values.</li>
-<li>
-<code>cellcycle_peco_reordered</code>: cell cycle phase in a unit circle (angle), ordered from 0 to 2<span class="math inline">\(pi\)</span>
-</li>
-<li>
-<code>cellcycle_function</code>: lists of 101 function corresponding to the top 101 cyclic genes identified in our dataset</li>
-<li>
-<code>sigma</code>: standard error associated with cyclic trends of gene expression</li>
-<li>
-<code>pve</code>: proportion of variance explained by the cyclic trend</li>
+<li><p><code>predict.yy</code>, a gene-by-sample matrix (101 x 888) that storing predicted cyclic expression values.</p></li>
+<li><p><code>cellcycle_peco_ordered</code>, cell cycle phase in a unit circle (angle), ordered from 0 to 2<span class="math inline">\(\pi\)</span>.</p></li>
+<li><p><code>cellcycle_function</code>, functions used for prediction corresponding to the top 101 cyclic genes identified.</p></li>
+<li><p><code>sigma</code>, standard error associated with cyclic trends of gene expression.</p></li>
+<li><p><code>pve</code>, proportion of variance explained by the cyclic trend.</p></li>
 </ul>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"training_human"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">training_human</span>)</pre></body></html></div>
 </div>
 <div id="predict-cell-cycle-phase-using-gene-expression-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#predict-cell-cycle-phase-using-gene-expression-data" class="anchor"></a>Predict cell cycle phase using gene expression data</h2>
-<p><code>peco</code> is integrated with <code>SingleCellExperiment</code> object in Bioconductor. Below shows an example of inputting <code>SingleCellExperiment</code> object to perform cell cycle phase prediction.</p>
-<p><code>sce_top101genes</code> includes 101 genes and 888 single-cell samples and one assay slot of <code>counts</code>.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"sce_top101genes"</span>)
+<p><code>peco</code> is integrated with <code>SingleCellExperiment</code> objects in Bioconductor. Here we illustrate using a <code>SingleCellExperiment</code> object to perform cell cycle phase prediction.</p>
+<p><code>sce_top101genes</code> is a <code>SingleCellExpression</code> object for 101 genes and 888 single-cell samples.</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">sce_top101genes</span>)
 <span class="fu">assays</span>(<span class="no">sce_top101genes</span>)
 <span class="co">#&gt; List of length 1</span>
 <span class="co">#&gt; names(1): counts</span></pre></body></html></div>
-<p>Transform the expression values to quantile-normalizesd counts-per-million values. <code>peco</code> uses the <code>cpm_quantNormed</code> slot as input data for predictions.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">sce_top101genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/data_transform_quantile.html">data_transform_quantile</a></span>(<span class="no">sce_top101genes</span>)
-<span class="co">#&gt; computing with 2 threads</span>
+<p>Transform expression to quantile-normalizesd counts-per-million (CPM) values; <code>peco</code> uses the <code>cpm_quantNormed</code> slot as the input data for predictions.</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">sce_top101genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/data_transform_quantile.html">data_transform_quantile</a></span>(<span class="no">sce_top101genes</span>)
 <span class="fu">assays</span>(<span class="no">sce_top101genes</span>)
 <span class="co">#&gt; List of length 3</span>
 <span class="co">#&gt; names(3): counts cpm cpm_quantNormed</span></pre></body></html></div>
-<p>Apply the prediction model using function <code>cycle_npreg_outsample</code> and generate prediction results contained in a list object <code>pred_top101genes</code>.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">pred_top101genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cycle_npreg_outsample.html">cycle_npreg_outsample</a></span>(
-    <span class="kw">Y_test</span><span class="kw">=</span><span class="no">sce_top101genes</span>,
-    <span class="kw">sigma_est</span><span class="kw">=</span><span class="no">training_human</span>$<span class="no">sigma</span>[<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">sce_top101genes</span>),],
-    <span class="kw">funs_est</span><span class="kw">=</span><span class="no">training_human</span>$<span class="no">cellcycle_function</span>[<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">sce_top101genes</span>)],
-    <span class="kw">method.trend</span><span class="kw">=</span><span class="st">"trendfilter"</span>,
-    <span class="kw">ncores</span><span class="kw">=</span><span class="fl">1</span>,
-    <span class="kw">get_trend_estimates</span><span class="kw">=</span><span class="fl">FALSE</span>)</pre></body></html></div>
-<p>The <code>pred_top101genes$Y</code> contains a SingleCellExperiment object with the predict cell cycle phase in the <code>colData</code> slot.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu">colData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>)$<span class="no">cellcycle_peco</span>)
+<p>Generate predictions using <code>cycle_npreg_outsample</code>.</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">pred_top101genes</span> <span class="kw">&lt;-</span>
+  <span class="fu"><a href="../reference/cycle_npreg_outsample.html">cycle_npreg_outsample</a></span>(<span class="kw">Y_test</span> <span class="kw">=</span> <span class="no">sce_top101genes</span>,
+    <span class="kw">sigma_est</span> <span class="kw">=</span> <span class="no">training_human</span>$<span class="no">sigma</span>[<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">sce_top101genes</span>),],
+    <span class="kw">funs_est</span> <span class="kw">=</span> <span class="no">training_human</span>$<span class="no">cellcycle_function</span>[<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">sce_top101genes</span>)],
+    <span class="kw">method.trend</span> <span class="kw">=</span> <span class="st">"trendfilter"</span>,<span class="kw">get_trend_estimates</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<p><code>pred_top101genes$Y</code> contains a <code>SingleCellExperiment</code> object with the predicted cell cycle phase in the <code>colData</code> slot:</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu">colData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>)$<span class="no">cellcycle_peco</span>)
 <span class="co">#&gt; 20170905-A01 20170905-A02 20170905-A03 20170905-A06 20170905-A07 20170905-A08 </span>
-<span class="co">#&gt;     1.099557     4.492477     2.607522     4.303982     4.052655     1.413717</span></pre></body></html></div>
-<p>Visualize results of prediction for one gene. Below we choose CDK1 (“ENSG00000170312”). Because CDK1 is a known cell cycle gene, this visualization serves as a sanity check for the results of fitting. The fitted function <code>training_human$cellcycle_function[[1]]</code> was obtained from our training data.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">y</span><span class="kw">=</span><span class="fu">assay</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>,<span class="st">"cpm_quantNormed"</span>)[<span class="st">"ENSG00000170312"</span>,],
-     <span class="kw">x</span><span class="kw">=</span><span class="fu">colData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>)$<span class="no">theta_shifted</span>, <span class="kw">main</span> <span class="kw">=</span> <span class="st">"CDK1"</span>,
-     <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"quantile normalized expression"</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="kw">y</span><span class="kw">=</span><span class="no">training_human</span>$<span class="no">cellcycle_function</span><span class="kw">[[</span><span class="st">"ENSG00000170312"</span>]](<span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>,<span class="fl">2</span>*<span class="no">pi</span>, <span class="kw">length.out</span><span class="kw">=</span><span class="fl">100</span>)),
-       <span class="kw">x</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>,<span class="fl">2</span>*<span class="no">pi</span>, <span class="kw">length.out</span><span class="kw">=</span><span class="fl">100</span>), <span class="kw">col</span> <span class="kw">=</span> <span class="st">"blue"</span>, <span class="kw">pch</span> <span class="kw">=</span><span class="fl">16</span>)</pre></body></html></div>
-<p><img src="peco_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<span class="co">#&gt;     1.099557     4.680973     2.544690     4.303982     4.052655     1.413717</span></pre></body></html></div>
+<p>View the predictions for the <em>CDK1</em> gene (Ensembl id ENSG00000170312). Because <em>CDK1</em> is a known cell cycle gene, this visualization serves as a “sanity check” for the predictions.</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>,<span class="fl">2</span>*<span class="no">pi</span>,<span class="kw">length.out</span> <span class="kw">=</span> <span class="fl">100</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fu">colData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>)$<span class="no">theta_shifted</span>,
+     <span class="kw">y</span> <span class="kw">=</span> <span class="fu">assay</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>,<span class="st">"cpm_quantNormed"</span>)[<span class="st">"ENSG00000170312"</span>,],
+     <span class="kw">pch</span> <span class="kw">=</span> <span class="fl">21</span>,<span class="kw">col</span> <span class="kw">=</span> <span class="st">"white"</span>,<span class="kw">bg</span> <span class="kw">=</span> <span class="st">"darkblue"</span>,
+     <span class="kw">main</span> <span class="kw">=</span> <span class="st">"CDK1"</span>,<span class="kw">xlab</span> <span class="kw">=</span> <span class="st">"FUCCI phase"</span>,
+     <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"quantile-normalized expression"</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">x</span>,<span class="kw">y</span> <span class="kw">=</span> <span class="no">training_human</span>$<span class="no">cellcycle_function</span><span class="kw">[[</span><span class="st">"ENSG00000170312"</span>]](<span class="no">x</span>),
+      <span class="kw">col</span> <span class="kw">=</span> <span class="st">"tomato"</span>,<span class="kw">lwd</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
+<p><img src="peco_files/figure-html/plot-predictions-single-gene-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
 <div id="visualize-cyclic-expression-trend-based-on-predicted-phase" class="section level2">
 <h2 class="hasAnchor">
 <a href="#visualize-cyclic-expression-trend-based-on-predicted-phase" class="anchor"></a>Visualize cyclic expression trend based on predicted phase</h2>
-<p>Visualize results of prediction for the top 10 genesone genes. Use <code>fit_cyclical_many</code> to estimate cyclic function based on the input data.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="co"># predicted cell time in the input data</span>
-<span class="no">theta_predict</span> <span class="kw">=</span> <span class="fu">colData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>)$<span class="no">cellcycle_peco</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">theta_predict</span>) <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="fu">colData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>))
-<span class="co"># expression values of 10 genes in the input data</span>
-<span class="no">yy_input</span> <span class="kw">=</span> <span class="fu">assay</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>,<span class="st">"cpm_quantNormed"</span>)[<span class="fl">1</span>:<span class="fl">6</span>,]
-<span class="co"># apply trendfilter to estimate cyclic gene expression trend</span>
-<span class="no">fit_cyclic</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fit_cyclical_many.html">fit_cyclical_many</a></span>(<span class="kw">Y</span><span class="kw">=</span><span class="no">yy_input</span>,
-                                <span class="kw">theta</span><span class="kw">=</span><span class="no">theta_predict</span>)
-<span class="co">#&gt; computing with 2 threads</span>
-<span class="no">gene_symbols</span> <span class="kw">=</span> <span class="fu">rowData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>)$<span class="no">hgnc</span>[<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">yy_input</span>)]
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">3</span>))
+<p>Next, we view the predictions for the top six genes. Here we use <code>fit_cyclical_many</code> to estimate cell cycle.</p>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">theta_predict</span> <span class="kw">&lt;-</span> <span class="fu">colData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>)$<span class="no">cellcycle_peco</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">theta_predict</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="fu">colData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>))
+<span class="no">yy_input</span> <span class="kw">&lt;-</span> <span class="fu">assay</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>,<span class="st">"cpm_quantNormed"</span>)[<span class="fl">1</span>:<span class="fl">6</span>,]
+<span class="no">fit_cyclic</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fit_cyclical_many.html">fit_cyclical_many</a></span>(<span class="kw">Y</span> <span class="kw">=</span> <span class="no">yy_input</span>,<span class="kw">theta</span> <span class="kw">=</span> <span class="no">theta_predict</span>)
+<span class="no">gene_symbols</span> <span class="kw">&lt;-</span> <span class="fu">rowData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>)[<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">yy_input</span>),<span class="st">"hgnc"</span>]
+<span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>,<span class="fl">2</span>*<span class="no">pi</span>,<span class="kw">length.out</span> <span class="kw">=</span> <span class="fl">100</span>)
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mfrow</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">2</span>))
 <span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">6</span>) {
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">y</span><span class="kw">=</span><span class="no">yy_input</span>[<span class="no">i</span>,],
-     <span class="kw">x</span><span class="kw">=</span><span class="no">fit_cyclic</span>$<span class="no">cellcycle_peco_ordered</span>,
-     <span class="kw">main</span> <span class="kw">=</span> <span class="no">gene_symbols</span>[<span class="no">i</span>],
-     <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"quantile normalized expression"</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="kw">y</span><span class="kw">=</span><span class="no">fit_cyclic</span>$<span class="no">cellcycle_function</span><span class="kw">[[</span><span class="no">i</span>]](<span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>,<span class="fl">2</span>*<span class="no">pi</span>, <span class="kw">length.out</span><span class="kw">=</span><span class="fl">100</span>)),
-       <span class="kw">x</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>,<span class="fl">2</span>*<span class="no">pi</span>, <span class="kw">length.out</span><span class="kw">=</span><span class="fl">100</span>), <span class="kw">col</span> <span class="kw">=</span> <span class="st">"blue"</span>, <span class="kw">pch</span> <span class="kw">=</span><span class="fl">16</span>)
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">fit_cyclic</span>$<span class="no">cellcycle_peco_ordered</span>,<span class="kw">y</span> <span class="kw">=</span> <span class="no">yy_input</span>[<span class="no">i</span>,],
+       <span class="kw">pch</span> <span class="kw">=</span> <span class="fl">1</span>,<span class="kw">col</span> <span class="kw">=</span> <span class="st">"darkblue"</span>,<span class="kw">main</span> <span class="kw">=</span> <span class="no">gene_symbols</span>[<span class="no">i</span>],
+       <span class="kw">xlab</span> <span class="kw">=</span> <span class="st">"FUCCI phase"</span>,<span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"normalized expression"</span>)
+  <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">x</span>,<span class="kw">y</span> <span class="kw">=</span> <span class="no">fit_cyclic</span>$<span class="no">cellcycle_function</span><span class="kw">[[</span><span class="no">i</span>]](<span class="no">x</span>),
+        <span class="kw">col</span> <span class="kw">=</span> <span class="st">"tomato"</span>,<span class="kw">lwd</span> <span class="kw">=</span> <span class="fl">2</span>)
 }</pre></body></html></div>
-<p><img src="peco_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p><img src="peco_files/figure-html/plot-predictions-top-genes-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="session-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session information</h2>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
 <span class="co">#&gt; R version 3.6.2 (2019-12-12)</span>
 <span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span>
 <span class="co">#&gt; Running under: macOS Catalina 10.15.7</span>
@@ -254,7 +174,7 @@
 <span class="co">#&gt; [8] methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt;  [1] peco_1.1.12                 doParallel_1.0.15          </span>
+<span class="co">#&gt;  [1] peco_1.1.15                 doParallel_1.0.15          </span>
 <span class="co">#&gt;  [3] iterators_1.0.12            foreach_1.4.7              </span>
 <span class="co">#&gt;  [5] SingleCellExperiment_1.6.0  SummarizedExperiment_1.16.1</span>
 <span class="co">#&gt;  [7] DelayedArray_0.12.3         BiocParallel_1.18.1        </span>
