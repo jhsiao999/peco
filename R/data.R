@@ -18,7 +18,7 @@
 #'   \item{cellcycle_peco_ordered}{Training labels ordered from 0 to
 #'     2*pi}
 #' 
-#'   \item{cell_cycle function}{Nonparametric function of cyclic gene
+#'   \item{cell_cycle_function}{Nonparametric function of cyclic gene
 #' expression trend obtained by trendfilter function in genlasso}
 #' 
 #'   \item{pve}{Proportion of variance explained in each gene by the

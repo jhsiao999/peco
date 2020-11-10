@@ -2,117 +2,109 @@
 title: "Predicting cell cycle phase using peco"
 author: "Joyce Hsiao"
 date: "`r Sys.Date()`"
-output: 
-    rmarkdown::html_vignette
+output: rmarkdown::html_vignette
 vignette: >
-    %\VignetteIndexEntry{Predicting cell cycle phase using peco}
-    %\VignetteEngine{knitr::rmarkdown}
-    %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{peco}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
+`peco` is a supervised approach for predicting cell cycle phase in a
+continuum using single-cell RNA sequencing data. The R package
+provides functions to build a training data set and predict cell cycle
+on a continuum.
+
+Our work shows that peco is able to predict continuous cell
+cylce phase using a small set of cyclic genes, _CDK1_, _UBE2C_,
+_TOP2A_, _HISTH1E_, and _HISTH1C_ (These were dentified as cell cycle marker
+genes in studies of yeast ([Spellman et al, 1998][spellman]) and HeLa
+cells ([Whitfield et al, 2002][whitfield]).
+
+Below, we present two use cases.
+
+In the first use case, we show how to use the built-in training
+dataset to predict continuous cell cycle.
+
+In the second use case, we show how to create a training data set,
+then build a predictor using the training data.
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(collapse = TRUE,comment = "#>")
+knitr::opts_chunk$set(results = "hold",collapse = TRUE,comment = "#>",
+                      fig.align = "center")
 ```
 
-Installation 
-------------
+`peco` uses `SingleCellExperiment` class objects:
 
-To install and load the package, run:
-
-```{r, eval=FALSE}
-install.packages("devtools")
-library(devtools)
-install_github("jhsiao999/peco")
-```
-
-`peco` uses `SingleCellExperiment` class objects.
-
-```{r}
+```{r load-pkgs, message=FALSE}
 library(SingleCellExperiment)
 library(doParallel)
 library(foreach)
 library(peco)
 ```
 
-Overview
---------
+About the training data
+-----------------------
 
-`peco` is a supervised approach for PrEdicting cell cycle phase in a
-COntinuum using single-cell RNA sequencing data. The R package
-provides functions to build training dataset and also functions to use
-existing training data to predict cell cycle on a continuum.
+`training_human` provides training data for 101 significant
+cyclic genes. The data include:
 
-Our work demonstrated that peco is able to predict continuous cell
-cylce phase using a small set of cylcic genes: _CDK1_, _UBE2C_,
-_TOP2A_, _HISTH1E_, and _HISTH1C_ (identified as cell cycle marker
-genes in studies of yeast ([Spellman et al., 1998][spellman]) and HeLa
-cells ([Whitfield et al., 2002][whitfield])).
++ `predict.yy`: A gene-by-sample matrix (101 x 888) that storing
+  predicted cyclic expression values.
 
-Below we provide two use cases. Vignette 1 shows how to use the
-built-training dataset to predict continuous cell cycle. Vignette 2
-shows how to make a training datast and build a predictor using
-training data.
++ `cellcycle_peco_ordered`: cell cycle phase in a unit circle
+  (angle), ordered from 0 to 2$\pi$.
 
-Users can also view the vigenettes via `browseVignettes("peco")`.
++ `cellcycle_function`: Functions corresponding to the top
+  101 cyclic genes identified.
 
-About the training dataset
---------------------------
++ `sigma`: Standard error associated with cyclic trends of gene
+  expression.
 
-`training_human` stores built-in training data of 101 significant cyclic genes. Below are the slots contained in `training_human`:
++ `pve`: Proportion of variance explained by the cyclic trend.
 
-- `predict.yy`: a gene by sample matrix (101 by 888) that stores predict cyclic expression values. 
-- `cellcycle_peco_reordered`: cell cycle phase in a unit circle (angle), ordered from 0 to 2$pi$
-- `cellcycle_function`: lists of 101 function corresponding to the top 101 cyclic genes identified in our dataset
-- `sigma`: standard error associated with cyclic trends of gene expression
-- `pve`: proportion of variance explained by the cyclic trend
-
-
-```{r}
-data("training_human")
+```{r loading-training-data}
+data(training_human)
 ```
 
 Predict cell cycle phase using gene expression data
 ---------------------------------------------------
 
-`peco` is integrated with `SingleCellExperiment` object in
-Bioconductor. Below shows an example of inputting
-`SingleCellExperiment` object to perform cell cycle phase prediction.
+`peco` is integrated with `SingleCellExperiment` objects in
+Bioconductor. Here we illustrate using a `SingleCellExperiment` object
+to perform cell cycle phase prediction.
 
-`sce_top101genes` includes 101 genes and 888 single-cell samples and
-one assay slot of `counts`.
+`sce_top101genes` is a `SingleCellExpression` object for 101 genes and
+888 single-cell samples.
 
-```{r}
-data("sce_top101genes")
+```{r load-genes}
+data(sce_top101genes)
 assays(sce_top101genes)
 ```
 
-Transform the expression values to quantile-normalizesd
-counts-per-million values. `peco` uses the `cpm_quantNormed` slot as
-input data for predictions.
+Transform expression to quantile-normalizesd counts-per-million (CPM)
+values; `peco` uses the `cpm_quantNormed` slot as the input data for
+predictions.
 
-```{r}
+```{r transform-expression}
 sce_top101genes <- data_transform_quantile(sce_top101genes)
 assays(sce_top101genes)
 ```
 
-Apply the prediction model using function `cycle_npreg_outsample` and
-generate prediction results contained in a list object
-`pred_top101genes`.
+Generate predictions using `cycle_npreg_outsample`.
 
-```{r}
-pred_top101genes <- cycle_npreg_outsample(
-    Y_test=sce_top101genes,
-    sigma_est=training_human$sigma[rownames(sce_top101genes),],
-    funs_est=training_human$cellcycle_function[rownames(sce_top101genes)],
-    method.trend="trendfilter",
-    ncores=1,
-    get_trend_estimates=FALSE)
+```{r predict-cell-cycle}
+pred_top101genes <-
+  cycle_npreg_outsample(Y_test = sce_top101genes,
+    sigma_est = training_human$sigma[rownames(sce_top101genes),],
+    funs_est = training_human$cellcycle_function[rownames(sce_top101genes)],
+    method.trend = "trendfilter",ncores = 1,
+    get_trend_estimates = FALSE)
 ```
 
-The `pred_top101genes$Y` contains a SingleCellExperiment object with
-the predict cell cycle phase in the `colData` slot.
+`pred_top101genes$Y` contains a `SingleCellExperiment` object with
+the predicted cell cycle phase in the `colData` slot:
 
-```{r}
+```{r inspect-predictions}
 head(colData(pred_top101genes$Y)$cellcycle_peco)
 ```
 
@@ -122,7 +114,7 @@ visualization serves as a sanity check for the results of fitting. The
 fitted function `training_human$cellcycle_function[[1]]` was obtained
 from our training data.
 
-```{r}
+```{r plot-predictions-single-gene, fig.height=4, fig.width=4}
 plot(y=assay(pred_top101genes$Y,"cpm_quantNormed")["ENSG00000170312",],
      x=colData(pred_top101genes$Y)$theta_shifted, main = "CDK1",
      ylab = "quantile normalized expression")
@@ -138,7 +130,7 @@ Visualize results of prediction for the top 10 genesone genes. Use
 data.
 
 
-```{r}
+```{r plot-predictions-top-genes, fig.height=6, fig.width=4}
 # predicted cell time in the input data
 theta_predict = colData(pred_top101genes$Y)$cellcycle_peco
 names(theta_predict) = rownames(colData(pred_top101genes$Y))
@@ -148,7 +140,7 @@ yy_input = assay(pred_top101genes$Y,"cpm_quantNormed")[1:6,]
 fit_cyclic <- fit_cyclical_many(Y=yy_input, 
                                 theta=theta_predict)
 gene_symbols = rowData(pred_top101genes$Y)$hgnc[rownames(yy_input)]
-par(mfrow=c(2,3))
+par(mfrow = c(3,2))
 for (i in 1:6) {
 plot(y=yy_input[i,],
      x=fit_cyclic$cellcycle_peco_ordered, 
@@ -161,10 +153,9 @@ points(y=fit_cyclic$cellcycle_function[[i]](seq(0,2*pi, length.out=100)),
 
 ## Session information
 
-```{r}
+```{r session-info}
 sessionInfo()
 ```
 
 [spellman]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC25624
 [whitfield]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC117619
-
