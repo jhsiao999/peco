@@ -15,7 +15,7 @@ citEntry(entry  = "Article",
          number  = "4",
          pages   = "611-621",
          journal = "Genome Biology",
-         url     = "http://www.genome.org/cgi/doi/10.1101/gr.247759.118",
+         url     = "https://doi.org/10.1101/gr.247759.118",
          year    = "2020",
          textVersion =
            paste("Chiaowen Joyce Hsiao, PoYuan Tung, John D. Blischak,",
@@ -23,4 +23,4 @@ citEntry(entry  = "Article",
                  "Matthew Stephens and Yoav Gilad (2020). Characterizing",
                  "and inferring quantitative cell cycle phase in",
                  "single-cell RNA-seq data analysis. Genome Biology,",
-                 "30(4): 611-621, doi:10.1101/gr.247759.11"))
+                 "30(4): 611-621, doi:10.1101/gr.247759.118"))
