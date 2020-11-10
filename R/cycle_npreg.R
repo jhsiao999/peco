@@ -1,10 +1,3 @@
-# cycle_npreg_insample and cycle_npreg_outsample are the two main
-# functions in peco. cycle_npreg_insample generates cyclic trend
-# estimates of gene expression levels using training data, and
-# cycle_npreg_outsample applies the estimates of cycle_npreg_insample
-# to another gene expression dataset to infer an angle or cell cycle
-# phase for each cell.
-
 #' @title Predict test-sample ordering using training labels (no update)
 #'
 #' @description Apply the estimates of cycle_npreg_insample to another
@@ -136,35 +129,34 @@
 #'     inferred phases from  \code{\link{cycle_npreg_loglik}}
 #' @export
 cycle_npreg_outsample <- function(Y_test,
-                                    sigma_est,
-                                    funs_est,
-                                    method.trend=c("trendfilter",
-                                                    "loess", "bspline"),
-                                    normed = TRUE,
-                                    polyorder=2,
-                                    method.grid="uniform",
-                                    ncores=2,
-                                    grids=100,
-                                    get_trend_estimates=FALSE) {
+                                  sigma_est,
+                                  funs_est,
+                                  method.trend=c("trendfilter",
+                                      "loess", "bspline"),
+                                  normed = TRUE,
+                                  polyorder=2,
+                                  method.grid="uniform",
+                                  ncores=2,
+                                  grids=100,
+                                  get_trend_estimates=FALSE) {
 
     if (!normed & inherits(Y_test, "SingleCellExperiment")) {
-      Y_test <- data_transform_quantile(Y_test)
+        Y_test <- data_transform_quantile(Y_test)
+        exprs_test <- assay(Y_test, "cpm_quantNormed")
+    } else if (normed & inherits(Y_test, "SingleCellExperiment"))
       exprs_test <- assay(Y_test, "cpm_quantNormed")
-    } else if (normed & inherits(Y_test, "SingleCellExperiment")) {
-      exprs_test <- assay(Y_test, "cpm_quantNormed")
-    } else if (!normed & !inherits(Y_test, "SingleCellExperiment")) {
+    else if (!normed & !inherits(Y_test, "SingleCellExperiment"))
       exprs_test <- data_transform_quantile(Y_test)
-    } else {
+    else
       exprs_test <- Y_test
-    }
 
-    # compute expected cell time for the test samples
-    # under mu and sigma estimated from the training samples
+    # Compute expected cell time for the test samples using mu and
+    # sigma estimated from the training samples.
     initial_loglik <- cycle_npreg_loglik(Y = exprs_test,
-                                        sigma_est = sigma_est,
-                                        method.grid = method.grid,
-                                        funs_est = funs_est,
-                                        grids = grids)
+                                         sigma_est = sigma_est,
+                                         method.grid = method.grid,
+                                         funs_est = funs_est,
+                                         grids = grids)
 
     if (inherits(Y_test, "SingleCellExperiment")) {
       colData(Y_test)$cellcycle_peco <- initial_loglik$cell_times_est
@@ -175,11 +167,12 @@ cycle_npreg_outsample <- function(Y_test,
     }
 
     if (get_trend_estimates) {
-        updated_estimates <- cycle_npreg_mstep(Y = Y_test,
-                                        theta = initial_loglik$cell_times_est,
-                                        method.trend = method.trend,
-                                        polyorder = polyorder,
-                                        ncores = ncores)
+        updated_estimates <-
+          cycle_npreg_mstep(Y = Y_test,
+                            theta = initial_loglik$cell_times_est,
+                            method.trend = method.trend,
+                            polyorder = polyorder,
+                            ncores = ncores)
         out <- list(
             Y=Y_test,
             cell_times_est=initial_loglik$cell_times_est,
@@ -206,7 +199,7 @@ cycle_npreg_outsample <- function(Y_test,
 #' using training data.
 #'
 #' @param Y A matrix of normalized and transformed gene expression
-#' values.  Gene by sample.
+#' values. Gene by sample.
 #'
 #' @param theta A vector of angles.
 #'
@@ -246,6 +239,7 @@ cycle_npreg_outsample <- function(Y_test,
 #'        using parameters learned from \code{\link{cycle_npreg_insample}}
 #'
 #' @export
+#' 
 cycle_npreg_insample <- function(Y, theta,
                                 ncores=2,
                                 polyorder=2,
@@ -287,18 +281,19 @@ cycle_npreg_insample <- function(Y, theta,
 #' @return A vector of initialized angles to be used in
 #' \code{cycle_npreg_loglik} to infer angles.
 #'
-#' @seealso
-#'     \code{\link{cycle_npreg_loglik}} for log-likehood at
-#'     angles between 0 to 2pi,
-#'     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
-#'     inferred phases from  \code{\link{cycle_npreg_loglik}},
-#'     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
-#'      using parameters learned from \code{\link{cycle_npreg_insample}}
-#' 
+#' @seealso \code{\link{cycle_npreg_loglik}} for log-likehood at
+#' angles between 0 to 2pi, \code{\link{cycle_npreg_mstep}} for
+#' estimating cyclic functions given inferred phases from
+#' \code{\link{cycle_npreg_loglik}},
+#' \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
+#' using parameters learned from \code{\link{cycle_npreg_insample}}
+#'
 #' @author Joyce Hsiao
 #'
+#' @keywords internal
+#' 
 initialize_grids <- function(Y, grids=100,
-                                method.grid=c("pca", "uniform")) {
+                             method.grid=c("pca", "uniform")) {
 
     len <- (2*pi)/(2*grids)
     theta_grids <- seq(len, (2*pi)-(len), length.out=grids)
@@ -332,8 +327,10 @@ initialize_grids <- function(Y, grids=100,
 #' @title Infer angles or cell cycle phase based on gene expression data
 #'
 #' @param Y Gene by sample expression matrix.
+#' 
 #' @param sigma_est A vector of standard errors for each gene from the
 #' training data.
+#' 
 #' @param funs_est A vector of cyclic functions estimated for each
 #' gene from the training data.
 #'
@@ -347,9 +344,6 @@ initialize_grids <- function(Y, grids=100,
 #'     \item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
 #' to each bin.}
 #'
-#' @importFrom stats dnorm
-#'
-#' @family peco classifier functions
 #' @seealso \code{\link{initialize_grids}} for selecting
 #'     angles in \code{\link{cycle_npreg_loglik}},
 #'     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
@@ -357,11 +351,12 @@ initialize_grids <- function(Y, grids=100,
 #'     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
 #'      using parameters learned from \code{\link{cycle_npreg_insample}}
 #'
+#' @importFrom stats dnorm
+#'
 #' @author Joyce Hsiao
 #' 
-cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
-                                grids=100,
-                                method.grid=c("pca", "uniform")) {
+cycle_npreg_loglik <- function(Y, sigma_est, funs_est, grids=100,
+                               method.grid=c("pca", "uniform")) {
 
     N <- ncol(Y); G <- nrow(Y)
     theta_choose <- initialize_grids(Y, grids=grids, method.grid=method.grid)
@@ -445,9 +440,12 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #' @importFrom stats approxfun
 #' @importFrom doParallel registerDoParallel
 #' @importFrom foreach foreach
-#' @importFrom parallel makeCluster stopCluster
+#' @importFrom foreach %dopar%
+#' @importFrom parallel makeCluster
+#' @importFrom parallel stopCluster
 #'
 #' @family peco classifier functions
+#' 
 #' @seealso
 #'     \code{\link{cycle_npreg_insample}} for estimating cyclic functions
 #'     given known phasesfrom training data,
@@ -456,24 +454,27 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est,
 #'
 #' @author Joyce Hsiao
 #' 
-cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
-                                                        "loess", "bspline"),
-                                polyorder=2, ncores=2) {
+cycle_npreg_mstep <- function(Y, theta,
+                              method.trend=c("trendfilter","loess","bspline"),
+                              polyorder=2, ncores=2) {
 
-    if (inherits(Y, "SingleCellExperiment")) {
+    if (inherits(Y, "SingleCellExperiment"))
       exprs_test <- assay(Y, "cpm_quantNormed")
-    } else {
+    else
       exprs_test <- Y
-    }
 
     if (is.null(ncores)) {
-        cl <- makeCluster(2); registerDoParallel(cl)
+        cl <- makeCluster(2)
+        registerDoParallel(cl)
         message(paste("computing on",ncores,"cores"))
     } else {
-        cl <- makeCluster(ncores); registerDoParallel(cl)
-        message(paste("computing on",ncores,"cores")) }
+        cl <- makeCluster(ncores)
+        registerDoParallel(cl)
+        message(paste("computing on",ncores,"cores"))
+    }
 
-    G <- nrow(exprs_test); N <- ncol(exprs_test)
+    G <- nrow(exprs_test)
+    N <- ncol(exprs_test)
 
     exprs_test_ordered <- exprs_test[,names(theta)]
     ord <- order(theta)
@@ -481,7 +482,7 @@ cycle_npreg_mstep <- function(Y, theta, method.trend=c("trendfilter",
     exprs_test_ordered <- exprs_test_ordered[,ord]
 
     fit <- foreach(g=seq_len(G)) %dopar% {
-        y_g <- exprs_test_ordered[g,]
+    y_g <- exprs_test_ordered[g,]
 
         if (method.trend=="trendfilter") {
             fit_g <- peco::fit_trendfilter(yy=y_g, polyorder = polyorder)

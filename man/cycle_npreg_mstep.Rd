@@ -58,7 +58,6 @@ function.
 
 Other peco classifier functions: 
 \code{\link{cycle_npreg_insample}()},
-\code{\link{cycle_npreg_loglik}()},
 \code{\link{cycle_npreg_outsample}()}
 }
 \author{

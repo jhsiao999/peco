@@ -1,8 +1,8 @@
 Encoding: UTF-8
 Type: Package
 Package: peco
-Version: 1.1.10
-Date: 2020-10-05
+Version: 1.1.12
+Date: 2020-11-10
 Title: A Supervised Approach for Predicting Cell Cycle Progression Using
     Single-Cell RNA-seq Data
 Authors@R: c(person("Chiaowen Joyce","Hsiao",email="joyce.hsiao1@gmail.com", 
@@ -18,7 +18,13 @@ Description: Our methods provide a way to assign continuous cell cycle
     cycle. This package provides method and training data, including
     single-cell RNA-seq data collected from 6 individual cell lines of
     induced pluripotent stem cells (iPSCs), and also continuous cell
-    cycle phase derived from FUCCI fluorescence imaging data.
+    cycle phase derived from FUCCI fluorescence imaging
+    data. cycle_npreg_insample and cycle_npreg_outsample are the two
+    main functions in peco. cycle_npreg_insample generates cyclic
+    trend estimates of gene expression levels using training data, and
+    cycle_npreg_outsample applies the estimates of
+    cycle_npreg_insample to another gene expression dataset to infer
+    an angle or cell cycle phase for each cell.
 URL: https://github.com/jhsiao999/peco
 BugReports: https://github.com/jhsiao999/peco/issues
 License: GPL (>= 3)

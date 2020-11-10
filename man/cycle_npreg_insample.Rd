@@ -14,7 +14,7 @@ cycle_npreg_insample(
 }
 \arguments{
 \item{Y}{A matrix of normalized and transformed gene expression
-values.  Gene by sample.}
+values. Gene by sample.}
 
 \item{theta}{A vector of angles.}
 
@@ -55,7 +55,6 @@ using training data.
        using parameters learned from \code{\link{cycle_npreg_insample}}
 
 Other peco classifier functions: 
-\code{\link{cycle_npreg_loglik}()},
 \code{\link{cycle_npreg_mstep}()},
 \code{\link{cycle_npreg_outsample}()}
 }

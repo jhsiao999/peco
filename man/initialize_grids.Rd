@@ -28,12 +28,13 @@ on a circle.
 }
 \seealso{
 \code{\link{cycle_npreg_loglik}} for log-likehood at
-    angles between 0 to 2pi,
-    \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
-    inferred phases from  \code{\link{cycle_npreg_loglik}},
-    \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
-     using parameters learned from \code{\link{cycle_npreg_insample}}
+angles between 0 to 2pi, \code{\link{cycle_npreg_mstep}} for
+estimating cyclic functions given inferred phases from
+\code{\link{cycle_npreg_loglik}},
+\code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
+using parameters learned from \code{\link{cycle_npreg_insample}}
 }
 \author{
 Joyce Hsiao
 }
+\keyword{internal}
