@@ -54,4 +54,4 @@ under the terms of the [GNU General Public License][gpl]. See file
 
 [gpl]: https://www.gnu.org/licenses/gpl-3.0.en.html
 [paper]: doi.org/10.1101/gr.247759.118
-[vignette]:
+[vignette]: https://jhsiao999.github.io/peco/articles/peco.html
