@@ -1,29 +1,29 @@
 #' @name training_human
 #'
-#' @title Training Data from 888 Single-cell Samples and 101 Top
-#'   Cyclic Genes
+#' @title Training Data from the Top 101 Cyclic Genes in 888
+#'   Single-cell Samples
 #'
-#' @description Pre-computed peco results: applied \code{fit_cyclic_many}
-#' to 888 single-cell samples that have both normalized gene
-#' expression values and cell cycle labels to obtain training results
-#' that can be used as input for predicting cell cycle phase in other
-#' data.
+#' @description Pre-computed peco results obtained by applying
+#'   \code{fit_cyclic_many} to 888 single-cell samples that have both
+#'   normalized gene expression values and cell cycle labels. These
+#'   training results can be used to predicting cell cycle phase in
+#'   other data.
 #'
 #' @format A list with the following elements:
 #'
 #' \describe{
-#'   \item{predict.yy}{Estimated cyclic expression values in the
-#' training data}
+#' \item{predict.yy}{Estimated cyclic expression values in the
+#'   training data}
 #' 
-#'   \item{cellcycle_peco_ordered}{Training labels ordered from 0 to
-#'     2*pi}
+#' \item{cellcycle_peco_ordered}{Training labels ordered from 0 to
+#'   \code{2*pi}.}
 #' 
-#'   \item{cell_cycle_function}{Nonparametric function of cyclic gene
-#' expression trend obtained by trendfilter function in genlasso}
+#' \item{cell_cycle_function}{Nonparametric function of cyclic gene
+#'   expression trend obtained by the \code{trendfilter} function in the
+#'   genlasso package.}
 #' 
-#'   \item{pve}{Proportion of variance explained in each gene by the
-#'   cell cycle phase label}
-#'  }
+#' \item{pve}{Proportion of variance explained in each gene by the
+#'   cell cycle phase label.}}
 #'
 #' @docType data
 #'
@@ -36,20 +36,17 @@ NULL
 
 #' @name sce_top101genes
 #' 
-#' @title Molecule counts of the 101 significant cyclical genes in the
-#' 888 samples analyzed in the study.
+#' @title Molecule Counts of the 101 Significant Cyclical Genes in the
+#'   888 samples Analyzed in the Study.
 #'
-#' @description A SingleCellExperiment object, including molecule count
-#' data after gene and smaple filtering. The \code{colData} slot
-#' contains sample phenotype information.
+#' @description A \code{SingleCellExperiment} object containing
+#'   processed molecule count data (obtained after gene and sample
+#'   filtering). The \code{colData} slot contains sample phenotype
+#'   information.
 #'
-#' @format A SingleCellExperiment object with 888 samples and the 101
-#'     significant cyclic genes,
-#' 
-#' \describe{
-#'     \item{theta}{Inferred angles of each cell along
-#'         a circle, also known as FUCCI phase.}
-#' }
+#' @format A \code{SingleCellExperiment} object with 888 samples and
+#'   the 101 significant cyclic genes. Also, {sce_top101genes$theta}
+#'   contains the inferred angles (FUCCI phase) for each cell.
 #'
 #' @docType data
 #'
@@ -64,20 +61,24 @@ NULL
 
 #' @name model_5genes_train
 #' 
-#' @title Traing model results among samples from 5 individuals.
+#' @title Model Training Results for 5 Genes
 #'
-#' @description Pre-computed results. Applied
-#'   \code{cycle_npreg_insample} to obtain gene-specific cyclic trend
-#'   parameters using samples from 5 individuals
+#' @description Pre-computed gene-specific cyclic trend results
+#'   obtained by applying \code{cycle_npreg_insample}.
 #'
-#' @format A list with the follwing elements
+#' @format A list with the follwing elements:
 #' \describe{
-#'   \item{Y}{a data.frame (gene by sample) of quantile-normailzed gene
-#'   expression values}
-#'   \item{theta}{a vector of cell cycl phase values (range between 0 to 2pi)}
-#'   \item{sigma_est}{a vector of estimated standard errors}
-#'   \item{funs_est}{a list of estimated cyclic functions}
-#' }
+#' 
+#' \item{Y}{A matrix (gene by sample) of quantile-normailzed gene
+#'   expression values.}
+#' 
+#' \item{theta}{A vector of cell cycle phase values (ranging between
+#'   0 and \code{2*pi}).}
+#' 
+#' \item{sigma_est}{A vector of estimated standard errors, one for
+#'   each gene.}
+#' 
+#' \item{funs_est}{A list of estimated cyclic functions.}}
 #'
 #' @docType data
 #'
@@ -90,20 +91,15 @@ NULL
 
 #' @name model_5genes_predict
 #' 
-#' @title A SingleCellExperiment object
+#' @title Cell-Cycle Predictions using 5 Genes
 #'
-#' @description Pre-computed peco results. Applied
-#' \emph{cycle_npreg_outsample} and results stored in
-#' \emph{model_5genes_train} to predict cell cycle phase for
-#' single-cell samples of NA19098. The predicted cell cycle is stored
-#' as variable \emph{cellcycle_peco}.
+#' @description Pre-computed peco results obtained by applying
+#'   \emph{cycle_npreg_outsample} with model stored in
+#'   \emph{model_5genes_train} to predict cell cycle phase for
+#'   single-cell samples of NA19098. 
 #'
-#' @format A list with the following elements
-#'
-#' \describe{
-#'   \item{cellcycle_peco}{Predict cell cycle,
-#'    the values ranged between 0 to 2pi}
-#'  }
+#' @format A \code{SingleCellExperiment} object. The predicted cell
+#' cycle is stored in \emph{model_5genes_predict$cellcycle_peco}.
 #'
 #' @docType data
 #'
@@ -116,17 +112,17 @@ NULL
 
 #' @name cellcyclegenes_whitfield2002
 #' 
-#' @title List of Cell Cycle Genes Identified in Whitfield et al 2002.
+#' @title List of Cell Cycle Genes Identified in Whitfield et al, 2002.
 #'
 #' @description List of cell cycle genes and their associated cell
-#'   cycle state as reported in Whitfield et al. 2002.
+#'   cycle state from Whitfield \emph{et al} (2002).
 #'
-#' @format A list with the following elements:
+#' @format A data frame with the three columns:
 #'
 #' \describe{
-#'   \item{hgnc}{Gene symbol}
-#'   \item{ensembl}{ENSEMBL gene ID}
-#'   \item{phase}{Marker phase identified in Whitfield et al. 2002}
+#'   \item{hgnc}{HGNC gene symbol.}
+#'   \item{ensembl}{Ensembl gene identifier.}
+#'   \item{phase}{Marker phase identified in Whitfield \emph{et al} (2002).}
 #'  }
 #'
 #' @docType data

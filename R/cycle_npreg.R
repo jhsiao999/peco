@@ -127,7 +127,9 @@
 #'     angles in \code{\link{cycle_npreg_loglik}},
 #'     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
 #'     inferred phases from  \code{\link{cycle_npreg_loglik}}
+#' 
 #' @export
+#' 
 cycle_npreg_outsample <- function(Y_test,
                                   sigma_est,
                                   funs_est,

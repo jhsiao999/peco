@@ -3,21 +3,18 @@
 \docType{data}
 \name{sce_top101genes}
 \alias{sce_top101genes}
-\title{Molecule counts of the 101 significant cyclical genes in the
-888 samples analyzed in the study.}
+\title{Molecule Counts of the 101 Significant Cyclical Genes in the
+  888 samples Analyzed in the Study.}
 \format{
-A SingleCellExperiment object with 888 samples and the 101
-    significant cyclic genes,
-
-\describe{
-    \item{theta}{Inferred angles of each cell along
-        a circle, also known as FUCCI phase.}
-}
+A \code{SingleCellExperiment} object with 888 samples and
+  the 101 significant cyclic genes. Also, {sce_top101genes$theta}
+  contains the inferred angles (FUCCI phase) for each cell.
 }
 \description{
-A SingleCellExperiment object, including molecule count
-data after gene and smaple filtering. The \code{colData} slot
-contains sample phenotype information.
+A \code{SingleCellExperiment} object containing
+  processed molecule count data (obtained after gene and sample
+  filtering). The \code{colData} slot contains sample phenotype
+  information.
 }
 \examples{
 library(SingleCellExperiment)

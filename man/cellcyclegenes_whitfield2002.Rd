@@ -3,19 +3,19 @@
 \docType{data}
 \name{cellcyclegenes_whitfield2002}
 \alias{cellcyclegenes_whitfield2002}
-\title{List of Cell Cycle Genes Identified in Whitfield et al 2002.}
+\title{List of Cell Cycle Genes Identified in Whitfield et al, 2002.}
 \format{
-A list with the following elements:
+A data frame with the three columns:
 
 \describe{
-  \item{hgnc}{Gene symbol}
-  \item{ensembl}{ENSEMBL gene ID}
-  \item{phase}{Marker phase identified in Whitfield et al. 2002}
+  \item{hgnc}{HGNC gene symbol.}
+  \item{ensembl}{Ensembl gene identifier.}
+  \item{phase}{Marker phase identified in Whitfield \emph{et al} (2002).}
  }
 }
 \description{
 List of cell cycle genes and their associated cell
-  cycle state as reported in Whitfield et al. 2002.
+  cycle state from Whitfield \emph{et al} (2002).
 }
 \examples{
 data(cellcyclegenes_whitfield2002)

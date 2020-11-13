@@ -3,21 +3,16 @@
 \docType{data}
 \name{model_5genes_predict}
 \alias{model_5genes_predict}
-\title{A SingleCellExperiment object}
+\title{Cell-Cycle Predictions using 5 Genes}
 \format{
-A list with the following elements
-
-\describe{
-  \item{cellcycle_peco}{Predict cell cycle,
-   the values ranged between 0 to 2pi}
- }
+A \code{SingleCellExperiment} object. The predicted cell
+cycle is stored in \emph{model_5genes_predict$cellcycle_peco}.
 }
 \description{
-Pre-computed peco results. Applied
-\emph{cycle_npreg_outsample} and results stored in
-\emph{model_5genes_train} to predict cell cycle phase for
-single-cell samples of NA19098. The predicted cell cycle is stored
-as variable \emph{cellcycle_peco}.
+Pre-computed peco results obtained by applying
+  \emph{cycle_npreg_outsample} with model stored in
+  \emph{model_5genes_train} to predict cell cycle phase for
+  single-cell samples of NA19098.
 }
 \examples{
 data(model_5genes_predict)

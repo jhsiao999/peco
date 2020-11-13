@@ -3,21 +3,25 @@
 \docType{data}
 \name{model_5genes_train}
 \alias{model_5genes_train}
-\title{Traing model results among samples from 5 individuals.}
+\title{Model Training Results for 5 Genes}
 \format{
-A list with the follwing elements
+A list with the follwing elements:
 \describe{
-  \item{Y}{a data.frame (gene by sample) of quantile-normailzed gene
-  expression values}
-  \item{theta}{a vector of cell cycl phase values (range between 0 to 2pi)}
-  \item{sigma_est}{a vector of estimated standard errors}
-  \item{funs_est}{a list of estimated cyclic functions}
-}
+
+\item{Y}{A matrix (gene by sample) of quantile-normailzed gene
+  expression values.}
+
+\item{theta}{A vector of cell cycle phase values (ranging between
+  0 and \code{2*pi}).}
+
+\item{sigma_est}{A vector of estimated standard errors, one for
+  each gene.}
+
+\item{funs_est}{A list of estimated cyclic functions.}}
 }
 \description{
-Pre-computed results. Applied
-  \code{cycle_npreg_insample} to obtain gene-specific cyclic trend
-  parameters using samples from 5 individuals
+Pre-computed gene-specific cyclic trend results
+  obtained by applying \code{cycle_npreg_insample}.
 }
 \examples{
 data(model_5genes_train)
