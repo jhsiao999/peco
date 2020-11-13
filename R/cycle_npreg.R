@@ -1,4 +1,4 @@
-#' @title Predict test-sample ordering using training labels (no update)
+#' @title Predict test-sample Ordering Using Training Labels (no update)
 #'
 #' @description Apply the estimates of cycle_npreg_insample to another
 #' gene expression dataset to infer an angle or cell cycle phase for
@@ -25,9 +25,6 @@
 #'   the predicted cell cycle phase or not (T or F). Default FALSE. This step
 #'   calls trendfilter and is computationally intensive.
 #' @param ncores We use doParallel package for parallel computing.
-#'
-#' @inheritParams cycle_npreg_mstep
-#' @inheritParams cycle_npreg_loglik
 #'
 #' @return A list with the following elements:
 #'
@@ -118,13 +115,10 @@
 #' @importFrom SummarizedExperiment assay assays assayNames colData colData<-
 #' @importFrom assertthat has_name
 #'
-#' @family peco classifier functions
 #' @seealso \code{\link{cycle_npreg_insample}} for obtaining parameteres for
 #'     cyclic functions from training data,
 #'     \code{\link{cycle_npreg_loglik}} for log-likehood at
 #'     angles between 0 to 2pi,
-#'     \code{\link{initialize_grids}} for selecting
-#'     angles in \code{\link{cycle_npreg_loglik}},
 #'     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
 #'     inferred phases from  \code{\link{cycle_npreg_loglik}}
 #' 
@@ -195,7 +189,7 @@ cycle_npreg_outsample <- function(Y_test,
     return(out)
 }
 
-#' @title Obtain cyclic trend estimates from the training data
+#' @title Obtain Cyclic Trend Estimates from Training Data
 #'
 #' @description Estimates cyclic trends of gene expression levels
 #' using training data.
@@ -214,8 +208,6 @@ cycle_npreg_outsample <- function(Y_test,
 #' @param method.trend Varous methods that can be applied to estimate
 #' cyclic trend of gene expression levels.
 #'
-#' @inheritParams cycle_npreg_mstep
-#'
 #' @return A list with four elements:
 #'
 #' \item{Y}{Gene expression marix.}
@@ -228,25 +220,22 @@ cycle_npreg_outsample <- function(Y_test,
 #' \item{funs_est}{A list of functions for approximating the cyclic
 #' trends of gene express levels for each gene.}
 #'
-#' @examples
-#' # see \code{\link{cycle_npreg_insample}}
-#'
 #' @author Joyce Hsiao
 #'
-#' @family peco classifier functions
+#' @examples
+#' # See cycle_npreg_outsample an example.
+#' 
 #' @seealso
-#'        \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
-#'        inferred phases from  \code{\link{cycle_npreg_loglik}},
-#'        \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
-#'        using parameters learned from \code{\link{cycle_npreg_insample}}
+#'   \code{\link{cycle_npreg_mstep}} for estimating cyclic functions
+#'   given inferred phases from \code{\link{cycle_npreg_loglik}}, and
+#'   \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
+#'   using parameters learned from \code{\link{cycle_npreg_insample}}.
 #'
 #' @export
 #' 
-cycle_npreg_insample <- function(Y, theta,
-                                ncores=2,
-                                polyorder=2,
-                                method.trend=c("trendfilter", "loess",
-                                               "bspline")) {
+cycle_npreg_insample <- function(Y, theta, ncores = 2, polyorder = 2,
+                                 method.trend = c("trendfilter", "loess",
+                                                  "bspline")) {
 
     # Order data by initial cell times.
     G <- nrow(Y)
@@ -267,40 +256,32 @@ cycle_npreg_insample <- function(Y, theta,
                 funs_est=initial_mstep$funs))
 }
 
-#' @title For prediction, initialize grid points for cell cycle phase
-#' on a circle.
+#' @title Initialize Grid for cycle_npreg_loglik
+#' 
+#' @description For prediction, initialize grid points for cell cycle phase
+#'   on a circle.
 #'
-#' @param Y Gene expression matrix. Gene by sample.
+#' @param Y Gene expression matrix (gene by sample).
 #'
-#' @param grids number of bins to be selected along 0 to 2pi.
+#' @param grids Number of bins used over interval 0 to \code{2*pi}.
 #'
-#' @param method.grid The approach to initialize angles in the
-#' computation. \code{uniform} creates k equally-spaced bins
-#' (grids). \code{pca} uses gene expression values to infer angles,
-#' and then use these pca-based angles to move the cells to the
-#' closest bin (as defined by \code{uniform}).
+#' @param method.grid The approach used to initialize angles in the
+#'   computation. \code{method.grid = "uniform"} creates k
+#'   equally-spaced bins ("grids"). \code{method.grid = "pca"} uses gene
+#'   expression values to infer angles, and then these angles are used
+#'   to project the cells to the closest bin.
 #'
 #' @return A vector of initialized angles to be used in
-#' \code{cycle_npreg_loglik} to infer angles.
-#'
-#' @seealso \code{\link{cycle_npreg_loglik}} for log-likehood at
-#' angles between 0 to 2pi, \code{\link{cycle_npreg_mstep}} for
-#' estimating cyclic functions given inferred phases from
-#' \code{\link{cycle_npreg_loglik}},
-#' \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
-#' using parameters learned from \code{\link{cycle_npreg_insample}}
-#'
-#' @author Joyce Hsiao
+#'   \code{\link{cycle_npreg_loglik}}.
 #'
 #' @keywords internal
-#' 
-initialize_grids <- function(Y, grids=100,
-                             method.grid=c("pca", "uniform")) {
+#'
+initialize_grids <- function(Y, grids = 100, method.grid = c("pca","uniform")) {
 
     len <- (2*pi)/(2*grids)
-    theta_grids <- seq(len, (2*pi)-(len), length.out=grids)
+    theta_grids <- seq(len, (2*pi)-(len), length.out = grids)
 
-    if (method.grid=="pca") {
+    if (method.grid == "pca") {
         pc_res <- prcomp(t(Y), scale = TRUE)
         grid_approx <- coord2rad(cbind(pc_res$x[,1], pc_res$x[,2]))
         grid_approx <- as.numeric(grid_approx)
@@ -311,133 +292,153 @@ initialize_grids <- function(Y, grids=100,
         names(theta_initial) <- names(grid_approx)
         names(theta_initial_ind) <- names(grid_approx)
 
-    for (i in seq_along(grid_approx)) {
-        theta_initial_ind[i] <-
-            which.min(pmin(abs(theta_grids-grid_approx[i]),
-                        abs(theta_grids-(2*pi-grid_approx[i]))))
-        theta_initial <- theta_grids[theta_initial_ind]
-    }
+        for (i in seq_along(grid_approx)) {
+            theta_initial_ind[i] <-
+                which.min(pmin(abs(theta_grids - grid_approx[i]),
+                               abs(theta_grids - (2*pi - grid_approx[i]))))
+            theta_initial <- theta_grids[theta_initial_ind]
+        }
     }
 
-    if (method.grid=="uniform") {
+    if (method.grid == "uniform")
         theta_initial <- theta_grids
-    }
-
     return(theta_initial)
 }
 
-#' @title Infer angles or cell cycle phase based on gene expression data
+#' @title Infer Angles or Cell Cycle Phase Using Gene Expression Data
 #'
 #' @param Y Gene by sample expression matrix.
 #' 
 #' @param sigma_est A vector of standard errors for each gene from the
-#' training data.
+#'   training data.
 #' 
 #' @param funs_est A vector of cyclic functions estimated for each
-#' gene from the training data.
+#'   gene from the training data.
 #'
-#' @inheritParams initialize_grids
+#' @param grids Number of bins used over interval 0 to \code{2*pi}.
+#'
+#' @param method.grid The approach used to initialize angles in the
+#'   computation. \code{method.grid = "uniform"} creates k
+#'   equally-spaced bins ("grids"). \code{method.grid = "pca"} uses gene
+#'   expression values to infer angles, and then these angles are used
+#'   to project the cells to the closest bin.
 #'
 #' @return A list with the following three elements:
 #'
-#'     \item{cell_times_est}{Inferred angles or cell cycle phases, NOT
-#' ordered.}
-#'     \item{loglik_est}{Log-likelihood estimates for each gene.}
-#'     \item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
-#' to each bin.}
-#'
-#' @seealso \code{\link{initialize_grids}} for selecting
-#'     angles in \code{\link{cycle_npreg_loglik}},
-#'     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
-#'     inferred phases from  \code{\link{cycle_npreg_loglik}},
-#'     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
-#'      using parameters learned from \code{\link{cycle_npreg_insample}}
+#' \item{cell_times_est}{Inferred angles or cell cycle phases (not
+#'   ordered).}
+#' 
+#' \item{loglik_est}{Log-likelihood estimates for each gene.}
+#' 
+#' \item{prob_per_cell_by_celltimes}{Probabilities of each cell belonging
+#'   to each bin.}
 #'
 #' @importFrom stats dnorm
 #'
-#' @author Joyce Hsiao
+#' @keywords internal
 #' 
-cycle_npreg_loglik <- function(Y, sigma_est, funs_est, grids=100,
-                               method.grid=c("pca", "uniform")) {
+cycle_npreg_loglik <- function(Y, sigma_est, funs_est, grids = 100,
+                               method.grid = c("pca","uniform")) {
 
-    N <- ncol(Y); G <- nrow(Y)
-    theta_choose <- initialize_grids(Y, grids=grids, method.grid=method.grid)
+    N <- ncol(Y)
+    G <- nrow(Y)
+    theta_choose <- initialize_grids(Y, grids = grids,
+                                     method.grid = method.grid)
 
     # for each cell, sum up the loglikelihood for each gene
     # at the observed cell times
     loglik_per_cell_by_celltimes <- matrix(0, N, grids)
     colnames(loglik_per_cell_by_celltimes) <- theta_choose
     for (n in seq_len(N)) {
-        loglik_per_cell <- do.call(rbind, lapply(seq_len(G), function(g) {
+        loglik_per_cell <- do.call(rbind, lapply(seq_len(G), function(g) 
             dnorm(Y[g,n], funs_est[[g]](theta_choose), sigma_est[g], log = TRUE)
-        }))
-    loglik_per_cell <- colSums(loglik_per_cell)
-    loglik_per_cell_by_celltimes[n,] <- loglik_per_cell
+        ))
+        loglik_per_cell <- colSums(loglik_per_cell)
+        loglik_per_cell_by_celltimes[n,] <- loglik_per_cell
     }
 
-    # use max likelihood to assign samples
-    prob_per_cell_by_celltimes <- t(apply(loglik_per_cell_by_celltimes, 1,
-                                        function(x) {
-            sumll <- sum(exp(x), na.rm=TRUE)
-            if (sumll == 0) { return(rep(0, grids))
-                } else { return(exp(x)/sumll) } }) )
+    # Use maximum-likelihood to assign samples.
+    prob_per_cell_by_celltimes <-
+        t(apply(loglik_per_cell_by_celltimes, 1,
+                function(x) {
+                  sumll <- sum(exp(x), na.rm=TRUE)
+                  if (sumll == 0)
+                    return(rep(0, grids))
+                  else
+                    return(exp(x)/sumll)
+                 }))
     colnames(prob_per_cell_by_celltimes) <- theta_choose
 
-    cell_times_samp_ind <- apply(prob_per_cell_by_celltimes, 1, function(x) {
-        if (max(x, na.rm=TRUE)==0) { sample(seq_len(grids), 1, replace=FALSE)
-            } else { which.max(x) } })
+    cell_times_samp_ind <-
+        apply(prob_per_cell_by_celltimes, 1, function(x)
+          if (max(x, na.rm = TRUE) == 0)
+            sample(seq_len(grids), 1, replace = FALSE)
+          else
+            which.max(x))
     names(cell_times_samp_ind) <-
         colnames(prob_per_cell_by_celltimes)[cell_times_samp_ind]
 
-    cell_times_est <- do.call(c, lapply(seq_len(N), function(n) {
-        theta_choose[cell_times_samp_ind[n]] }) )
+    cell_times_est <-
+        do.call(c, lapply(seq_len(N), function(n)
+          theta_choose[cell_times_samp_ind[n]]))
     names(cell_times_est) <- colnames(Y)
 
-    # compute likelihood based on the selected cell times
-    loglik_max_per_cell <- do.call(c, lapply(seq_len(N), function(n) {
-        ll <- loglik_per_cell_by_celltimes[n,]
-        ll[cell_times_samp_ind[n]] }) )
+    # Compute likelihood based on the selected cell times.
+    loglik_max_per_cell <-
+        do.call(c, lapply(seq_len(N), function(n) {
+          ll <- loglik_per_cell_by_celltimes[n,]
+          return(ll[cell_times_samp_ind[n]])
+        }))
     loglik_est <- sum(loglik_max_per_cell)
 
-    return(list(loglik_est=loglik_est,
-                cell_times_est=cell_times_est,
-                prob_per_cell_by_celltimes=prob_per_cell_by_celltimes))
+    return(list(loglik_est = loglik_est,
+                cell_times_est = cell_times_est,
+                prob_per_cell_by_celltimes = prob_per_cell_by_celltimes))
 }
 
-#' @title Estimate parameters of the cyclic trends
+#' @title Estimate Parameters of the Cyclic Trends
 #'
-#' @description This is used in both cycle_npreg_insample (training
-#' data fitting) and cycle_npreg_outsample (testing data prediction)
-#' to estimate cyclic trends of gene expression values. The function
-#' outputs for each gene standard error of the cyclic trend, cyclic
-#' function, and the estimated expression levels given the cyclic
-#' function.
+#' @description This is used by \code{\link{cycle_npreg_insample}}
+#'   (model fitting from training data) and
+#'   \code{\link{cycle_npreg_outsample}} (prediction in test data
+#'   estimate cyclic trends of gene expression values. The function
+#'   outputs, for each gene, a standard error of the cyclic trend, a
+#'   cyclic function, and the estimated expression levels from the
+#'   cyclic function.
 #'
 #' @param Y Gene by sample expression matrix (log2CPM).
 #' 
 #' @param theta Observed cell times.
 #' 
 #' @param method.trend How to estimate cyclic trend of gene expression
-#' values?  We offer three options: 'trendfilter'
-#' (\code{fit_trendfilter()}), 'loess' (\code{fit_loess()}) and
-#' 'bsplines' (\code{fit_bspline()}).  'trendfilter' provided the best
-#' fit in our study. But 'trendfilter` uses cross-validation and takes
-#' some time. Therefore, we recommend using bspline for quick results.
+#'   values. We offer three options: \code{method.trend =
+#'   "trendfilter"}, uses \code{\link{fit_trendfilter}},
+#'   \code{method.trend = "loess"} uses \code{\link{fit_loess}}), and
+#'   \code{method.trend = "bsplines"} uses \code{\link{fit_bspline}}.  We
+#'   found that \code{"trendfilter"} provided the best fits in our
+#'   experiments. However, trend-filtering may require more
+#'   computational effort since it uses cross-validation, so for fast
+#'   results we recommend using \code{"bspline"}.
 #' 
-#' @param ncores How many computing cores to use? We use doParallel
-#' package for parallel computing.
+#' @param polyorder We estimate cyclic trends of gene expression
+#'   levels using nonparamtric trend filtering.
 #'
-#' @inheritParams cycle_npreg_insample
+#' @param ncores How many computing cores to use? We use the
+#'   \code{doParallel} package for parallel computing.
 #'
 #' @return A list with the following elements:
 #'
 #' \item{Y}{Input gene expression data.}
+#' 
 #' \item{theta}{Input angles.}
+#' 
 #' \item{mu_est}{Estimated expression levels given the cyclic function
 #'       for each gene.}
+#' 
 #' \item{sigma_est}{Estimated standard error of the cyclic trends for
-#'       each gene}
-#' \item{funs}{Estimated cyclic functions}
+#'   each gene.}
+#' 
+#' \item{funs}{Estimated cyclic functions.}
 #'
 #' @importFrom stats approxfun
 #' @importFrom doParallel registerDoParallel
@@ -446,34 +447,22 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est, grids=100,
 #' @importFrom parallel makeCluster
 #' @importFrom parallel stopCluster
 #'
-#' @family peco classifier functions
-#' 
-#' @seealso
-#'     \code{\link{cycle_npreg_insample}} for estimating cyclic functions
-#'     given known phasesfrom training data,
-#'     \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
-#'      using parameters learned from \code{\link{cycle_npreg_insample}}
-#'
-#' @author Joyce Hsiao
+#' @keywords internal
 #' 
 cycle_npreg_mstep <- function(Y, theta,
-                              method.trend=c("trendfilter","loess","bspline"),
-                              polyorder=2, ncores=2) {
+                              method.trend = c("trendfilter","loess","bspline"),
+                              polyorder = 2, ncores = 2) {
 
     if (inherits(Y, "SingleCellExperiment"))
       exprs_test <- assay(Y, "cpm_quantNormed")
     else
       exprs_test <- Y
 
-    if (is.null(ncores)) {
-        cl <- makeCluster(2)
-        registerDoParallel(cl)
-        message(paste("computing on",ncores,"cores"))
-    } else {
-        cl <- makeCluster(ncores)
-        registerDoParallel(cl)
-        message(paste("computing on",ncores,"cores"))
-    }
+    if (is.null(ncores))
+      ncores <- 2
+    cl <- makeCluster(ncores)
+    registerDoParallel(cl)
+    message(paste("computing on",ncores,"cores"))
 
     G <- nrow(exprs_test)
     N <- ncol(exprs_test)
@@ -483,35 +472,36 @@ cycle_npreg_mstep <- function(Y, theta,
     theta_ordered <- theta[ord]
     exprs_test_ordered <- exprs_test_ordered[,ord]
 
-    fit <- foreach(g=seq_len(G)) %dopar% {
-    y_g <- exprs_test_ordered[g,]
-
-        if (method.trend=="trendfilter") {
-            fit_g <- peco::fit_trendfilter(yy=y_g, polyorder = polyorder)
-            fun_g <- approxfun(x=as.numeric(theta_ordered),
-                            y=as.numeric(fit_g$trend.yy), rule=2)
-            mu_g <- fit_g$trend.yy
+    fit <- foreach(g = seq_len(G)) %dopar% {
+        y_g <- exprs_test_ordered[g,]
+        if (method.trend == "trendfilter") {
+            fit_g <- fit_trendfilter(yy = y_g, polyorder = polyorder)
+            fun_g <- approxfun(x = as.numeric(theta_ordered),
+                               y = as.numeric(fit_g$trend.yy),
+                               rule = 2)
+            mu_g  <- fit_g$trend.yy
         }
-        if (method.trend=="bspline") {
-            fit_g <- peco::fit_bspline(yy=y_g, time = theta_ordered)
-            fun_g <- approxfun(x=as.numeric(theta_ordered),
-                            y=as.numeric(fit_g$pred.yy), rule=2)
-            mu_g <- fit_g$pred.yy
-        }
-
-        if (method.trend=="loess") {
-            fit_g <- peco::fit_loess(yy=y_g, time = theta_ordered)
-            fun_g <- approxfun(x=as.numeric(theta_ordered),
-                            y=as.numeric(fit_g$pred.yy), rule=2)
-            mu_g <- fit_g$pred.yy
+        if (method.trend == "bspline") {
+            fit_g <- fit_bspline(yy = y_g, time = theta_ordered)
+            fun_g <- approxfun(x = as.numeric(theta_ordered),
+                               y = as.numeric(fit_g$pred.yy),
+                               rule = 2)
+            mu_g  <- fit_g$pred.yy
         }
 
-        sigma_g <- sqrt(sum((y_g-mu_g)^2)/N)
+        if (method.trend == "loess") {
+            fit_g <- fit_loess(yy = y_g, time = theta_ordered)
+            fun_g <- approxfun(x = as.numeric(theta_ordered),
+                               y = as.numeric(fit_g$pred.yy),
+                               rule = 2)
+            mu_g  <- fit_g$pred.yy
+        }
 
-        list(y_g =y_g,
-            mu_g=mu_g,
-            sigma_g=sigma_g,
-            fun_g=fun_g)
+        sigma_g <- sqrt(sum((y_g - mu_g)^2)/N)
+        return(list(y_g     = y_g,
+                    mu_g    = mu_g,
+                    sigma_g = sigma_g,
+                    fun_g   = fun_g))
     }
     stopCluster(cl)
 
@@ -525,9 +515,9 @@ cycle_npreg_mstep <- function(Y, theta,
     funs <- do.call(c, lapply(fit, "[[", "fun_g"))
     names(funs) <- rownames(exprs_test_ordered)
 
-    return(list(Y = exprs_test_ordered,
-                theta = theta_ordered,
-                mu_est = mu_est,
+    return(list(Y         = exprs_test_ordered,
+                theta     = theta_ordered,
+                mu_est    = mu_est,
                 sigma_est = sigma_est,
-                funs = funs))
+                funs      = funs))
 }

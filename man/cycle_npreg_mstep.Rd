@@ -2,7 +2,7 @@
 % Please edit documentation in R/cycle_npreg.R
 \name{cycle_npreg_mstep}
 \alias{cycle_npreg_mstep}
-\title{Estimate parameters of the cyclic trends}
+\title{Estimate Parameters of the Cyclic Trends}
 \usage{
 cycle_npreg_mstep(
   Y,
@@ -18,49 +18,43 @@ cycle_npreg_mstep(
 \item{theta}{Observed cell times.}
 
 \item{method.trend}{How to estimate cyclic trend of gene expression
-values?  We offer three options: 'trendfilter'
-(\code{fit_trendfilter()}), 'loess' (\code{fit_loess()}) and
-'bsplines' (\code{fit_bspline()}).  'trendfilter' provided the best
-fit in our study. But 'trendfilter` uses cross-validation and takes
-some time. Therefore, we recommend using bspline for quick results.}
+values. We offer three options: \code{method.trend =
+"trendfilter"}, uses \code{\link{fit_trendfilter}},
+\code{method.trend = "loess"} uses \code{\link{fit_loess}}), and
+\code{method.trend = "bsplines"} uses \code{\link{fit_bspline}}.  We
+found that \code{"trendfilter"} provided the best fits in our
+experiments. However, trend-filtering may require more
+computational effort since it uses cross-validation, so for fast
+results we recommend using \code{"bspline"}.}
 
 \item{polyorder}{We estimate cyclic trends of gene expression
-levels using nonparamtric trend filtering. The default fits second
-degree polynomials.}
+levels using nonparamtric trend filtering.}
 
-\item{ncores}{How many computing cores to use? We use doParallel
-package for parallel computing.}
+\item{ncores}{How many computing cores to use? We use the
+\code{doParallel} package for parallel computing.}
 }
 \value{
 A list with the following elements:
 
 \item{Y}{Input gene expression data.}
+
 \item{theta}{Input angles.}
+
 \item{mu_est}{Estimated expression levels given the cyclic function
       for each gene.}
+
 \item{sigma_est}{Estimated standard error of the cyclic trends for
-      each gene}
-\item{funs}{Estimated cyclic functions}
+  each gene.}
+
+\item{funs}{Estimated cyclic functions.}
 }
 \description{
-This is used in both cycle_npreg_insample (training
-data fitting) and cycle_npreg_outsample (testing data prediction)
-to estimate cyclic trends of gene expression values. The function
-outputs for each gene standard error of the cyclic trend, cyclic
-function, and the estimated expression levels given the cyclic
-function.
+This is used by \code{\link{cycle_npreg_insample}}
+  (model fitting from training data) and
+  \code{\link{cycle_npreg_outsample}} (prediction in test data
+  estimate cyclic trends of gene expression values. The function
+  outputs, for each gene, a standard error of the cyclic trend, a
+  cyclic function, and the estimated expression levels from the
+  cyclic function.
 }
-\seealso{
-\code{\link{cycle_npreg_insample}} for estimating cyclic functions
-    given known phasesfrom training data,
-    \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
-     using parameters learned from \code{\link{cycle_npreg_insample}}
-
-Other peco classifier functions: 
-\code{\link{cycle_npreg_insample}()},
-\code{\link{cycle_npreg_outsample}()}
-}
-\author{
-Joyce Hsiao
-}
-\concept{peco classifier functions}
+\keyword{internal}

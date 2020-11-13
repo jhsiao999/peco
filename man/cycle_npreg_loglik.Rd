@@ -2,7 +2,7 @@
 % Please edit documentation in R/cycle_npreg.R
 \name{cycle_npreg_loglik}
 \alias{cycle_npreg_loglik}
-\title{Infer angles or cell cycle phase based on gene expression data}
+\title{Infer Angles or Cell Cycle Phase Using Gene Expression Data}
 \usage{
 cycle_npreg_loglik(
   Y,
@@ -21,34 +21,26 @@ training data.}
 \item{funs_est}{A vector of cyclic functions estimated for each
 gene from the training data.}
 
-\item{grids}{number of bins to be selected along 0 to 2pi.}
+\item{grids}{Number of bins used over interval 0 to \code{2*pi}.}
 
-\item{method.grid}{The approach to initialize angles in the
-computation. \code{uniform} creates k equally-spaced bins
-(grids). \code{pca} uses gene expression values to infer angles,
-and then use these pca-based angles to move the cells to the
-closest bin (as defined by \code{uniform}).}
+\item{method.grid}{The approach used to initialize angles in the
+computation. \code{method.grid = "uniform"} creates k
+equally-spaced bins ("grids"). \code{method.grid = "pca"} uses gene
+expression values to infer angles, and then these angles are used
+to project the cells to the closest bin.}
 }
 \value{
 A list with the following three elements:
 
-    \item{cell_times_est}{Inferred angles or cell cycle phases, NOT
-ordered.}
-    \item{loglik_est}{Log-likelihood estimates for each gene.}
-    \item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
-to each bin.}
+\item{cell_times_est}{Inferred angles or cell cycle phases (not
+  ordered).}
+
+\item{loglik_est}{Log-likelihood estimates for each gene.}
+
+\item{prob_per_cell_by_celltimes}{Probabilities of each cell belonging
+  to each bin.}
 }
 \description{
-Infer angles or cell cycle phase based on gene expression data
+Infer Angles or Cell Cycle Phase Using Gene Expression Data
 }
-\seealso{
-\code{\link{initialize_grids}} for selecting
-    angles in \code{\link{cycle_npreg_loglik}},
-    \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
-    inferred phases from  \code{\link{cycle_npreg_loglik}},
-    \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
-     using parameters learned from \code{\link{cycle_npreg_insample}}
-}
-\author{
-Joyce Hsiao
-}
+\keyword{internal}

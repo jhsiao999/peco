@@ -2,7 +2,7 @@
 % Please edit documentation in R/cycle_npreg.R
 \name{cycle_npreg_outsample}
 \alias{cycle_npreg_outsample}
-\title{Predict test-sample ordering using training labels (no update)}
+\title{Predict test-sample Ordering Using Training Labels (no update)}
 \usage{
 cycle_npreg_outsample(
   Y_test,
@@ -141,13 +141,6 @@ title("Predicting cell cycle phase for NA18511", outer=TRUE)
     cyclic functions from training data,
     \code{\link{cycle_npreg_loglik}} for log-likehood at
     angles between 0 to 2pi,
-    \code{\link{initialize_grids}} for selecting
-    angles in \code{\link{cycle_npreg_loglik}},
     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
     inferred phases from  \code{\link{cycle_npreg_loglik}}
-
-Other peco classifier functions: 
-\code{\link{cycle_npreg_insample}()},
-\code{\link{cycle_npreg_mstep}()}
 }
-\concept{peco classifier functions}

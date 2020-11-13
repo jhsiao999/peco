@@ -2,7 +2,7 @@
 % Please edit documentation in R/cycle_npreg.R
 \name{cycle_npreg_insample}
 \alias{cycle_npreg_insample}
-\title{Obtain cyclic trend estimates from the training data}
+\title{Obtain Cyclic Trend Estimates from Training Data}
 \usage{
 cycle_npreg_insample(
   Y,
@@ -45,20 +45,15 @@ Estimates cyclic trends of gene expression levels
 using training data.
 }
 \examples{
-# see \code{\link{cycle_npreg_insample}}
+# See cycle_npreg_outsample an example.
 
 }
 \seealso{
-\code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
-       inferred phases from  \code{\link{cycle_npreg_loglik}},
-       \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
-       using parameters learned from \code{\link{cycle_npreg_insample}}
-
-Other peco classifier functions: 
-\code{\link{cycle_npreg_mstep}()},
-\code{\link{cycle_npreg_outsample}()}
+\code{\link{cycle_npreg_mstep}} for estimating cyclic functions
+  given inferred phases from \code{\link{cycle_npreg_loglik}}, and
+  \code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
+  using parameters learned from \code{\link{cycle_npreg_insample}}.
 }
 \author{
 Joyce Hsiao
 }
-\concept{peco classifier functions}

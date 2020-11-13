@@ -2,39 +2,27 @@
 % Please edit documentation in R/cycle_npreg.R
 \name{initialize_grids}
 \alias{initialize_grids}
-\title{For prediction, initialize grid points for cell cycle phase
-on a circle.}
+\title{Initialize Grid for cycle_npreg_loglik}
 \usage{
 initialize_grids(Y, grids = 100, method.grid = c("pca", "uniform"))
 }
 \arguments{
-\item{Y}{Gene expression matrix. Gene by sample.}
+\item{Y}{Gene expression matrix (gene by sample).}
 
-\item{grids}{number of bins to be selected along 0 to 2pi.}
+\item{grids}{Number of bins used over interval 0 to \code{2*pi}.}
 
-\item{method.grid}{The approach to initialize angles in the
-computation. \code{uniform} creates k equally-spaced bins
-(grids). \code{pca} uses gene expression values to infer angles,
-and then use these pca-based angles to move the cells to the
-closest bin (as defined by \code{uniform}).}
+\item{method.grid}{The approach used to initialize angles in the
+computation. \code{method.grid = "uniform"} creates k
+equally-spaced bins ("grids"). \code{method.grid = "pca"} uses gene
+expression values to infer angles, and then these angles are used
+to project the cells to the closest bin.}
 }
 \value{
 A vector of initialized angles to be used in
-\code{cycle_npreg_loglik} to infer angles.
+  \code{\link{cycle_npreg_loglik}}.
 }
 \description{
 For prediction, initialize grid points for cell cycle phase
-on a circle.
-}
-\seealso{
-\code{\link{cycle_npreg_loglik}} for log-likehood at
-angles between 0 to 2pi, \code{\link{cycle_npreg_mstep}} for
-estimating cyclic functions given inferred phases from
-\code{\link{cycle_npreg_loglik}},
-\code{\link{cycle_npreg_outsample}} for predicting cell cycle phase
-using parameters learned from \code{\link{cycle_npreg_insample}}
-}
-\author{
-Joyce Hsiao
+  on a circle.
 }
 \keyword{internal}
