@@ -75,65 +75,61 @@
 #' library(SingleCellExperiment)
 #' data(sce_top101genes)
 #'
-#' # select top 5 cyclic genes
+#' # Select top 5 cyclic genes.
 #' sce_top5 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
 #'                                   decreasing = TRUE)[1:5],]
 #'
-#' # Select samples from NA18511 for our prediction example.
-#' coldata <- colData(sce_top5)
-#' which_samples_train <- rownames(coldata)[coldata$chip_id != "NA18511"]
+#' # Select NA18511 samples for training and test sets.
+#' coldata               <- colData(sce_top5)
+#' which_samples_train   <- rownames(coldata)[coldata$chip_id != "NA18511"]
 #' which_samples_predict <- rownames(coldata)[coldata$chip_id == "NA18511"]
+#' 
+#' # Learn gene cyclic functions from the training data using the
+#' # trend filtering method.
+#' sce_top5    <- data_transform_quantile(sce_top5)
+#' expr_quant  <- assay(sce_top5, "cpm_quantNormed")
+#' Y_train     <- expr_quant[, colnames(expr_quant) %in% which_samples_train]
+#' theta_train <- coldata$theta_shifted[rownames(coldata) %in%
+#'                  which_samples_train]
+#' names(theta_train) <- rownames(coldata)[rownames(coldata) %in%
+#'                                         which_samples_train]
+#' model_5genes_train <- cycle_npreg_insample(Y = Y_train,theta = theta_train,
+#'                                            polyorder = 2,ncores = 2,
+#'                                            method.trend = "trendfilter")
 #'
-#' # learning cyclic functions of the genes using our training data
-#' sce_top5 <- data_transform_quantile(sce_top5)
-#' expr_quant <- assay(sce_top5, "cpm_quantNormed")
-#' Y_train <- expr_quant[, colnames(expr_quant) %in% which_samples_train]
-#' theta_train <-
-#'     coldata$theta_shifted[rownames(coldata) %in% which_samples_train]
-#' names(theta_train) <-
-#'     rownames(coldata)[rownames(coldata) %in% which_samples_train]
+#' # Predict cell cycle in the test samples.
+#' Y_test <- sce_top5[,colnames(sce_top5) %in% which_samples_predict]
+#' model_5genes_predict <-
+#'   cycle_npreg_outsample(Y_test = Y_test,
+#'                         sigma_est = model_5genes_train$sigma_est,
+#'                         funs_est = model_5genes_train$funs_est,
+#'                         method.trend = "trendfilter",
+#'                         ncores = 2,get_trend_estimates = FALSE)
 #'
-#' # obtain cyclic function estimates
-#' model_5genes_train <- cycle_npreg_insample(Y = Y_train,
-#'                                            theta = theta_train,
-#'                                            polyorder=2,
-#'                                            ncores=2,
-#'                                            method.trend="trendfilter")
-#'
-#' # predict cell cycle
-#' model_5genes_predict <- cycle_npreg_outsample(
-#'   Y_test=sce_top5[,colnames(sce_top5) %in% which_samples_predict],
-#'   sigma_est=model_5genes_train$sigma_est,
-#'   funs_est=model_5genes_train$funs_est,
-#'   method.trend="trendfilter",
-#'   ncores=2,
-#'   get_trend_estimates=FALSE)
-#'
-#' # estimate cyclic gene expression levels given cell cycle for each gene
+#' # Estimate cyclic gene expression levels given the cell cycle for each
+#' # gene.
 #' predict_cyclic <-
-#'     fit_cyclical_many(Y=assay(model_5genes_predict$Y,"cpm_quantNormed"),
-#'                       theta=colData(model_5genes_predict$Y)$cellcycle_peco)
-#' all.equal(names(predict_cyclic[[2]]), colnames(predict_cyclic[[1]]))
+#'   fit_cyclical_many(Y = assay(model_5genes_predict$Y,"cpm_quantNormed"),
+#'                     theta = colData(model_5genes_predict$Y)$cellcycle_peco)
 #'
-#' par(mfrow=c(2,3), mar=c(4,4,3,1))
+#' # Plot the cell cycle predictions vs. FUCCI phase.
+#' par(mfrow = c(2,3),mar = c(4,4,3,1))
 #' for (g in seq_along(rownames(model_5genes_predict$Y))) {
 #'   plot(assay(model_5genes_predict$Y,"cpm_quantNormed")[
-#'       rownames(model_5genes_predict$Y)[g],],
-#'        x=colData(model_5genes_predict$Y)$cellcycle_peco, axes=FALSE,
-#'        xlab="FUCCI phase",
-#'        ylab="Predicted phase")
-#'   points(y=predict_cyclic$cellcycle_function[[
-#'            rownames(model_5genes_predict$Y)[g]]](
-#'     seq(0, 2*pi, length.out = 100)),
-#'     x=seq(0, 2*pi, length.out = 100),
-#'     pch=16, col="royalblue")
-#'   axis(2); axis(1,at=c(0,pi/2, pi, 3*pi/2, 2*pi),
-#'                 labels=c(0,expression(pi/2), expression(pi),
-#'                          expression(3*pi/2), expression(2*pi)))
-#'   abline(h=0, lty=1, col="black", lwd=.7)
-#'   title(rownames(model_5genes_predict$Y_reordered)[g])
+#'         rownames(model_5genes_predict$Y)[g],],
+#'        x = colData(model_5genes_predict$Y)$cellcycle_peco,axes = FALSE,
+#'        xlab = "FUCCI phase",ylab = "predicted phase")
+#'   x <- seq(0,2*pi,length.out = 100)
+#'   lines(x = x,y = predict_cyclic$cellcycle_function[[
+#'                      rownames(model_5genes_predict$Y)[g]]](x),
+#'         lwd = 1.5,col = "tomato")
+#'   axis(2)
+#'   axis(1,at = seq(0,2*pi,length.out = 5),
+#'        labels = c(0,expression(pi/2),expression(pi),expression(3*pi/2),
+#'                   expression(2*pi)))
+#'   abline(h = 0,lwd = 1,col = "skyblue",lty = "dotted")
+#'   title(names(model_5genes_predict$Y)[g])
 #' }
-#' title("Predicting cell cycle phase for NA18511", outer=TRUE)
 #'
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment assay
