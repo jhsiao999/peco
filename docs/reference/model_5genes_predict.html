@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A SingleCellExperiment object — model_5genes_predict • peco</title>
+<title>Cell-Cycle Predictions using 5 Genes — model_5genes_predict • peco</title>
 
 
 <!-- jquery -->
@@ -39,12 +39,11 @@
 
 
 
-<meta property="og:title" content="A SingleCellExperiment object — model_5genes_predict" />
-<meta property="og:description" content="Pre-computed peco results. Applied
-cycle_npreg_outsample and results stored in
-model_5genes_train to predict cell cycle phase for
-single-cell samples of NA19098. The predicted cell cycle is stored
-as variable cellcycle_peco." />
+<meta property="og:title" content="Cell-Cycle Predictions using 5 Genes — model_5genes_predict" />
+<meta property="og:description" content="Pre-computed peco results obtained by applying
+  cycle_npreg_outsample with model stored in
+  model_5genes_train to predict cell cycle phase for
+  single-cell samples of NA19098." />
 
 
 
@@ -76,7 +75,7 @@ as variable cellcycle_peco." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.21</span>
       </span>
     </div>
 
@@ -109,30 +108,24 @@ as variable cellcycle_peco." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A SingleCellExperiment object</h1>
+    <h1>Cell-Cycle Predictions using 5 Genes</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/data.R'><code>R/data.R</code></a></small>
     <div class="hidden name"><code>model_5genes_predict.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Pre-computed peco results. Applied
-<em>cycle_npreg_outsample</em> and results stored in
-<em>model_5genes_train</em> to predict cell cycle phase for
-single-cell samples of NA19098. The predicted cell cycle is stored
-as variable <em>cellcycle_peco</em>.</p>
+    <p>Pre-computed peco results obtained by applying
+  <em>cycle_npreg_outsample</em> with model stored in
+  <em>model_5genes_train</em> to predict cell cycle phase for
+  single-cell samples of NA19098.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A list with the following elements</p>
-<dl'>
-  <dt>cellcycle_peco</dt><dd><p>Predict cell cycle,
-   the values ranged between 0 to 2pi</p></dd>
- 
-</dl>
-
+    <p>A <code>SingleCellExperiment</code> object. The predicted cell
+cycle is stored in <em>model_5genes_predict$cellcycle_peco</em>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>model_5genes_predict</span>)</div></pre>

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.21</span>
       </span>
     </div>
 
@@ -67,7 +67,7 @@
       <h1 data-toc-skip>Predicting cell cycle phase using peco</h1>
                         <h4 class="author">Joyce Hsiao</h4>
             
-            <h4 class="date">2020-11-10</h4>
+            <h4 class="date">2020-11-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jhsiao999/peco/blob/master/vignettes/peco.Rmd"><code>vignettes/peco.Rmd</code></a></small>
       <div class="hidden name"><code>peco.Rmd</code></div>
@@ -122,7 +122,7 @@
 <p><code>pred_top101genes$Y</code> contains a <code>SingleCellExperiment</code> object with the predicted cell cycle phase in the <code>colData</code> slot:</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu">colData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>)$<span class="no">cellcycle_peco</span>)
 <span class="co">#&gt; 20170905-A01 20170905-A02 20170905-A03 20170905-A06 20170905-A07 20170905-A08 </span>
-<span class="co">#&gt;     1.099557     4.680973     2.544690     4.303982     4.052655     1.413717</span></pre></body></html></div>
+<span class="co">#&gt;     1.099557     4.680973     2.607522     4.303982     4.052655     1.413717</span></pre></body></html></div>
 <p>View the predictions for the <em>CDK1</em> gene (Ensembl id ENSG00000170312). Because <em>CDK1</em> is a known cell cycle gene, this visualization serves as a “sanity check” for the predictions.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>,<span class="fl">2</span>*<span class="no">pi</span>,<span class="kw">length.out</span> <span class="kw">=</span> <span class="fl">100</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fu">colData</span>(<span class="no">pred_top101genes</span>$<span class="no">Y</span>)$<span class="no">theta_shifted</span>,
@@ -174,7 +174,7 @@
 <span class="co">#&gt; [8] methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt;  [1] peco_1.1.15                 doParallel_1.0.15          </span>
+<span class="co">#&gt;  [1] peco_1.1.21                 doParallel_1.0.15          </span>
 <span class="co">#&gt;  [3] iterators_1.0.12            foreach_1.4.7              </span>
 <span class="co">#&gt;  [5] SingleCellExperiment_1.6.0  SummarizedExperiment_1.16.1</span>
 <span class="co">#&gt;  [7] DelayedArray_0.12.3         BiocParallel_1.18.1        </span>

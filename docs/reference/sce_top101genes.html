@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Molecule counts of the 101 significant cyclical genes in the
-888 samples analyzed in the study. — sce_top101genes • peco</title>
+<title>Molecule Counts of the 101 Significant Cyclical Genes in the
+  888 samples Analyzed in the Study. — sce_top101genes • peco</title>
 
 
 <!-- jquery -->
@@ -40,11 +40,12 @@
 
 
 
-<meta property="og:title" content="Molecule counts of the 101 significant cyclical genes in the
-888 samples analyzed in the study. — sce_top101genes" />
-<meta property="og:description" content="A SingleCellExperiment object, including molecule count
-data after gene and smaple filtering. The colData slot
-contains sample phenotype information." />
+<meta property="og:title" content="Molecule Counts of the 101 Significant Cyclical Genes in the
+  888 samples Analyzed in the Study. — sce_top101genes" />
+<meta property="og:description" content="A SingleCellExperiment object containing
+  processed molecule count data (obtained after gene and sample
+  filtering). The colData slot contains sample phenotype
+  information." />
 
 
 
@@ -76,7 +77,7 @@ contains sample phenotype information." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.21</span>
       </span>
     </div>
 
@@ -109,30 +110,26 @@ contains sample phenotype information." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Molecule counts of the 101 significant cyclical genes in the
-888 samples analyzed in the study.</h1>
+    <h1>Molecule Counts of the 101 Significant Cyclical Genes in the
+  888 samples Analyzed in the Study.</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/data.R'><code>R/data.R</code></a></small>
     <div class="hidden name"><code>sce_top101genes.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A SingleCellExperiment object, including molecule count
-data after gene and smaple filtering. The <code>colData</code> slot
-contains sample phenotype information.</p>
+    <p>A <code>SingleCellExperiment</code> object containing
+  processed molecule count data (obtained after gene and sample
+  filtering). The <code>colData</code> slot contains sample phenotype
+  information.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A SingleCellExperiment object with 888 samples and the 101
-    significant cyclic genes,</p>
-<dl'>
-    <dt>theta</dt><dd><p>Inferred angles of each cell along
-        a circle, also known as FUCCI phase.</p></dd>
-
-</dl>
-
+    <p>A <code>SingleCellExperiment</code> object with 888 samples and
+  the 101 significant cyclic genes. Also, sce_top101genes$theta
+  contains the inferred angles (FUCCI phase) for each cell.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>SingleCellExperiment</span>)

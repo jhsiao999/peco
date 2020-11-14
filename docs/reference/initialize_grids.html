@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>For prediction, initialize grid points for cell cycle phase
-on a circle. — initialize_grids • peco</title>
+<title>Initialize Grid for cycle_npreg_loglik — initialize_grids • peco</title>
 
 
 <!-- jquery -->
@@ -40,10 +39,9 @@ on a circle. — initialize_grids • peco</title>
 
 
 
-<meta property="og:title" content="For prediction, initialize grid points for cell cycle phase
-on a circle. — initialize_grids" />
+<meta property="og:title" content="Initialize Grid for cycle_npreg_loglik — initialize_grids" />
 <meta property="og:description" content="For prediction, initialize grid points for cell cycle phase
-on a circle." />
+  on a circle." />
 
 
 
@@ -75,7 +73,7 @@ on a circle." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.21</span>
       </span>
     </div>
 
@@ -108,15 +106,14 @@ on a circle." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>For prediction, initialize grid points for cell cycle phase
-on a circle.</h1>
+    <h1>Initialize Grid for cycle_npreg_loglik</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/cycle_npreg.R'><code>R/cycle_npreg.R</code></a></small>
     <div class="hidden name"><code>initialize_grids.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>For prediction, initialize grid points for cell cycle phase
-on a circle.</p>
+  on a circle.</p>
     </div>
 
     <pre class="usage"><span class='fu'>initialize_grids</span>(<span class='no'>Y</span>, <span class='kw'>grids</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>method.grid</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pca"</span>, <span class='st'>"uniform"</span>))</pre>
@@ -126,34 +123,26 @@ on a circle.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Y</th>
-      <td><p>Gene expression matrix. Gene by sample.</p></td>
+      <td><p>Gene expression matrix (gene by sample).</p></td>
     </tr>
     <tr>
       <th>grids</th>
-      <td><p>number of bins to be selected along 0 to 2pi.</p></td>
+      <td><p>Number of bins used over interval 0 to <code>2*pi</code>.</p></td>
     </tr>
     <tr>
       <th>method.grid</th>
-      <td><p>The approach to initialize angles in the
-computation. <code>uniform</code> creates k equally-spaced bins
-(grids). <code>pca</code> uses gene expression values to infer angles,
-and then use these pca-based angles to move the cells to the
-closest bin (as defined by <code>uniform</code>).</p></td>
+      <td><p>The approach used to initialize angles in the
+computation. <code>method.grid = "uniform"</code> creates k
+equally-spaced bins ("grids"). <code>method.grid = "pca"</code> uses gene
+expression values to infer angles, and then these angles are used
+to project the cells to the closest bin.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A vector of initialized angles to be used in
-<code>cycle_npreg_loglik</code> to infer angles.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='cycle_npreg_loglik.html'>cycle_npreg_loglik</a></code> for log-likehood at
-angles between 0 to 2pi, <code><a href='cycle_npreg_mstep.html'>cycle_npreg_mstep</a></code> for
-estimating cyclic functions given inferred phases from
-<code><a href='cycle_npreg_loglik.html'>cycle_npreg_loglik</a></code>,
-<code><a href='cycle_npreg_outsample.html'>cycle_npreg_outsample</a></code> for predicting cell cycle phase
-using parameters learned from <code><a href='cycle_npreg_insample.html'>cycle_npreg_insample</a></code></p></div>
+  <code><a href='cycle_npreg_loglik.html'>cycle_npreg_loglik</a></code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

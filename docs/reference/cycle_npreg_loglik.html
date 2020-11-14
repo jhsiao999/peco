@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Infer angles or cell cycle phase based on gene expression data — cycle_npreg_loglik • peco</title>
+<title>Infer Angles or Cell Cycle Phase Using Gene Expression Data — cycle_npreg_loglik • peco</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Infer angles or cell cycle phase based on gene expression data — cycle_npreg_loglik" />
-<meta property="og:description" content="Infer angles or cell cycle phase based on gene expression data" />
+<meta property="og:title" content="Infer Angles or Cell Cycle Phase Using Gene Expression Data — cycle_npreg_loglik" />
+<meta property="og:description" content="Infer Angles or Cell Cycle Phase Using Gene Expression Data" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.21</span>
       </span>
     </div>
 
@@ -105,13 +105,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Infer angles or cell cycle phase based on gene expression data</h1>
+    <h1>Infer Angles or Cell Cycle Phase Using Gene Expression Data</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/cycle_npreg.R'><code>R/cycle_npreg.R</code></a></small>
     <div class="hidden name"><code>cycle_npreg_loglik.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Infer angles or cell cycle phase based on gene expression data</p>
+    <p>Infer Angles or Cell Cycle Phase Using Gene Expression Data</p>
     </div>
 
     <pre class="usage"><span class='fu'>cycle_npreg_loglik</span>(
@@ -141,36 +141,29 @@ gene from the training data.</p></td>
     </tr>
     <tr>
       <th>grids</th>
-      <td><p>number of bins to be selected along 0 to 2pi.</p></td>
+      <td><p>Number of bins used over interval 0 to <code>2*pi</code>.</p></td>
     </tr>
     <tr>
       <th>method.grid</th>
-      <td><p>The approach to initialize angles in the
-computation. <code>uniform</code> creates k equally-spaced bins
-(grids). <code>pca</code> uses gene expression values to infer angles,
-and then use these pca-based angles to move the cells to the
-closest bin (as defined by <code>uniform</code>).</p></td>
+      <td><p>The approach used to initialize angles in the
+computation. <code>method.grid = "uniform"</code> creates k
+equally-spaced bins ("grids"). <code>method.grid = "pca"</code> uses gene
+expression values to infer angles, and then these angles are used
+to project the cells to the closest bin.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with the following three elements:</p>
-<p></p>
-<dt>cell_times_est</dt><dd><p>Inferred angles or cell cycle phases, NOT
-ordered.</p></dd>
-    <dt>loglik_est</dt><dd><p>Log-likelihood estimates for each gene.</p></dd>
-    <dt>prob_per_cell_by_celltimes</dt><dd><p>Probabilities of each cell belong
-to each bin.</p></dd>
+<dt>cell_times_est</dt><dd><p>Inferred angles or cell cycle phases (not
+  ordered).</p></dd>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+<dt>loglik_est</dt><dd><p>Log-likelihood estimates for each gene.</p></dd>
 
-    <div class='dont-index'><p><code><a href='initialize_grids.html'>initialize_grids</a></code> for selecting
-    angles in <code>cycle_npreg_loglik</code>,
-    <code><a href='cycle_npreg_mstep.html'>cycle_npreg_mstep</a></code> for estimating cyclic functions given
-    inferred phases from  <code>cycle_npreg_loglik</code>,
-    <code><a href='cycle_npreg_outsample.html'>cycle_npreg_outsample</a></code> for predicting cell cycle phase
-     using parameters learned from <code><a href='cycle_npreg_insample.html'>cycle_npreg_insample</a></code></p></div>
+<dt>prob_per_cell_by_celltimes</dt><dd><p>Probabilities of each cell belonging
+  to each bin.</p></dd>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

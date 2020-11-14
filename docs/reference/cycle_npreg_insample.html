@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Obtain cyclic trend estimates from the training data — cycle_npreg_insample • peco</title>
+<title>Obtain Cyclic Trend Estimates from Training Data — cycle_npreg_insample • peco</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Obtain cyclic trend estimates from the training data — cycle_npreg_insample" />
-<meta property="og:description" content="Estimates cyclic trends of gene expression levels
-using training data." />
+<meta property="og:title" content="Obtain Cyclic Trend Estimates from Training Data — cycle_npreg_insample" />
+<meta property="og:description" content="Estimate cyclic trends of gene expression levels
+  using training data." />
 
 
 
@@ -73,7 +73,7 @@ using training data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.21</span>
       </span>
     </div>
 
@@ -106,14 +106,14 @@ using training data." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Obtain cyclic trend estimates from the training data</h1>
+    <h1>Obtain Cyclic Trend Estimates from Training Data</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/cycle_npreg.R'><code>R/cycle_npreg.R</code></a></small>
     <div class="hidden name"><code>cycle_npreg_insample.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Estimates cyclic trends of gene expression levels
-using training data.</p>
+    <p>Estimate cyclic trends of gene expression levels
+  using training data.</p>
     </div>
 
     <pre class="usage"><span class='fu'>cycle_npreg_insample</span>(
@@ -129,8 +129,8 @@ using training data.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Y</th>
-      <td><p>A matrix of normalized and transformed gene expression
-values. Gene by sample.</p></td>
+      <td><p>A matrix (gene by sample) of normalized and transformed
+gene expression values.</p></td>
     </tr>
     <tr>
       <th>theta</th>
@@ -138,46 +138,49 @@ values. Gene by sample.</p></td>
     </tr>
     <tr>
       <th>ncores</th>
-      <td><p>We use doParallel package for parallel computing.</p></td>
+      <td><p>We use the doParallel package for parallel computing.</p></td>
     </tr>
     <tr>
       <th>polyorder</th>
       <td><p>We estimate cyclic trends of gene expression
-levels using nonparamtric trend filtering. The default fits second
-degree polynomials.</p></td>
+levels using nonparamtric trend filtering.</p></td>
     </tr>
     <tr>
       <th>method.trend</th>
-      <td><p>Varous methods that can be applied to estimate
-cyclic trend of gene expression levels.</p></td>
+      <td><p>How to estimate cyclic trend of gene expression
+values. We offer three options: <code>method.trend =
+"trendfilter"</code>, uses <code><a href='fit_trendfilter.html'>fit_trendfilter</a></code>,
+<code>method.trend = "loess"</code> uses <code><a href='fit_loess.html'>fit_loess</a></code>), and
+<code>method.trend = "bsplines"</code> uses <code><a href='fit_bspline.html'>fit_bspline</a></code>.  We
+found that <code>"trendfilter"</code> provided the best fits in our
+experiments. However, trend-filtering may require more
+computational effort since it uses cross-validation, so for fast
+results we recommend using <code>"bspline"</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with four elements:</p>
-<dt>Y</dt><dd><p>Gene expression marix.</p></dd>
+<dt>Y</dt><dd><p>The gene expression marix.</p></dd>
 
 <dt>theta</dt><dd><p>Vector of angles or cell cycle phases.</p></dd>
 
 <dt>sigma_est</dt><dd><p>Estimated standard error of the cyclic trend for
-each gene.</p></dd>
+  each gene.</p></dd>
 
 <dt>funs_est</dt><dd><p>A list of functions for approximating the cyclic
 trends of gene express levels for each gene.</p></dd>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='cycle_npreg_mstep.html'>cycle_npreg_mstep</a></code> for estimating cyclic functions given
-       inferred phases from  <code><a href='cycle_npreg_loglik.html'>cycle_npreg_loglik</a></code>,
-       <code><a href='cycle_npreg_outsample.html'>cycle_npreg_outsample</a></code> for predicting cell cycle phase
-       using parameters learned from <code>cycle_npreg_insample</code></p>
-<p>Other peco classifier functions: 
-<code><a href='cycle_npreg_mstep.html'>cycle_npreg_mstep</a>()</code>,
-<code><a href='cycle_npreg_outsample.html'>cycle_npreg_outsample</a>()</code></p></div>
+    <div class='dont-index'><p><code><a href='cycle_npreg_mstep.html'>cycle_npreg_mstep</a></code> for estimating cyclic functions
+  given inferred phases from <code><a href='cycle_npreg_loglik.html'>cycle_npreg_loglik</a></code>, and
+  <code><a href='cycle_npreg_outsample.html'>cycle_npreg_outsample</a></code> for predicting cell cycle phase
+  using parameters learned from <code>cycle_npreg_insample</code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># see \code{\link{cycle_npreg_insample}}
+    <pre class="examples"><div class='input'># See \code{help(cycle_npreg_outsample)} for an example.
 
 </div></pre>
   </div>

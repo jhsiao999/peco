@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Predict test-sample ordering using training labels (no update) — cycle_npreg_outsample • peco</title>
+<title>Predict Test-sample Ordering Using Training Labels — cycle_npreg_outsample • peco</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,10 @@
 
 
 
-<meta property="og:title" content="Predict test-sample ordering using training labels (no update) — cycle_npreg_outsample" />
-<meta property="og:description" content="Apply the estimates of cycle_npreg_insample to another
-gene expression dataset to infer an angle or cell cycle phase for
-each cell." />
+<meta property="og:title" content="Predict Test-sample Ordering Using Training Labels — cycle_npreg_outsample" />
+<meta property="og:description" content="Apply the estimates from cycle_npreg_insample
+  to another gene expression dataset to infer an angle, or cell cycle
+  phase, for each cell." />
 
 
 
@@ -74,7 +74,7 @@ each cell." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.21</span>
       </span>
     </div>
 
@@ -107,15 +107,15 @@ each cell." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Predict test-sample ordering using training labels (no update)</h1>
+    <h1>Predict Test-sample Ordering Using Training Labels</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/cycle_npreg.R'><code>R/cycle_npreg.R</code></a></small>
     <div class="hidden name"><code>cycle_npreg_outsample.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Apply the estimates of cycle_npreg_insample to another
-gene expression dataset to infer an angle or cell cycle phase for
-each cell.</p>
+    <p>Apply the estimates from <code>cycle_npreg_insample</code>
+  to another gene expression dataset to infer an angle, or cell cycle
+  phase, for each cell.</p>
     </div>
 
     <pre class="usage"><span class='fu'>cycle_npreg_outsample</span>(
@@ -136,35 +136,47 @@ each cell.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Y_test</th>
-      <td><p>A SingleCellExperiment object.</p></td>
+      <td><p>A <code>SingleCellExperiment</code> object.</p></td>
     </tr>
     <tr>
       <th>sigma_est</th>
-      <td><p>Input from training data. A vector of gene-specific
-standard error of the cyclic trends.</p></td>
+      <td><p>A vector of gene-specific standard errors of the
+cyclic trends.</p></td>
     </tr>
     <tr>
       <th>funs_est</th>
-      <td><p>Input fron training data. A vector of cyclic functions
-estimating cyclic trends.</p></td>
+      <td><p>A vector of cyclic functions used to estimate
+cyclic trends.</p></td>
     </tr>
     <tr>
       <th>method.trend</th>
-      <td><p>Varous methods that can be applied to estimate
-cyclic trend of gene expression levels.</p></td>
+      <td><p>How to estimate cyclic trend of gene expression
+values. We offer three options: <code>method.trend =
+"trendfilter"</code>, uses <code><a href='fit_trendfilter.html'>fit_trendfilter</a></code>,
+<code>method.trend = "loess"</code> uses <code><a href='fit_loess.html'>fit_loess</a></code>), and
+<code>method.trend = "bsplines"</code> uses <code><a href='fit_bspline.html'>fit_bspline</a></code>.  We
+found that <code>"trendfilter"</code> provided the best fits in our
+experiments. However, trend-filtering may require more
+computational effort since it uses cross-validation, so for fast
+results we recommend using <code>"bspline"</code>.</p></td>
     </tr>
     <tr>
       <th>normed</th>
-      <td><p>Is the data already normalized? TRUE or FALSE.</p></td>
+      <td><p>Is the data already normalized? <code>TRUE</code> or
+<code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>polyorder</th>
       <td><p>We estimate cyclic trends of gene expression levels using
-nonparamtric trend filtering. The default fits second degree polynomials.</p></td>
+nonparamtric trend filtering.</p></td>
     </tr>
     <tr>
       <th>method.grid</th>
-      <td><p>Method for defining bins along the circle.</p></td>
+      <td><p>The approach used to initialize angles in the
+computation. <code>method.grid = "uniform"</code> creates k
+equally-spaced bins ("grids"). <code>method.grid = "pca"</code> uses gene
+expression values to infer angles, and then these angles are used
+to project the cells to the closest bin.</p></td>
     </tr>
     <tr>
       <th>ncores</th>
@@ -176,46 +188,50 @@ nonparamtric trend filtering. The default fits second degree polynomials.</p></t
     </tr>
     <tr>
       <th>get_trend_estimates</th>
-      <td><p>To re-estimate the cylic trend based on
-the predicted cell cycle phase or not (T or F). Default FALSE. This step
-calls trendfilter and is computationally intensive.</p></td>
+      <td><p>Re-estimate the cylic trend based on the
+predicted cell cycle phase, or not (<code>TRUE</code> or
+<code>FALSE</code>). This step calls trendfilter and is
+computationally intensive.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with the following elements:</p>
-<dt>Y</dt><dd><p>The input gene expression marix.</p></dd>
-<dt>cell_times_est</dt><dd><p>Inferred angles or cell cycle phases, NOT
-ordered.</p></dd>
-<dt>loglik_est</dt><dd><p>Log-likelihood estimates for each gene.</p></dd>
-<dt>cell_times_reordered</dt><dd><p>The inferred angles reordered (in
-ascending order).</p></dd>
+<dt>Y</dt><dd><p>The inputted gene expression marix.</p></dd>
+
+<dt>cell_times_est</dt><dd><p>Inferred angles or cell cycle phases
+  (not ordered).</p></dd>
+
+<dt>loglik_est</dt><dd><p>Log-likelihoods for each gene.</p></dd>
+
+<dt>cell_times_reordered</dt><dd><p>The inferred angles, in ascending
+  order.</p></dd>
+
 <dt>Y_reorded</dt><dd><p>The input gene expression matrix reordered by
-cell_times_reordered.</p></dd>
-<dt>sigma_reordered</dt><dd><p>Estimated standard error of the cyclic trend
-for each gene, reordered by cell_times_reordered.</p></dd>
+  <code>cell_times_reordered</code>.</p></dd>
+
+<dt>sigma_reordered</dt><dd><p>Standard error of the cyclic trend for each
+  gene, reordered by <code>cell_times_reordered</code>.</p></dd>
+
 <dt>funs_reordered</dt><dd><p>A list of functions for approximating the
-cyclic trends of gene express levels for each gene, reordered by
-cell_times_reordered.</p></dd>
+  cyclic trends of gene expression levels for each gene, reordered by
+  <code>cell_times_reordered</code>.</p></dd>
+
 <dt>mu_reordered</dt><dd><p>Estimated cyclic trend of gene expression
-values for each gene, reordered by cell_times_reordered.</p></dd>
-<dt>prob_per_cell_by_celltimes</dt><dd><p>Probabilities of each cell belong
-to each bin.</p></dd>
+  values for each gene, reordered by <code>cell_times_reordered</code>.</p></dd>
+
+<dt>prob_per_cell_by_celltimes</dt><dd><p>Probabilities of each cell
+  belonging to each bin.</p></dd>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='cycle_npreg_insample.html'>cycle_npreg_insample</a></code> for obtaining parameteres for
-    cyclic functions from training data,
-    <code><a href='cycle_npreg_loglik.html'>cycle_npreg_loglik</a></code> for log-likehood at
-    angles between 0 to 2pi,
-    <code><a href='initialize_grids.html'>initialize_grids</a></code> for selecting
-    angles in <code><a href='cycle_npreg_loglik.html'>cycle_npreg_loglik</a></code>,
-    <code><a href='cycle_npreg_mstep.html'>cycle_npreg_mstep</a></code> for estimating cyclic functions given
-    inferred phases from  <code><a href='cycle_npreg_loglik.html'>cycle_npreg_loglik</a></code></p>
-<p>Other peco classifier functions: 
-<code><a href='cycle_npreg_insample.html'>cycle_npreg_insample</a>()</code>,
-<code><a href='cycle_npreg_mstep.html'>cycle_npreg_mstep</a>()</code></p></div>
+    <div class='dont-index'><p><code><a href='cycle_npreg_insample.html'>cycle_npreg_insample</a></code> for estimating parameters for
+cyclic functions from training data,
+<code><a href='cycle_npreg_loglik.html'>cycle_npreg_loglik</a></code> for log-likehood at angles between
+0 to 2pi, and <code><a href='cycle_npreg_mstep.html'>cycle_npreg_mstep</a></code> for estimating cyclic
+functions given inferred phases from
+<code><a href='cycle_npreg_loglik.html'>cycle_npreg_loglik</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>SingleCellExperiment</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: SummarizedExperiment</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomicRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: stats4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: BiocGenerics</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: parallel</span></div><div class='output co'>#&gt; <span class='message'></span>
@@ -249,61 +265,58 @@ to each bin.</p></dd>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    aperm, apply, rowsum</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sce_top101genes</span>)
 
-<span class='co'># select top 5 cyclic genes</span>
+<span class='co'># Select top 5 cyclic genes.</span>
 <span class='no'>sce_top5</span> <span class='kw'>&lt;-</span> <span class='no'>sce_top101genes</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='fu'>rowData</span>(<span class='no'>sce_top101genes</span>)$<span class='no'>pve_fucci</span>,
-                                  <span class='kw'>decreasing</span><span class='kw'>=</span><span class='fl'>TRUE</span>)[<span class='fl'>1</span>:<span class='fl'>5</span>],]
+                                  <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)[<span class='fl'>1</span>:<span class='fl'>5</span>],]
 
-<span class='co'># Select samples from NA18511 for our prediction example</span>
-<span class='no'>coldata</span> <span class='kw'>&lt;-</span> <span class='fu'>colData</span>(<span class='no'>sce_top5</span>)
-<span class='no'>which_samples_train</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>coldata</span>)[<span class='no'>coldata</span>$<span class='no'>chip_id</span> <span class='kw'>!=</span> <span class='st'>"NA18511"</span>]
+<span class='co'># Select NA18511 samples for training and test sets.</span>
+<span class='no'>coldata</span>               <span class='kw'>&lt;-</span> <span class='fu'>colData</span>(<span class='no'>sce_top5</span>)
+<span class='no'>which_samples_train</span>   <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>coldata</span>)[<span class='no'>coldata</span>$<span class='no'>chip_id</span> <span class='kw'>!=</span> <span class='st'>"NA18511"</span>]
 <span class='no'>which_samples_predict</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>coldata</span>)[<span class='no'>coldata</span>$<span class='no'>chip_id</span> <span class='kw'>==</span> <span class='st'>"NA18511"</span>]
 
-<span class='co'># learning cyclic functions of the genes using our training data</span>
-<span class='no'>sce_top5</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='data_transform_quantile.html'>data_transform_quantile</a></span>(<span class='no'>sce_top5</span>)</div><div class='output co'>#&gt; <span class='message'>computing with 2 threads</span></div><div class='input'><span class='no'>expr_quant</span> <span class='kw'>&lt;-</span> <span class='fu'>assay</span>(<span class='no'>sce_top5</span>, <span class='st'>"cpm_quantNormed"</span>)
-<span class='no'>Y_train</span> <span class='kw'>&lt;-</span> <span class='no'>expr_quant</span>[, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>expr_quant</span>) <span class='kw'>%in%</span> <span class='no'>which_samples_train</span>]
-<span class='no'>theta_train</span> <span class='kw'>&lt;-</span>
-    <span class='no'>coldata</span>$<span class='no'>theta_shifted</span>[<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>coldata</span>) <span class='kw'>%in%</span> <span class='no'>which_samples_train</span>]
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>theta_train</span>) <span class='kw'>&lt;-</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>coldata</span>)[<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>coldata</span>) <span class='kw'>%in%</span> <span class='no'>which_samples_train</span>]
+<span class='co'># Learn gene cyclic functions from the training data using the</span>
+<span class='co'># trend filtering method.</span>
+<span class='no'>sce_top5</span>    <span class='kw'>&lt;-</span> <span class='fu'><a href='data_transform_quantile.html'>data_transform_quantile</a></span>(<span class='no'>sce_top5</span>)</div><div class='output co'>#&gt; <span class='message'>computing with 2 threads</span></div><div class='input'><span class='no'>expr_quant</span>  <span class='kw'>&lt;-</span> <span class='fu'>assay</span>(<span class='no'>sce_top5</span>, <span class='st'>"cpm_quantNormed"</span>)
+<span class='no'>Y_train</span>     <span class='kw'>&lt;-</span> <span class='no'>expr_quant</span>[, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>expr_quant</span>) <span class='kw'>%in%</span> <span class='no'>which_samples_train</span>]
+<span class='no'>theta_train</span> <span class='kw'>&lt;-</span> <span class='no'>coldata</span>$<span class='no'>theta_shifted</span>[<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>coldata</span>) <span class='kw'>%in%</span>
+                 <span class='no'>which_samples_train</span>]
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>theta_train</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>coldata</span>)[<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>coldata</span>) <span class='kw'>%in%</span>
+                                        <span class='no'>which_samples_train</span>]
+<span class='no'>model_5genes_train</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cycle_npreg_insample.html'>cycle_npreg_insample</a></span>(<span class='kw'>Y</span> <span class='kw'>=</span> <span class='no'>Y_train</span>,<span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>theta_train</span>,
+                                           <span class='kw'>polyorder</span> <span class='kw'>=</span> <span class='fl'>2</span>,<span class='kw'>ncores</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+                                           <span class='kw'>method.trend</span> <span class='kw'>=</span> <span class='st'>"trendfilter"</span>)</div><div class='output co'>#&gt; <span class='message'>computing on 2 cores</span></div><div class='input'>
+<span class='co'># Predict cell cycle in the test samples.</span>
+<span class='no'>Y_test</span> <span class='kw'>&lt;-</span> <span class='no'>sce_top5</span>[,<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>sce_top5</span>) <span class='kw'>%in%</span> <span class='no'>which_samples_predict</span>]
+<span class='no'>model_5genes_predict</span> <span class='kw'>&lt;-</span>
+  <span class='fu'>cycle_npreg_outsample</span>(<span class='kw'>Y_test</span> <span class='kw'>=</span> <span class='no'>Y_test</span>,
+                        <span class='kw'>sigma_est</span> <span class='kw'>=</span> <span class='no'>model_5genes_train</span>$<span class='no'>sigma_est</span>,
+                        <span class='kw'>funs_est</span> <span class='kw'>=</span> <span class='no'>model_5genes_train</span>$<span class='no'>funs_est</span>,
+                        <span class='kw'>method.trend</span> <span class='kw'>=</span> <span class='st'>"trendfilter"</span>,
+                        <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='fl'>2</span>,<span class='kw'>get_trend_estimates</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='co'># obtain cyclic function estimates</span>
-<span class='no'>model_5genes_train</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cycle_npreg_insample.html'>cycle_npreg_insample</a></span>(<span class='kw'>Y</span> <span class='kw'>=</span> <span class='no'>Y_train</span>,
-                                           <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>theta_train</span>,
-                                           <span class='kw'>polyorder</span><span class='kw'>=</span><span class='fl'>2</span>,
-                                           <span class='kw'>ncores</span><span class='kw'>=</span><span class='fl'>2</span>,
-                                           <span class='kw'>method.trend</span><span class='kw'>=</span><span class='st'>"trendfilter"</span>)</div><div class='output co'>#&gt; <span class='message'>computing on 2 cores</span></div><div class='input'>
-<span class='co'># predict cell cycle</span>
-<span class='no'>model_5genes_predict</span> <span class='kw'>&lt;-</span> <span class='fu'>cycle_npreg_outsample</span>(
-  <span class='kw'>Y_test</span><span class='kw'>=</span><span class='no'>sce_top5</span>[,<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>sce_top5</span>) <span class='kw'>%in%</span> <span class='no'>which_samples_predict</span>],
-  <span class='kw'>sigma_est</span><span class='kw'>=</span><span class='no'>model_5genes_train</span>$<span class='no'>sigma_est</span>,
-  <span class='kw'>funs_est</span><span class='kw'>=</span><span class='no'>model_5genes_train</span>$<span class='no'>funs_est</span>,
-  <span class='kw'>method.trend</span><span class='kw'>=</span><span class='st'>"trendfilter"</span>,
-  <span class='kw'>ncores</span><span class='kw'>=</span><span class='fl'>2</span>,
-  <span class='kw'>get_trend_estimates</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-
-<span class='co'># estimate cyclic gene expression levels given cell cycle for each gene</span>
+<span class='co'># Estimate cyclic gene expression levels given the cell cycle for each</span>
+<span class='co'># gene.</span>
 <span class='no'>predict_cyclic</span> <span class='kw'>&lt;-</span>
-    <span class='fu'><a href='fit_cyclical_many.html'>fit_cyclical_many</a></span>(<span class='kw'>Y</span><span class='kw'>=</span><span class='fu'>assay</span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>,<span class='st'>"cpm_quantNormed"</span>),
-                      <span class='kw'>theta</span><span class='kw'>=</span><span class='fu'>colData</span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>)$<span class='no'>cellcycle_peco</span>)</div><div class='output co'>#&gt; <span class='message'>computing with 2 threads</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>predict_cyclic</span><span class='kw'>[[</span><span class='fl'>2</span>]]), <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>predict_cyclic</span><span class='kw'>[[</span><span class='fl'>1</span>]]))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>3</span>), <span class='kw'>mar</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>,<span class='fl'>4</span>,<span class='fl'>3</span>,<span class='fl'>1</span>))
+  <span class='fu'><a href='fit_cyclical_many.html'>fit_cyclical_many</a></span>(<span class='kw'>Y</span> <span class='kw'>=</span> <span class='fu'>assay</span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>,<span class='st'>"cpm_quantNormed"</span>),
+                    <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'>colData</span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>)$<span class='no'>cellcycle_peco</span>)</div><div class='output co'>#&gt; <span class='message'>computing with 2 threads</span></div><div class='input'>
+<span class='co'># Plot the cell cycle predictions vs. FUCCI phase.</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='kw'>mfrow</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>3</span>),<span class='kw'>mar</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>,<span class='fl'>4</span>,<span class='fl'>3</span>,<span class='fl'>1</span>))
 <span class='kw'>for</span> (<span class='no'>g</span> <span class='kw'>in</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>))) {
   <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'>assay</span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>,<span class='st'>"cpm_quantNormed"</span>)[
-      <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>)[<span class='no'>g</span>],],
-       <span class='kw'>x</span><span class='kw'>=</span><span class='fu'>colData</span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>)$<span class='no'>cellcycle_peco</span>, <span class='kw'>axes</span><span class='kw'>=</span><span class='fl'>FALSE</span>,
-       <span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>"FUCCI phase"</span>,
-       <span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>"Predicted phase"</span>)
-  <span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span>(<span class='kw'>y</span><span class='kw'>=</span><span class='no'>predict_cyclic</span>$<span class='no'>cellcycle_function</span><span class='kw'>[[</span>
-           <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>)[<span class='no'>g</span>]]](
-    <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2</span>*<span class='no'>pi</span>, <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fl'>100</span>)),
-    <span class='kw'>x</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2</span>*<span class='no'>pi</span>, <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fl'>100</span>),
-    <span class='kw'>pch</span><span class='kw'>=</span><span class='fl'>16</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"royalblue"</span>)
-  <span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>2</span>); <span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>1</span>,<span class='kw'>at</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='no'>pi</span>/<span class='fl'>2</span>, <span class='no'>pi</span>, <span class='fl'>3</span>*<span class='no'>pi</span>/<span class='fl'>2</span>, <span class='fl'>2</span>*<span class='no'>pi</span>),
-                <span class='kw'>labels</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>pi</span>/<span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>pi</span>),
-                         <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fl'>3</span>*<span class='no'>pi</span>/<span class='fl'>2</span>), <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fl'>2</span>*<span class='no'>pi</span>)))
-  <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>h</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>lty</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='st'>"black"</span>, <span class='kw'>lwd</span><span class='kw'>=</span><span class='fl'>.7</span>)
-  <span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y_reordered</span>)[<span class='no'>g</span>])
-}
-<span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span>(<span class='st'>"Predicting cell cycle phase for NA18511"</span>, <span class='kw'>outer</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='img'><img src='cycle_npreg_outsample-1.png' alt='' width='700' height='433' /></div></pre>
+        <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>)[<span class='no'>g</span>],],
+       <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>colData</span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>)$<span class='no'>cellcycle_peco</span>,<span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+       <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"FUCCI phase"</span>,<span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"predicted phase"</span>)
+  <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>,<span class='fl'>2</span>*<span class='no'>pi</span>,<span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>,<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>predict_cyclic</span>$<span class='no'>cellcycle_function</span><span class='kw'>[[</span>
+                     <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>)[<span class='no'>g</span>]]](<span class='no'>x</span>),
+        <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1.5</span>,<span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"tomato"</span>)
+  <span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>2</span>)
+  <span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='fl'>1</span>,<span class='kw'>at</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>,<span class='fl'>2</span>*<span class='no'>pi</span>,<span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fl'>5</span>),
+       <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>pi</span>/<span class='fl'>2</span>),<span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>pi</span>),<span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fl'>3</span>*<span class='no'>pi</span>/<span class='fl'>2</span>),
+                  <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fl'>2</span>*<span class='no'>pi</span>)))
+  <span class='fu'><a href='https://rdrr.io/r/graphics/abline.html'>abline</a></span>(<span class='kw'>h</span> <span class='kw'>=</span> <span class='fl'>0</span>,<span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>1</span>,<span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"skyblue"</span>,<span class='kw'>lty</span> <span class='kw'>=</span> <span class='st'>"dotted"</span>)
+  <span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>model_5genes_predict</span>$<span class='no'>Y</span>)[<span class='no'>g</span>])
+}</div><div class='img'><img src='cycle_npreg_outsample-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

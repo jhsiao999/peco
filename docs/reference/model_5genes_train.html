@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Traing model results among samples from 5 individuals. — model_5genes_train • peco</title>
+<title>Model Training Results for 5 Genes — model_5genes_train • peco</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,9 @@
 
 
 
-<meta property="og:title" content="Traing model results among samples from 5 individuals. — model_5genes_train" />
-<meta property="og:description" content="Pre-computed results. Applied
-  cycle_npreg_insample to obtain gene-specific cyclic trend
-  parameters using samples from 5 individuals" />
+<meta property="og:title" content="Model Training Results for 5 Genes — model_5genes_train" />
+<meta property="og:description" content="Pre-computed gene-specific cyclic trend results
+  obtained by applying cycle_npreg_insample." />
 
 
 
@@ -74,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.21</span>
       </span>
     </div>
 
@@ -107,28 +106,32 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Traing model results among samples from 5 individuals.</h1>
+    <h1>Model Training Results for 5 Genes</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/data.R'><code>R/data.R</code></a></small>
     <div class="hidden name"><code>model_5genes_train.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Pre-computed results. Applied
-  <code>cycle_npreg_insample</code> to obtain gene-specific cyclic trend
-  parameters using samples from 5 individuals</p>
+    <p>Pre-computed gene-specific cyclic trend results
+  obtained by applying <code>cycle_npreg_insample</code>.</p>
     </div>
 
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A list with the follwing elements</p><dl'>
-  <dt>Y</dt><dd><p>a data.frame (gene by sample) of quantile-normailzed gene
-  expression values</p></dd>
-  <dt>theta</dt><dd><p>a vector of cell cycl phase values (range between 0 to 2pi)</p></dd>
-  <dt>sigma_est</dt><dd><p>a vector of estimated standard errors</p></dd>
-  <dt>funs_est</dt><dd><p>a list of estimated cyclic functions</p></dd>
+    <p>A list with the follwing elements:</p><dl'>
 
+<dt>Y</dt><dd><p>A matrix (gene by sample) of quantile-normailzed gene
+  expression values.</p></dd>
+
+<dt>theta</dt><dd><p>A vector of cell cycle phase values (ranging between
+  0 and <code>2*pi</code>).</p></dd>
+
+<dt>sigma_est</dt><dd><p>A vector of estimated standard errors, one for
+  each gene.</p></dd>
+
+<dt>funs_est</dt><dd><p>A list of estimated cyclic functions.</p></dd>
 </dl>
 
 

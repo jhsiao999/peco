@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate parameters of the cyclic trends — cycle_npreg_mstep • peco</title>
+<title>Estimate Parameters of the Cyclic Trends — cycle_npreg_mstep • peco</title>
 
 
 <!-- jquery -->
@@ -39,13 +39,14 @@
 
 
 
-<meta property="og:title" content="Estimate parameters of the cyclic trends — cycle_npreg_mstep" />
-<meta property="og:description" content="This is used in both cycle_npreg_insample (training
-data fitting) and cycle_npreg_outsample (testing data prediction)
-to estimate cyclic trends of gene expression values. The function
-outputs for each gene standard error of the cyclic trend, cyclic
-function, and the estimated expression levels given the cyclic
-function." />
+<meta property="og:title" content="Estimate Parameters of the Cyclic Trends — cycle_npreg_mstep" />
+<meta property="og:description" content="This is used by cycle_npreg_insample
+  (model fitting from training data) and
+  cycle_npreg_outsample (prediction in test data
+  estimate cyclic trends of gene expression values. The function
+  outputs, for each gene, a standard error of the cyclic trend, a
+  cyclic function, and the estimated expression levels from the
+  cyclic function." />
 
 
 
@@ -77,7 +78,7 @@ function." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.21</span>
       </span>
     </div>
 
@@ -110,18 +111,19 @@ function." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate parameters of the cyclic trends</h1>
+    <h1>Estimate Parameters of the Cyclic Trends</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/cycle_npreg.R'><code>R/cycle_npreg.R</code></a></small>
     <div class="hidden name"><code>cycle_npreg_mstep.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is used in both cycle_npreg_insample (training
-data fitting) and cycle_npreg_outsample (testing data prediction)
-to estimate cyclic trends of gene expression values. The function
-outputs for each gene standard error of the cyclic trend, cyclic
-function, and the estimated expression levels given the cyclic
-function.</p>
+    <p>This is used by <code><a href='cycle_npreg_insample.html'>cycle_npreg_insample</a></code>
+  (model fitting from training data) and
+  <code><a href='cycle_npreg_outsample.html'>cycle_npreg_outsample</a></code> (prediction in test data
+  estimate cyclic trends of gene expression values. The function
+  outputs, for each gene, a standard error of the cyclic trend, a
+  cyclic function, and the estimated expression levels from the
+  cyclic function.</p>
     </div>
 
     <pre class="usage"><span class='fu'>cycle_npreg_mstep</span>(
@@ -146,22 +148,24 @@ function.</p>
     <tr>
       <th>method.trend</th>
       <td><p>How to estimate cyclic trend of gene expression
-values?  We offer three options: 'trendfilter'
-(<code><a href='fit_trendfilter.html'>fit_trendfilter()</a></code>), 'loess' (<code><a href='fit_loess.html'>fit_loess()</a></code>) and
-'bsplines' (<code><a href='fit_bspline.html'>fit_bspline()</a></code>).  'trendfilter' provided the best
-fit in our study. But 'trendfilter` uses cross-validation and takes
-some time. Therefore, we recommend using bspline for quick results.</p></td>
+values. We offer three options: <code>method.trend =
+"trendfilter"</code>, uses <code><a href='fit_trendfilter.html'>fit_trendfilter</a></code>,
+<code>method.trend = "loess"</code> uses <code><a href='fit_loess.html'>fit_loess</a></code>), and
+<code>method.trend = "bsplines"</code> uses <code><a href='fit_bspline.html'>fit_bspline</a></code>.  We
+found that <code>"trendfilter"</code> provided the best fits in our
+experiments. However, trend-filtering may require more
+computational effort since it uses cross-validation, so for fast
+results we recommend using <code>"bspline"</code>.</p></td>
     </tr>
     <tr>
       <th>polyorder</th>
       <td><p>We estimate cyclic trends of gene expression
-levels using nonparamtric trend filtering. The default fits second
-degree polynomials.</p></td>
+levels using nonparamtric trend filtering.</p></td>
     </tr>
     <tr>
       <th>ncores</th>
-      <td><p>How many computing cores to use? We use doParallel
-package for parallel computing.</p></td>
+      <td><p>How many computing cores to use? We use the
+<code>doParallel</code> package for parallel computing.</p></td>
     </tr>
     </table>
 
@@ -169,22 +173,17 @@ package for parallel computing.</p></td>
 
     <p>A list with the following elements:</p>
 <dt>Y</dt><dd><p>Input gene expression data.</p></dd>
+
 <dt>theta</dt><dd><p>Input angles.</p></dd>
+
 <dt>mu_est</dt><dd><p>Estimated expression levels given the cyclic function
       for each gene.</p></dd>
+
 <dt>sigma_est</dt><dd><p>Estimated standard error of the cyclic trends for
-      each gene</p></dd>
-<dt>funs</dt><dd><p>Estimated cyclic functions</p></dd>
+  each gene.</p></dd>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+<dt>funs</dt><dd><p>Estimated cyclic functions.</p></dd>
 
-    <div class='dont-index'><p><code><a href='cycle_npreg_insample.html'>cycle_npreg_insample</a></code> for estimating cyclic functions
-    given known phasesfrom training data,
-    <code><a href='cycle_npreg_outsample.html'>cycle_npreg_outsample</a></code> for predicting cell cycle phase
-     using parameters learned from <code><a href='cycle_npreg_insample.html'>cycle_npreg_insample</a></code></p>
-<p>Other peco classifier functions: 
-<code><a href='cycle_npreg_insample.html'>cycle_npreg_insample</a>()</code>,
-<code><a href='cycle_npreg_outsample.html'>cycle_npreg_outsample</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

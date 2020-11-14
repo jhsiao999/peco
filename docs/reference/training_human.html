@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Training Data from 888 Single-cell Samples and 101 Top
-  Cyclic Genes — training_human • peco</title>
+<title>Training Data from the Top 101 Cyclic Genes in 888
+  Single-cell Samples — training_human • peco</title>
 
 
 <!-- jquery -->
@@ -40,13 +40,13 @@
 
 
 
-<meta property="og:title" content="Training Data from 888 Single-cell Samples and 101 Top
-  Cyclic Genes — training_human" />
-<meta property="og:description" content="Pre-computed peco results: applied fit_cyclic_many
-to 888 single-cell samples that have both normalized gene
-expression values and cell cycle labels to obtain training results
-that can be used as input for predicting cell cycle phase in other
-data." />
+<meta property="og:title" content="Training Data from the Top 101 Cyclic Genes in 888
+  Single-cell Samples — training_human" />
+<meta property="og:description" content="Pre-computed peco results obtained by applying
+  fit_cyclic_many to 888 single-cell samples that have both
+  normalized gene expression values and cell cycle labels. These
+  training results can be used to predicting cell cycle phase in
+  other data." />
 
 
 
@@ -78,7 +78,7 @@ data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">peco</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.21</span>
       </span>
     </div>
 
@@ -111,18 +111,18 @@ data." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Training Data from 888 Single-cell Samples and 101 Top
-  Cyclic Genes</h1>
+    <h1>Training Data from the Top 101 Cyclic Genes in 888
+  Single-cell Samples</h1>
     <small class="dont-index">Source: <a href='https://github.com/jhsiao999/peco/blob/master/R/data.R'><code>R/data.R</code></a></small>
     <div class="hidden name"><code>training_human.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Pre-computed peco results: applied <code>fit_cyclic_many</code>
-to 888 single-cell samples that have both normalized gene
-expression values and cell cycle labels to obtain training results
-that can be used as input for predicting cell cycle phase in other
-data.</p>
+    <p>Pre-computed peco results obtained by applying
+  <code>fit_cyclic_many</code> to 888 single-cell samples that have both
+  normalized gene expression values and cell cycle labels. These
+  training results can be used to predicting cell cycle phase in
+  other data.</p>
     </div>
 
 
@@ -131,18 +131,18 @@ data.</p>
 
     <p>A list with the following elements:</p>
 <dl'>
-  <dt>predict.yy</dt><dd><p>Estimated cyclic expression values in the
-training data</p></dd>
+<dt>predict.yy</dt><dd><p>Estimated cyclic expression values in the
+  training data</p></dd>
 
-  <dt>cellcycle_peco_ordered</dt><dd><p>Training labels ordered from 0 to
-    2*pi</p></dd>
+<dt>cellcycle_peco_ordered</dt><dd><p>Training labels ordered from 0 to
+  <code>2*pi</code>.</p></dd>
 
-  <dt>cell_cycle function</dt><dd><p>Nonparametric function of cyclic gene
-expression trend obtained by trendfilter function in genlasso</p></dd>
+<dt>cell_cycle_function</dt><dd><p>Nonparametric function of cyclic gene
+  expression trend obtained by the <code>trendfilter</code> function in the
+  genlasso package.</p></dd>
 
-  <dt>pve</dt><dd><p>Proportion of variance explained in each gene by the
-  cell cycle phase label</p></dd>
- 
+<dt>pve</dt><dd><p>Proportion of variance explained in each gene by the
+  cell cycle phase label.</p></dd>
 </dl>
 
 
