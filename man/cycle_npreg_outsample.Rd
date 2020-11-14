@@ -77,14 +77,14 @@ A list with the following elements:
   gene, reordered by \code{cell_times_reordered}.}
 
 \item{funs_reordered}{A list of functions for approximating the
-  cyclic trends of gene express levels for each gene, reordered by
-  cell_times_reordered.}
+  cyclic trends of gene expression levels for each gene, reordered by
+  \code{cell_times_reordered}.}
 
 \item{mu_reordered}{Estimated cyclic trend of gene expression
-  values for each gene, reordered by cell_times_reordered.}
+  values for each gene, reordered by \code{cell_times_reordered}.}
 
-\item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
-  to each bin.}
+\item{prob_per_cell_by_celltimes}{Probabilities of each cell
+  belonging to each bin.}
 }
 \description{
 Apply the estimates from \code{cycle_npreg_insample}
