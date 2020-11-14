@@ -13,39 +13,45 @@ cycle_npreg_insample(
 )
 }
 \arguments{
-\item{Y}{A matrix of normalized and transformed gene expression
-values. Gene by sample.}
+\item{Y}{A matrix (gene by sample) of normalized and transformed
+gene expression values.}
 
 \item{theta}{A vector of angles.}
 
-\item{ncores}{We use doParallel package for parallel computing.}
+\item{ncores}{We use the doParallel package for parallel computing.}
 
 \item{polyorder}{We estimate cyclic trends of gene expression
-levels using nonparamtric trend filtering. The default fits second
-degree polynomials.}
+levels using nonparamtric trend filtering.}
 
-\item{method.trend}{Varous methods that can be applied to estimate
-cyclic trend of gene expression levels.}
+\item{method.trend}{How to estimate cyclic trend of gene expression
+values. We offer three options: \code{method.trend =
+"trendfilter"}, uses \code{\link{fit_trendfilter}},
+\code{method.trend = "loess"} uses \code{\link{fit_loess}}), and
+\code{method.trend = "bsplines"} uses \code{\link{fit_bspline}}.  We
+found that \code{"trendfilter"} provided the best fits in our
+experiments. However, trend-filtering may require more
+computational effort since it uses cross-validation, so for fast
+results we recommend using \code{"bspline"}.}
 }
 \value{
 A list with four elements:
 
-\item{Y}{Gene expression marix.}
+\item{Y}{The gene expression marix.}
 
 \item{theta}{Vector of angles or cell cycle phases.}
 
 \item{sigma_est}{Estimated standard error of the cyclic trend for
-each gene.}
+  each gene.}
 
 \item{funs_est}{A list of functions for approximating the cyclic
 trends of gene express levels for each gene.}
 }
 \description{
-Estimates cyclic trends of gene expression levels
-using training data.
+Estimate cyclic trends of gene expression levels
+  using training data.
 }
 \examples{
-# See cycle_npreg_outsample an example.
+# See \code{help(cycle_npreg_outsample)} for an example.
 
 }
 \seealso{

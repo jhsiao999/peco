@@ -2,7 +2,7 @@
 % Please edit documentation in R/cycle_npreg.R
 \name{cycle_npreg_outsample}
 \alias{cycle_npreg_outsample}
-\title{Predict test-sample Ordering Using Training Labels (no update)}
+\title{Predict Test-sample Ordering Using Training Labels}
 \usage{
 cycle_npreg_outsample(
   Y_test,
@@ -18,57 +18,78 @@ cycle_npreg_outsample(
 )
 }
 \arguments{
-\item{Y_test}{A SingleCellExperiment object.}
+\item{Y_test}{A \code{SingleCellExperiment} object.}
 
-\item{sigma_est}{Input from training data. A vector of gene-specific
-standard error of the cyclic trends.}
+\item{sigma_est}{A vector of gene-specific standard errors of the
+cyclic trends.}
 
-\item{funs_est}{Input fron training data. A vector of cyclic functions
-estimating cyclic trends.}
+\item{funs_est}{A vector of cyclic functions used to estimate
+cyclic trends.}
 
-\item{method.trend}{Varous methods that can be applied to estimate
-cyclic trend of gene expression levels.}
+\item{method.trend}{How to estimate cyclic trend of gene expression
+values. We offer three options: \code{method.trend =
+"trendfilter"}, uses \code{\link{fit_trendfilter}},
+\code{method.trend = "loess"} uses \code{\link{fit_loess}}), and
+\code{method.trend = "bsplines"} uses \code{\link{fit_bspline}}.  We
+found that \code{"trendfilter"} provided the best fits in our
+experiments. However, trend-filtering may require more
+computational effort since it uses cross-validation, so for fast
+results we recommend using \code{"bspline"}.}
 
-\item{normed}{Is the data already normalized? TRUE or FALSE.}
+\item{normed}{Is the data already normalized? \code{TRUE} or
+\code{FALSE}.}
 
 \item{polyorder}{We estimate cyclic trends of gene expression levels using
-nonparamtric trend filtering. The default fits second degree polynomials.}
+nonparamtric trend filtering.}
 
-\item{method.grid}{Method for defining bins along the circle.}
+\item{method.grid}{The approach used to initialize angles in the
+computation. \code{method.grid = "uniform"} creates k
+equally-spaced bins ("grids"). \code{method.grid = "pca"} uses gene
+expression values to infer angles, and then these angles are used
+to project the cells to the closest bin.}
 
 \item{ncores}{We use doParallel package for parallel computing.}
 
 \item{grids}{number of bins to be selected along 0 to 2pi.}
 
-\item{get_trend_estimates}{To re-estimate the cylic trend based on
-the predicted cell cycle phase or not (T or F). Default FALSE. This step
-calls trendfilter and is computationally intensive.}
+\item{get_trend_estimates}{Re-estimate the cylic trend based on the
+predicted cell cycle phase, or not (\code{TRUE} or
+\code{FALSE}). This step calls trendfilter and is
+computationally intensive.}
 }
 \value{
 A list with the following elements:
 
-\item{Y}{The input gene expression marix.}
-\item{cell_times_est}{Inferred angles or cell cycle phases, NOT
-ordered.}
-\item{loglik_est}{Log-likelihood estimates for each gene.}
-\item{cell_times_reordered}{The inferred angles reordered (in
-ascending order).}
+\item{Y}{The inputted gene expression marix.}
+
+\item{cell_times_est}{Inferred angles or cell cycle phases
+  (not ordered).}
+
+\item{loglik_est}{Log-likelihoods for each gene.}
+
+\item{cell_times_reordered}{The inferred angles, in ascending
+  order.}
+
 \item{Y_reorded}{The input gene expression matrix reordered by
-cell_times_reordered.}
-\item{sigma_reordered}{Estimated standard error of the cyclic trend
-for each gene, reordered by cell_times_reordered.}
+  \code{cell_times_reordered}.}
+
+\item{sigma_reordered}{Standard error of the cyclic trend for each
+  gene, reordered by \code{cell_times_reordered}.}
+
 \item{funs_reordered}{A list of functions for approximating the
-cyclic trends of gene express levels for each gene, reordered by
-cell_times_reordered.}
+  cyclic trends of gene express levels for each gene, reordered by
+  cell_times_reordered.}
+
 \item{mu_reordered}{Estimated cyclic trend of gene expression
-values for each gene, reordered by cell_times_reordered.}
+  values for each gene, reordered by cell_times_reordered.}
+
 \item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
-to each bin.}
+  to each bin.}
 }
 \description{
-Apply the estimates of cycle_npreg_insample to another
-gene expression dataset to infer an angle or cell cycle phase for
-each cell.
+Apply the estimates from \code{cycle_npreg_insample}
+  to another gene expression dataset to infer an angle, or cell cycle
+  phase, for each cell.
 }
 \examples{
 library(SingleCellExperiment)
@@ -76,9 +97,9 @@ data(sce_top101genes)
 
 # select top 5 cyclic genes
 sce_top5 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
-                                  decreasing=TRUE)[1:5],]
+                                  decreasing = TRUE)[1:5],]
 
-# Select samples from NA18511 for our prediction example
+# Select samples from NA18511 for our prediction example.
 coldata <- colData(sce_top5)
 which_samples_train <- rownames(coldata)[coldata$chip_id != "NA18511"]
 which_samples_predict <- rownames(coldata)[coldata$chip_id == "NA18511"]
@@ -134,13 +155,12 @@ for (g in seq_along(rownames(model_5genes_predict$Y))) {
 }
 title("Predicting cell cycle phase for NA18511", outer=TRUE)
 
-
 }
 \seealso{
-\code{\link{cycle_npreg_insample}} for obtaining parameteres for
-    cyclic functions from training data,
-    \code{\link{cycle_npreg_loglik}} for log-likehood at
-    angles between 0 to 2pi,
-    \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
-    inferred phases from  \code{\link{cycle_npreg_loglik}}
+\code{\link{cycle_npreg_insample}} for estimating parameters for
+cyclic functions from training data,
+\code{\link{cycle_npreg_loglik}} for log-likehood at angles between
+0 to 2pi, and \code{\link{cycle_npreg_mstep}} for estimating cyclic
+functions given inferred phases from
+\code{\link{cycle_npreg_loglik}}.
 }

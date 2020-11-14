@@ -1,50 +1,75 @@
-#' @title Predict test-sample Ordering Using Training Labels (no update)
+#' @title Predict Test-sample Ordering Using Training Labels
 #'
-#' @description Apply the estimates of cycle_npreg_insample to another
-#' gene expression dataset to infer an angle or cell cycle phase for
-#' each cell.
+#' @description Apply the estimates from \code{cycle_npreg_insample}
+#'   to another gene expression dataset to infer an angle, or cell cycle
+#'   phase, for each cell.
 #'
-#' @param Y_test A SingleCellExperiment object.
+#' @param Y_test A \code{SingleCellExperiment} object.
 #'
-#' @param sigma_est Input from training data. A vector of gene-specific
-#'   standard error of the cyclic trends.
+#' @param sigma_est A vector of gene-specific standard errors of the
+#'   cyclic trends.
 #'
-#' @param funs_est Input fron training data. A vector of cyclic functions
-#'   estimating cyclic trends.
+#' @param funs_est A vector of cyclic functions used to estimate
+#'   cyclic trends.
 #'
 #' @param polyorder We estimate cyclic trends of gene expression levels using
-#'    nonparamtric trend filtering. The default fits second degree polynomials.
-#' @param normed Is the data already normalized? TRUE or FALSE.
-#' @param method.grid Method for defining bins along the circle.
-#' @param method.trend Varous methods that can be applied to estimate
-#' cyclic trend of gene expression levels.
+#'   nonparamtric trend filtering.
+#' 
+#' @param normed Is the data already normalized? \code{TRUE} or
+#'   \code{FALSE}.
+#' 
+#' @param method.grid The approach used to initialize angles in the
+#'   computation. \code{method.grid = "uniform"} creates k
+#'   equally-spaced bins ("grids"). \code{method.grid = "pca"} uses gene
+#'   expression values to infer angles, and then these angles are used
+#'   to project the cells to the closest bin.
+#'
+#' @param method.trend How to estimate cyclic trend of gene expression
+#'   values. We offer three options: \code{method.trend =
+#'   "trendfilter"}, uses \code{\link{fit_trendfilter}},
+#'   \code{method.trend = "loess"} uses \code{\link{fit_loess}}), and
+#'   \code{method.trend = "bsplines"} uses \code{\link{fit_bspline}}.  We
+#'   found that \code{"trendfilter"} provided the best fits in our
+#'   experiments. However, trend-filtering may require more
+#'   computational effort since it uses cross-validation, so for fast
+#'   results we recommend using \code{"bspline"}.
 #'
 #' @param grids number of bins to be selected along 0 to 2pi.
 #'
-#' @param get_trend_estimates To re-estimate the cylic trend based on
-#'   the predicted cell cycle phase or not (T or F). Default FALSE. This step
-#'   calls trendfilter and is computationally intensive.
+#' @param get_trend_estimates Re-estimate the cylic trend based on the
+#'   predicted cell cycle phase, or not (\code{TRUE} or
+#'   \code{FALSE}). This step calls trendfilter and is
+#'   computationally intensive.
+#' 
 #' @param ncores We use doParallel package for parallel computing.
 #'
 #' @return A list with the following elements:
 #'
-#' \item{Y}{The input gene expression marix.}
-#' \item{cell_times_est}{Inferred angles or cell cycle phases, NOT
-#' ordered.}
-#' \item{loglik_est}{Log-likelihood estimates for each gene.}
-#' \item{cell_times_reordered}{The inferred angles reordered (in
-#' ascending order).}
+#' \item{Y}{The inputted gene expression marix.}
+#' 
+#' \item{cell_times_est}{Inferred angles or cell cycle phases
+#'   (not ordered).}
+#' 
+#' \item{loglik_est}{Log-likelihoods for each gene.}
+#' 
+#' \item{cell_times_reordered}{The inferred angles, in ascending
+#'   order.}
+#' 
 #' \item{Y_reorded}{The input gene expression matrix reordered by
-#' cell_times_reordered.}
-#' \item{sigma_reordered}{Estimated standard error of the cyclic trend
-#' for each gene, reordered by cell_times_reordered.}
+#'   \code{cell_times_reordered}.}
+#' 
+#' \item{sigma_reordered}{Standard error of the cyclic trend for each
+#'   gene, reordered by \code{cell_times_reordered}.}
+#' 
 #' \item{funs_reordered}{A list of functions for approximating the
-#' cyclic trends of gene express levels for each gene, reordered by
-#' cell_times_reordered.}
+#'   cyclic trends of gene express levels for each gene, reordered by
+#'   cell_times_reordered.}
+#' 
 #' \item{mu_reordered}{Estimated cyclic trend of gene expression
-#' values for each gene, reordered by cell_times_reordered.}
+#'   values for each gene, reordered by cell_times_reordered.}
+#' 
 #' \item{prob_per_cell_by_celltimes}{Probabilities of each cell belong
-#' to each bin.}
+#'   to each bin.}
 #'
 #' @examples
 #' library(SingleCellExperiment)
@@ -52,9 +77,9 @@
 #'
 #' # select top 5 cyclic genes
 #' sce_top5 <- sce_top101genes[order(rowData(sce_top101genes)$pve_fucci,
-#'                                   decreasing=TRUE)[1:5],]
+#'                                   decreasing = TRUE)[1:5],]
 #'
-#' # Select samples from NA18511 for our prediction example
+#' # Select samples from NA18511 for our prediction example.
 #' coldata <- colData(sce_top5)
 #' which_samples_train <- rownames(coldata)[coldata$chip_id != "NA18511"]
 #' which_samples_predict <- rownames(coldata)[coldata$chip_id == "NA18511"]
@@ -110,31 +135,31 @@
 #' }
 #' title("Predicting cell cycle phase for NA18511", outer=TRUE)
 #'
-#'
 #' @importFrom SingleCellExperiment SingleCellExperiment
-#' @importFrom SummarizedExperiment assay assays assayNames colData colData<-
+#' @importFrom SummarizedExperiment assay
+#' @importFrom SummarizedExperiment assays
+#' @importFrom SummarizedExperiment assayNames
+#' @importFrom SummarizedExperiment colData
+#' @importFrom SummarizedExperiment colData<-
 #' @importFrom assertthat has_name
 #'
-#' @seealso \code{\link{cycle_npreg_insample}} for obtaining parameteres for
-#'     cyclic functions from training data,
-#'     \code{\link{cycle_npreg_loglik}} for log-likehood at
-#'     angles between 0 to 2pi,
-#'     \code{\link{cycle_npreg_mstep}} for estimating cyclic functions given
-#'     inferred phases from  \code{\link{cycle_npreg_loglik}}
+#' @seealso
+#'
+#' \code{\link{cycle_npreg_insample}} for estimating parameters for
+#' cyclic functions from training data,
+#' \code{\link{cycle_npreg_loglik}} for log-likehood at angles between
+#' 0 to 2pi, and \code{\link{cycle_npreg_mstep}} for estimating cyclic
+#' functions given inferred phases from
+#' \code{\link{cycle_npreg_loglik}}.
 #' 
 #' @export
 #' 
-cycle_npreg_outsample <- function(Y_test,
-                                  sigma_est,
-                                  funs_est,
-                                  method.trend=c("trendfilter",
-                                      "loess", "bspline"),
-                                  normed = TRUE,
-                                  polyorder=2,
-                                  method.grid="uniform",
-                                  ncores=2,
-                                  grids=100,
-                                  get_trend_estimates=FALSE) {
+cycle_npreg_outsample <- function(Y_test, sigma_est, funs_est,
+                                  method.trend = c("trendfilter", "loess",
+                                                   "bspline"),
+                                  normed = TRUE, polyorder = 2,
+                                  method.grid = "uniform", ncores = 2,
+                                  grids = 100, get_trend_estimates = FALSE) {
 
     if (!normed & inherits(Y_test, "SingleCellExperiment")) {
         Y_test <- data_transform_quantile(Y_test)
@@ -156,66 +181,71 @@ cycle_npreg_outsample <- function(Y_test,
 
     if (inherits(Y_test, "SingleCellExperiment")) {
       colData(Y_test)$cellcycle_peco <- initial_loglik$cell_times_est
-      if (!is.null(colData(Y_test)@elementMetadata$labelDescription)) {
-        colData(Y_test)@elementMetadata$labelDescription[ncol(colData(Y_test))] <-
-          "peco predicted continuous cell cycle, between 0 to 2pi"
-      }
+      if (!is.null(colData(Y_test)@elementMetadata$labelDescription)) 
+        colData(Y_test)@elementMetadata$labelDescription[
+          ncol(colData(Y_test))] <-
+            "peco predicted continuous cell cycle, between 0 to 2pi"
     }
 
     if (get_trend_estimates) {
-        updated_estimates <-
-          cycle_npreg_mstep(Y = Y_test,
-                            theta = initial_loglik$cell_times_est,
-                            method.trend = method.trend,
-                            polyorder = polyorder,
-                            ncores = ncores)
-        out <- list(
-            Y=Y_test,
-            cell_times_est=initial_loglik$cell_times_est,
-            loglik_est=initial_loglik$loglik_est,
-            Y_reordered=updated_estimates$Y,
-            cell_times_reordered=updated_estimates$theta,
-            mu_reordered=updated_estimates$mu_est,
-            sigma_reordered=updated_estimates$sigma_est,
-            funs_reordered=updated_estimates$funs,
-            prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
-        } else {
-          out <- list(
-            Y=Y_test,
-            cell_times_est=initial_loglik$cell_times_est,
-            loglik_est=initial_loglik$loglik_est,
-            prob_per_cell_by_celltimes=initial_loglik$prob_per_cell_by_celltimes)
-        }
+      updated_estimates <-
+        cycle_npreg_mstep(Y = Y_test,
+                          theta = initial_loglik$cell_times_est,
+                          method.trend = method.trend,
+                          polyorder = polyorder,
+                          ncores = ncores)
+      out <- list(Y               = Y_test,
+                  cell_times_est  = initial_loglik$cell_times_est,
+                  loglik_est      = initial_loglik$loglik_est,
+                  Y_reordered     = updated_estimates$Y,
+                  cell_times_reordered = updated_estimates$theta,
+                  mu_reordered    = updated_estimates$mu_est,
+                  sigma_reordered = updated_estimates$sigma_est,
+                  funs_reordered  = updated_estimates$funs,
+                  prob_per_cell_by_celltimes =
+                    initial_loglik$prob_per_cell_by_celltimes)
+    } else
+      out <- list(Y              = Y_test,
+                  cell_times_est = initial_loglik$cell_times_est,
+                  loglik_est     = initial_loglik$loglik_est,
+                  prob_per_cell_by_celltimes =
+                    initial_loglik$prob_per_cell_by_celltimes)
     return(out)
 }
 
 #' @title Obtain Cyclic Trend Estimates from Training Data
 #'
-#' @description Estimates cyclic trends of gene expression levels
-#' using training data.
+#' @description Estimate cyclic trends of gene expression levels
+#'   using training data.
 #'
-#' @param Y A matrix of normalized and transformed gene expression
-#' values. Gene by sample.
+#' @param Y A matrix (gene by sample) of normalized and transformed
+#'   gene expression values.
 #'
 #' @param theta A vector of angles.
 #'
-#' @param ncores We use doParallel package for parallel computing.
+#' @param ncores We use the doParallel package for parallel computing.
 #'
 #' @param polyorder We estimate cyclic trends of gene expression
-#' levels using nonparamtric trend filtering. The default fits second
-#' degree polynomials.
+#'   levels using nonparamtric trend filtering.
 #'
-#' @param method.trend Varous methods that can be applied to estimate
-#' cyclic trend of gene expression levels.
+#' @param method.trend How to estimate cyclic trend of gene expression
+#'   values. We offer three options: \code{method.trend =
+#'   "trendfilter"}, uses \code{\link{fit_trendfilter}},
+#'   \code{method.trend = "loess"} uses \code{\link{fit_loess}}), and
+#'   \code{method.trend = "bsplines"} uses \code{\link{fit_bspline}}.  We
+#'   found that \code{"trendfilter"} provided the best fits in our
+#'   experiments. However, trend-filtering may require more
+#'   computational effort since it uses cross-validation, so for fast
+#'   results we recommend using \code{"bspline"}.
 #'
 #' @return A list with four elements:
 #'
-#' \item{Y}{Gene expression marix.}
+#' \item{Y}{The gene expression marix.}
 #'
 #' \item{theta}{Vector of angles or cell cycle phases.}
 #'
 #' \item{sigma_est}{Estimated standard error of the cyclic trend for
-#' each gene.}
+#'   each gene.}
 #'
 #' \item{funs_est}{A list of functions for approximating the cyclic
 #' trends of gene express levels for each gene.}
@@ -223,7 +253,7 @@ cycle_npreg_outsample <- function(Y_test,
 #' @author Joyce Hsiao
 #'
 #' @examples
-#' # See cycle_npreg_outsample an example.
+#' # See \code{help(cycle_npreg_outsample)} for an example.
 #' 
 #' @seealso
 #'   \code{\link{cycle_npreg_mstep}} for estimating cyclic functions
@@ -250,10 +280,10 @@ cycle_npreg_insample <- function(Y, theta, ncores = 2, polyorder = 2,
                                     method.trend=method.trend,
                                     ncores = ncores)
 
-    return(list(Y=Y,
-                theta=theta,
-                sigma_est=initial_mstep$sigma_est,
-                funs_est=initial_mstep$funs))
+    return(list(Y         = Y,
+                theta     = theta,
+                sigma_est = initial_mstep$sigma_est,
+                funs_est  = initial_mstep$funs))
 }
 
 #' @title Initialize Grid for cycle_npreg_loglik
@@ -345,8 +375,8 @@ cycle_npreg_loglik <- function(Y, sigma_est, funs_est, grids = 100,
     theta_choose <- initialize_grids(Y, grids = grids,
                                      method.grid = method.grid)
 
-    # for each cell, sum up the loglikelihood for each gene
-    # at the observed cell times
+    # For each cell, sum up the loglikelihood for each gene
+    # at the observed cell times.
     loglik_per_cell_by_celltimes <- matrix(0, N, grids)
     colnames(loglik_per_cell_by_celltimes) <- theta_choose
     for (n in seq_len(N)) {
